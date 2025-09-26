@@ -1,0 +1,126 @@
+# Subtitle Renamer for Arabic Streams
+
+## Project Overview
+
+This project is a Python-based utility that renames subtitle files (e.g., `.srt`, `.ass`) to match the corresponding video files (e.g., `.mkv`, `.mp4`) in the same directory. It is specifically designed for Arabic streams and includes Windows Explorer context menu integration for ease of use. The script intelligently extracts season and episode numbers from filenames to ensure correct matching and adds an `.ar` suffix to the renamed subtitle files.
+
+### Key Features
+- Automatic detection and matching of video and subtitle files based on episode numbers
+- Support for common video formats (.mkv, .mp4) and subtitle formats (.srt, .ass)
+- Extraction of episode numbers from S##E## and - ## patterns
+- Windows context menu integration for convenient access
+- Preservation of original subtitle file extensions
+- Addition of .ar suffix to indicate Arabic subtitles
+
+## Key Files
+
+- `rename_subtitles_to_match_videos_ar.py`: The core Python script containing the logic for renaming files
+- `add_subtitle_rename_menu.reg`: A Windows registry file that adds a "Rename subtitle files" option to the folder context menu
+- `remove_subtitle_rename_menu.reg`: A Windows registry file to remove the context menu item
+- `ARAB_STREAMS_LOGO.ico`: An icon file used for the context menu item
+- `GEMINI.md`: Documentation explaining the project
+- `QWEN.md`: Current file providing context for Qwen CLI interactions
+
+## Dependencies
+
+- **Python 3**: The script is written in Python 3 and requires it to be installed
+- **Python Launcher**: The script relies on the Python Launcher (`py.exe`) being installed and located at `C:\Windows\py.exe`. This is the default location for the launcher on Windows
+- **Windows OS**: The script and registry files are designed specifically for Windows systems
+
+## Installation and Setup
+
+### Prerequisites
+- Python 3 must be installed on the system
+- Python Launcher (`py.exe`) must be available at `C:\Windows\py.exe`
+
+### Installation Steps
+1. Place the `rename_subtitles_to_match_videos_ar` folder in your `C:\` root directory
+2. The folder must maintain the exact name `rename_subtitles_to_match_videos_ar`
+3. The Python script and icon file names must remain unchanged for the context menu integration to work properly
+
+### Adding Context Menu Integration
+1. Double-click `add_subtitle_rename_menu.reg` to add the context menu item
+2. Approve any security warnings that appear
+3. The "Rename subtitle files" option will now appear in the context menu when right-clicking in a folder background
+
+### Removing Context Menu Integration
+- Double-click `remove_subtitle_rename_menu.reg` to remove the context menu item
+
+## Usage
+
+### Using the Context Menu (Recommended)
+1. Navigate to a folder containing video and subtitle files
+2. Right-click anywhere in the folder background (not on a specific file)
+3. Select "Rename subtitle files" from the context menu
+4. The script will automatically rename the subtitle files to match the video files
+5. A console window will appear showing the progress and results
+
+### Direct Execution
+1. Open a command prompt or PowerShell window
+2. Navigate to the project directory: `cd C:\rename_subtitles_to_match_videos_ar`
+3. Run the script: `python rename_subtitles_to_match_videos_ar.py`
+4. Or using the Python Launcher: `py rename_subtitles_to_match_videos_ar.py`
+
+## How the Script Works
+
+### Episode Detection
+The script uses two patterns to detect episode numbers:
+1. `S##E##` pattern (used in video files like S01E01)
+2. `- ##` pattern (used in subtitle files like "- 01", "- 02")
+
+### Matching Process
+1. The script scans the current directory for video files (`.mkv`, `.mp4`)
+2. It scans for subtitle files (`.srt`, `.ass`)
+3. It extracts episode numbers from video filenames
+4. It creates a mapping of episode numbers to video file names
+5. It processes each subtitle file, extracting its episode number
+6. If a matching video file is found for a subtitle, it renames the subtitle to match the video file name
+7. The renamed file includes the `.ar` suffix and the original subtitle extension (e.g., `.ar.srt`)
+
+### Output
+The script provides console output showing:
+- Current directory being processed
+- Number and names of video and subtitle files found
+- Episode numbers detected
+- Renaming operations performed
+- Final count of renamed files
+
+## Development Conventions
+
+- The code is written in Python 3 using standard libraries only (`os`, `re`)
+- Regular expressions are used for pattern matching
+- The script is designed to be run on Windows systems
+- File names and directory structure must remain unchanged for context menu integration to work
+- The script assumes that both video and subtitle files are in the same directory
+- Episode numbers are zero-padded to ensure 2-digit format (e.g., "1" becomes "01", resulting in S01E01)
+
+## Supported File Formats
+
+### Video Formats
+- `.mkv` (Matroska Video)
+- `.mp4` (MPEG-4 Part 14)
+
+### Subtitle Formats
+- `.srt` (SubRip Subtitle)
+- `.ass` (Advanced SubStation Alpha)
+
+## Troubleshooting
+
+### Context Menu Option Not Appearing
+- Ensure the project folder is in the C:\ root directory with the exact name
+- Verify that Python and the Python Launcher are installed correctly
+- Run the .reg file as administrator if needed
+
+### Files Not Being Renamed
+- Ensure both video and subtitle files are in the same directory
+- Check that episode numbers follow the supported patterns (S##E## or - ##)
+- Make sure the script has write permissions to the directory
+
+### Python Path Issues
+- Verify that Python 3 is installed
+- Ensure the Python Launcher (`py.exe`) is available at `C:\Windows\py.exe`
+- If needed, modify the .reg file to point to the correct Python executable path
+
+## Security Note
+
+The registry files modify the Windows registry to add context menu integration. Only run these files from trusted sources. The removal registry file can be used to revert these changes if needed.
