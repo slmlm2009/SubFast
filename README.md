@@ -1,4 +1,4 @@
-# Subtitle Renamer Tool [ar]
+# Subtitle Renamer Tool [AR]
 
 A powerful Python script that automatically renames subtitle files to match their corresponding video files, with intelligent episode detection and Windows context menu integration.
 
