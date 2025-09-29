@@ -1,0 +1,39 @@
+filename,file_type,episode_pattern,formatted_output
+Program S02Ep15.mkv,Video,S02E15,Program S02Ep15.mkv >> S02E15
+Program S2Ep10.mkv,Video,S02E10,Program S2Ep10.mkv >> S02E10
+ShowName - 1.mkv,Video,S01E1,ShowName - 1.mkv >> S01E1
+ShowName - 11.mkv,Video,S01E11,ShowName - 11.mkv >> S01E11
+ShowName - 111.mkv,Video,S01E111,ShowName - 111.mkv >> S01E111
+ShowName - 1111.mkv,Video,S01E1111,ShowName - 1111.mkv >> S01E1111
+ShowName -3.mkv,Video,S01E3,ShowName -3.mkv >> S01E3
+ShowName E05.mkv,Video,S01E05,ShowName E05.mkv >> S01E05
+ShowName E1010.mkv,Video,S01E1010,ShowName E1010.mkv >> S01E1010
+ShowName E110.mkv,Video,S01E110,ShowName E110.mkv >> S01E110
+ShowName E6.mkv,Video,S01E6,ShowName E6.mkv >> S01E6
+ShowName Ep10 - Copy.mkv,Video,S01E10,ShowName Ep10 - Copy.mkv >> S01E10
+ShowName Ep1020 - Copy.mkv,Video,S01E1020,ShowName Ep1020 - Copy.mkv >> S01E1020
+ShowName EP1030.mkv,Video,S01E1030,ShowName EP1030.mkv >> S01E1030
+ShowName Ep120 - Copy.mkv,Video,S01E120,ShowName Ep120 - Copy.mkv >> S01E120
+ShowName EP130.mkv,Video,S01E130,ShowName EP130.mkv >> S01E130
+ShowName EP20.mkv,Video,S01E20,ShowName EP20.mkv >> S01E20
+ShowName Ep7 - Copy.mkv,Video,S01E7,ShowName Ep7 - Copy.mkv >> S01E7
+ShowName EP8.mkv,Video,S01E8,ShowName EP8.mkv >> S01E8
+ShowName episode09 - Copy - Copy.mkv,Video,S01E09,ShowName episode09 - Copy - Copy.mkv >> S01E09
+ShowName episode1040 - Copy - Copy.mkv,Video,S01E1040,ShowName episode1040 - Copy - Copy.mkv >> S01E1040
+ShowName Episode1050 - Copy.mkv,Video,S01E1050,ShowName Episode1050 - Copy.mkv >> S01E1050
+ShowName Episode12 - Copy.mkv,Video,S01E12,ShowName Episode12 - Copy.mkv >> S01E12
+ShowName episode13 - Copy.mkv,Video,S01E13,ShowName episode13 - Copy.mkv >> S01E13
+ShowName Episode14.mkv,Video,S01E14,ShowName Episode14.mkv >> S01E14
+ShowName episode140 - Copy - Copy.mkv,Video,S01E140,ShowName episode140 - Copy - Copy.mkv >> S01E140
+ShowName Episode150 - Copy.mkv,Video,S01E150,ShowName Episode150 - Copy.mkv >> S01E150
+ShowName S02E0160 - Copy - Copy.mkv,Video,S02E0160,ShowName S02E0160 - Copy - Copy.mkv >> S02E0160
+ShowName S02E1 - Copy.mkv,Video,S02E1,ShowName S02E1 - Copy.mkv >> S02E1
+ShowName S02E16 - Copy - Copy.mkv,Video,S02E16,ShowName S02E16 - Copy - Copy.mkv >> S02E16
+ShowName S02E170 - Copy - Copy.mkv,Video,S02E170,ShowName S02E170 - Copy - Copy.mkv >> S02E170
+ShowName S1E15.mkv,Video,S01E15,ShowName S1E15.mkv >> S01E15
+ShowName S2E1070 - Copy.mkv,Video,S02E1070,ShowName S2E1070 - Copy.mkv >> S02E1070
+ShowName S2E17 - Copy.mkv,Video,S02E17,ShowName S2E17 - Copy.mkv >> S02E17
+ShowName S2E170 - Copy.mkv,Video,S02E170,ShowName S2E170 - Copy.mkv >> S02E170
+ShowName- 4.mkv,Video,S01E4,ShowName- 4.mkv >> S01E4
+ShowName-11111.mkv,Video,S01E11111,ShowName-11111.mkv >> S01E11111
+Program S02Ep15.ar.srt,Subtitle,S02E15,Program S02Ep15.ar.srt >> S02E15

@@ -1,0 +1,57 @@
+FILENAME.EXTENSION >> IDENTIFIED SEASON#EPISODE#
+Collide.S01E01.en.srt >> S01E01
+Collide.S01E01.mkv >> S01E01
+Collide.S01E01.srt >> S01E01
+Different.S02E02.srt >> S02E2
+No.Match.S01E01.mkv >> S01E01
+Series.3x01.srt >> S03E01
+Series.S03E01.mkv >> S03E01
+Show Season2 Episode2.ass >> S02E2
+Show Season2 Episode2.mkv >> S02E2
+Show.Name - 05.srt >> S01E05
+Show.Name - 5.mkv >> S01E5
+Show.Name Season 1 Ep 5.mkv >> S01E5
+Show.Name Season 1 Ep 5.srt >> S01E05
+Show.Name Season2Ep15.mkv >> S02E15
+Show.Name Season2Ep5.srt >> S02E05
+Show.Name.2x05.mkv >> S02E05
+Show.Name.2x05.srt >> S02E05
+Show.Name.E05.mkv >> S01E05
+Show.Name.Ep05.srt >> S01E05
+Show.Name.S01.Ep.05.mkv >> S01E05
+Show.Name.S01.Ep.05.srt >> S01E05
+Show.Name.S01E02.mkv >> S01E02
+Show.Name.S01E02.srt >> S01E02
+Show.Name.S01Ep05.mkv >> S01E05
+Show.Name.S01Ep05.srt >> S01E05
+Show.Name.Season 1 Ep 5.srt >> S01E05
+Show.Name.Season 1 Episode 5.mkv >> S01E5
+Show.Name.Season.1.Episode.05.ass >> S01E05
+Show.Name.Season.1.Episode.05.mkv >> S01E05
+Show.Name.Season1 Ep05.mkv >> S01E05
+Show.Name.Season1Ep05.srt >> S01E05
+Show.Name.Season1Episode05.ass >> S01E05
+Show.Name.Season1Episode05.mkv >> S01E05
+Show.Name.Season2.Ep05.srt >> S02E05
+Show.Name.Season2.Ep160.mkv >> S02E160
+Show.S4E3.mkv >> S04E3
+Show.s4e3.srt >> S04E3
+My.Movie.2023.1080p.mkv >> S(None)E(None)
+My.Movie.2023.srt >> S(None)E(None)
+
+FOUND AND RENAMED MATCHING SUBTITLE AND VIEDEO FILES FOR THESE EPISODES:
+- S01E01
+- S01E02
+- S01E05
+- S02E05
+- S02E2
+- S03E01
+- S04E3
+
+COULDN'T FIND MATCHING SUBTITLE AND VIEDEO FILES FOR THESE EPISODES:
+- S02E15
+- S02E160
+
+COULDNT IDENTIFY SEASON#EPISODE# FOR THESE FILES:
+- My.Movie.2023.1080p.mkv
+- My.Movie.2023.srt
