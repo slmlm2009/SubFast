@@ -217,8 +217,4 @@ For issues, questions, or feature requests, please provide:
 - Complete error messages or unexpected behavior
 - Steps to reproduce the problem
 
-<<<<<<< HEAD
 The script includes detailed logging and analysis output to help diagnose issues quickly.
-=======
-The script includes detailed logging and analysis output to help diagnose issues quickly.
->>>>>>> aeb36dd (Synced local repo with GitHub)
