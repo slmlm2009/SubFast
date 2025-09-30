@@ -1,25 +1,8 @@
-#!/usr/bin/env python3
-"""
-Subtitle Renamer Tool [AR]
-
-Automatically renames subtitle files (.srt, .ass) to match corresponding video files
-(.mkv, .mp4) based on detected episode patterns. Adds '.ar' language tag before the
-file extension to specify Arabic subtitles for media players.
-
-Supports multiple episode naming patterns (S01E01, 2x05, Season.Episode, etc.) and
-includes movie matching mode for single video/subtitle pairs.
-
-Optimized version with pre-compiled regex patterns and single-pass file processing
-for improved performance on large datasets.
-"""
-
 import os
 import re
 from collections import defaultdict
 
-# Pre-compiled regex patterns for episode detection
-# Patterns are tried in order, with most common formats first for faster matching
-# Each pattern extracts season and episode numbers, normalizing them to S##E## format
+# Compile regex patterns once for better performance
 EPISODE_PATTERNS = [
     (re.compile(r'[Ss](\d+)[Ee](\d+)'), lambda m: (m.group(1).zfill(2), m.group(2))),
     (re.compile(r'(?:^|[._\s-])(\d+)[xX](\d+)(?=[._\s-]|$)'), lambda m: (m.group(1).zfill(2), m.group(2))),
@@ -39,14 +22,13 @@ EPISODE_PATTERNS = [
     (re.compile(r'-\s*(\d+)'), lambda m: ("01", m.group(1))),
 ]
 
-# Pre-compiled utility regex patterns for filename processing
-PROBLEMATIC_CHARS = re.compile(r'[<>:"/\|?*]')  # Invalid characters for filenames
-SUBTITLE_SUFFIX_PATTERN = re.compile(r'[._\-\s]*[Ss]ub(title)?[._\-\s]*', re.IGNORECASE)  # Remove "sub" markers
-YEAR_PATTERN = re.compile(r'(?:19|20)\d{2}')  # Match 4-digit years (1900-2099)
-BASE_NAME_CLEANUP = re.compile(r'[._\-]+')  # Replace separators with spaces
+# Compile once for performance
+PROBLEMATIC_CHARS = re.compile(r'[<>:"/\|?*]')
+SUBTITLE_SUFFIX_PATTERN = re.compile(r'[._\-\s]*[Ss]ub(title)?[._\-\s]*', re.IGNORECASE)
+YEAR_PATTERN = re.compile(r'(?:19|20)\d{2}')
+BASE_NAME_CLEANUP = re.compile(r'[._\-]+')
 
-# Common video quality and format indicators to exclude when matching movie titles
-# These words are filtered out to improve title similarity matching between video and subtitle files
+# Common video quality indicators (compiled once)
 COMMON_INDICATORS = {
     '1080p', '720p', '480p', '2160p', '4k', 'bluray', 'web', 'dvd', 'hd', 'x264', 'x265', 
     'h264', 'h265', 'avc', 'hevc', 'aac', 'ac3', 'dts', 'remux', 'proper', 'repack', 
@@ -58,20 +40,7 @@ COMMON_INDICATORS = {
 }
 
 def get_episode_number(filename):
-    """
-    Extract episode information from filename and normalize to S##E## format.
-    
-    Args:
-        filename: The filename to parse
-        
-    Returns:
-        Normalized episode string (e.g., 'S01E05') or None if no pattern found
-        
-    Examples:
-        'Show.S01E05.mkv' -> 'S01E05'
-        'Show.2x10.mkv' -> 'S02E10'
-        'Show - 15.mkv' -> 'S01E15' (assumes Season 1)
-    """
+    """Extract episode information from filename using compiled patterns"""
     for pattern, formatter in EPISODE_PATTERNS:
         match = pattern.search(filename)
         if match:
@@ -80,69 +49,38 @@ def get_episode_number(filename):
     return None
 
 def extract_season_episode_numbers(episode_string):
-    """
-    Parse normalized episode string to extract season and episode numbers.
-    
-    Args:
-        episode_string: Episode string in S##E## format (e.g., 'S01E05')
-        
-    Returns:
-        Tuple of (season_number, episode_number) as strings, or ("", "") if invalid
-    """
+    """Extract season and episode numbers from episode string like S01E05"""
     if not episode_string:
         return "", ""
     
+    # Use single regex instead of two separate searches
     match = re.match(r'S(\d+)E(\d+)', episode_string)
     if match:
         return match.group(1), match.group(2)
     return "", ""
 
 def extract_base_name(filename):
-    """
-    Extract and clean the base filename for comparison.
-    
-    Removes file extension and converts separators (., _, -) to spaces for
-    better word-based matching in movie mode.
-    
-    Args:
-        filename: The filename to process
-        
-    Returns:
-        Cleaned base name with spaces instead of separators
-    """
+    """Extract the base name without extension and common separators"""
     base_name = os.path.splitext(filename)[0]
     base_name = BASE_NAME_CLEANUP.sub(' ', base_name)
     return base_name.strip()
 
 def find_movie_subtitle_match(video_files, subtitle_files):
-    """
-    Match a single movie file with a single subtitle file based on title similarity.
-    
-    Uses two matching strategies:
-    1. Year matching: If both files contain the same 4-digit year, they're considered a match
-    2. Word overlap: Compares common words after removing quality indicators (720p, x264, etc.)
-    
-    Args:
-        video_files: List of video filenames (must contain exactly 1 file)
-        subtitle_files: List of subtitle filenames (must contain exactly 1 file)
-        
-    Returns:
-        Tuple of (video_file, subtitle_file) if match found, None otherwise
-    """
+    """Find a potential movie-subtitle match based on filename similarity"""
     if len(video_files) != 1 or len(subtitle_files) != 1:
         return None
     
     video_name = extract_base_name(video_files[0])
     subtitle_name = extract_base_name(subtitle_files[0])
     
-    # Extract release years if present in filenames
+    # Extract years from filenames
     video_year_match = YEAR_PATTERN.search(video_files[0])
     subtitle_year_match = YEAR_PATTERN.search(subtitle_files[0])
     
     video_year = video_year_match.group() if video_year_match else None
     subtitle_year = subtitle_year_match.group() if subtitle_year_match else None
     
-    # Split into words and filter out quality/format indicators for cleaner comparison
+    # Split names into words and remove common indicators
     video_words = set(video_name.lower().split()) - COMMON_INDICATORS
     subtitle_words = set(subtitle_name.lower().split()) - COMMON_INDICATORS
     
@@ -161,29 +99,14 @@ def find_movie_subtitle_match(video_files, subtitle_files):
     return None
 
 def generate_unique_name(base_name, subtitle_ext, subtitle, directory):
-    """
-    Generate a unique filename when multiple subtitles match the same video.
-    
-    First attempts the standard format: {video_base}.ar{ext}
-    If that exists, creates a unique variant: {video_base}.ar_{original_sub_name}{ext}
-    If that also exists, adds a numeric counter.
-    
-    Args:
-        base_name: Base name of the video file (without extension)
-        subtitle_ext: Extension of the subtitle file (e.g., '.srt')
-        subtitle: Original subtitle filename
-        directory: Target directory path
-        
-    Returns:
-        Tuple of (new_filename, full_path)
-    """
+    """Generate a unique filename for collision handling"""
     new_name = f"{base_name}.ar{subtitle_ext}"
     new_path = os.path.join(directory, new_name)
     
     if not os.path.exists(new_path):
         return new_name, new_path
     
-    # File already exists - create unique name incorporating original subtitle name
+    # Handle collision
     original_base = os.path.splitext(subtitle)[0]
     original_cleaned = SUBTITLE_SUFFIX_PATTERN.sub('', original_base)
     if not original_cleaned:
@@ -205,26 +128,11 @@ def generate_unique_name(base_name, subtitle_ext, subtitle, directory):
     return specific_new_name, new_path
 
 def build_episode_context(video_files):
-    """
-    Build reference mappings for context-aware episode matching.
-    
-    Creates mappings to handle cases where the same episode uses different
-    numbering formats (e.g., S02E015 vs S02E15). The first video file found
-    (alphabetically) establishes the canonical pattern for that episode.
-    
-    Args:
-        video_files: List of video filenames
-        
-    Returns:
-        Tuple of (video_episodes dict, temp_video_dict)
-        - video_episodes: Maps (season, episode) tuples to canonical episode strings
-        - temp_video_dict: Maps episode strings to video filenames
-    """
+    """Build episode context mapping for standardization"""
     video_episodes = {}
     temp_video_dict = {}
     
-    # Process alphabetically to ensure deterministic pattern selection when multiple
-    # videos have the same episode number with different formatting
+    # Process in sorted order for consistency
     for video in sorted(video_files):
         episode_string = get_episode_number(video)
         if episode_string:
@@ -242,25 +150,7 @@ def build_episode_context(video_files):
     return video_episodes, temp_video_dict
 
 def process_subtitles(subtitle_files, video_episodes, temp_video_dict, directory):
-    """
-    Process and rename subtitle files to match their corresponding videos.
-    
-    For each subtitle:
-    1. Detect episode pattern
-    2. Apply context-aware standardization (adjust S02E015 to S02E15 if needed)
-    3. Find matching video file
-    4. Rename to {video_base}.ar{subtitle_ext}
-    5. Handle collisions by creating unique names
-    
-    Args:
-        subtitle_files: List of subtitle filenames to process
-        video_episodes: Episode standardization map from build_episode_context()
-        temp_video_dict: Video filename lookup map from build_episode_context()
-        directory: Working directory path
-        
-    Returns:
-        Number of successfully renamed files
-    """
+    """Process subtitle files and rename them"""
     renamed_count = 0
     
     print("PROCESSING SUBTITLES:")
@@ -269,7 +159,7 @@ def process_subtitles(subtitle_files, video_episodes, temp_video_dict, directory
     for subtitle in sorted(subtitle_files):
         ep = get_episode_number(subtitle)
         
-        # Standardize episode format to match video files (handles padding differences)
+        # Apply context-aware standardization
         adjusted_episode_string = ep
         if ep:
             season, episode = extract_season_episode_numbers(ep)
@@ -281,7 +171,7 @@ def process_subtitles(subtitle_files, video_episodes, temp_video_dict, directory
                         print(f"'{subtitle}' -> {ep} adjusted to {video_pattern} (context-aware)")
                     adjusted_episode_string = video_pattern
 
-        # Find corresponding video file and perform rename
+        # Match and rename
         target_video = None
         if adjusted_episode_string and adjusted_episode_string in temp_video_dict:
             target_video = temp_video_dict[adjusted_episode_string]
@@ -311,29 +201,12 @@ def process_subtitles(subtitle_files, video_episodes, temp_video_dict, directory
     return renamed_count
 
 def analyze_results(files, video_files, subtitle_files, video_episodes, temp_video_dict):
-    """
-    Analyze matching results and categorize files for summary report.
-    
-    Categorizes files into:
-    - found_matches: Episodes where both video and subtitle were successfully matched
-    - not_found_episodes: Episodes with only video OR only subtitle
-    - unidentified_files: Files where no episode pattern could be detected
-    
-    Args:
-        files: All files in directory
-        video_files: List of video filenames
-        subtitle_files: List of subtitle filenames
-        video_episodes: Episode standardization map
-        temp_video_dict: Video filename lookup map
-        
-    Returns:
-        Tuple of (found_matches set, not_found_episodes set, unidentified_files list)
-    """
+    """Generate analysis summary efficiently"""
     found_matches = set()
     not_found_episodes = set()
     unidentified_files = []
     
-    # Build map of which episodes have matching subtitles
+    # Track which episodes have matches
     subtitle_episodes = {}
     for subtitle in subtitle_files:
         ep = get_episode_number(subtitle)
@@ -350,7 +223,7 @@ def analyze_results(files, video_files, subtitle_files, video_episodes, temp_vid
         else:
             not_found_episodes.add("(None)")
     
-    # Identify videos that don't have corresponding subtitle files
+    # Check for videos without matching subtitles
     for video in video_files:
         ep = get_episode_number(video)
         if ep:
@@ -360,7 +233,7 @@ def analyze_results(files, video_files, subtitle_files, video_episodes, temp_vid
                 if key not in subtitle_episodes:
                     not_found_episodes.add(video_episodes.get(key, ep))
     
-    # Collect files where episode pattern detection failed
+    # Find unidentified files
     for filename in files:
         if filename.endswith(('.srt', '.ass', '.mkv', '.mp4')):
             if not get_episode_number(filename):
@@ -372,7 +245,7 @@ def rename_subtitles_to_match_videos():
     directory = os.getcwd()
     files = os.listdir(directory)
     
-    # Separate video and subtitle files by extension
+    # Filter files by extension
     video_files = [f for f in files if f.endswith(('.mkv', '.mp4'))]
     subtitle_files = [f for f in files if f.endswith(('.srt', '.ass'))]
 
@@ -385,7 +258,7 @@ def rename_subtitles_to_match_videos():
         print(f"Subtitles: {subtitle_files[:4]}{'...' if len(subtitle_files) > 4 else ''}")
     print()
 
-    # Build episode reference mappings for context-aware matching
+    # Build episode context
     video_episodes, temp_video_dict = build_episode_context(video_files)
     
     if video_episodes:
@@ -394,13 +267,13 @@ def rename_subtitles_to_match_videos():
         print(f"EPISODE PATTERNS DETECTED FROM VIDEO FILES: {list(video_episodes.values())[:10]}{'...' if len(video_episodes) > 10 else ''}")
     print()
 
-    # Rename subtitle files to match corresponding videos
+    # Process subtitles
     renamed_count = process_subtitles(subtitle_files, video_episodes, temp_video_dict, directory)
     
     print("-" * 40)
     print()
     
-    # Activate movie matching mode if no TV episodes were found
+    # Handle movie mode
     remaining_video_files = [v for v in video_files if not get_episode_number(v)]
     remaining_subtitle_files = [s for s in subtitle_files if not get_episode_number(s)]
     
@@ -430,7 +303,7 @@ def rename_subtitles_to_match_videos():
         print("INFO: No files were renamed.")
     print("=" * 60)
     
-    # Display detailed analysis of matching results
+    # Analysis summary
     print("\nANALYSIS SUMMARY:")
     print("=" * 60)
     
@@ -458,18 +331,7 @@ def rename_subtitles_to_match_videos():
         print()
 
 def export_analysis_to_csv():
-    """
-    Export detailed episode detection analysis to renaming_report.csv.
-    
-    Creates a report showing:
-    1. All files with their detected episode numbers (or 'None' if not detected)
-    2. Episodes that were successfully matched and renamed
-    3. Episodes missing either video or subtitle
-    4. Files where episode detection failed
-    
-    The report is generated BEFORE any renaming occurs to preserve original filenames.
-    Output file: renaming_report.csv in the current directory
-    """
+    """Export episode analysis results to a text file in TEMPLATE format"""
     directory = os.getcwd()
     files = os.listdir(directory)
     
@@ -477,17 +339,17 @@ def export_analysis_to_csv():
     subtitle_files = [f for f in files if f.endswith(('.srt', '.ass'))]
     all_files = video_files + subtitle_files
     
-    # Build episode mappings for analysis
+    # Build context efficiently
     video_episodes, temp_video_dict = build_episode_context(video_files)
     
-    # Separate files into identified and unidentified categories
+    # Categorize files
     identified_files = []
     unidentified_files = []
     
     for filename in all_files:
         episode_string = get_episode_number(filename)
         
-        # Standardize episode format to match video files (handles padding differences) for subtitles
+        # Apply context-aware standardization for subtitles
         adjusted_episode_string = episode_string
         if filename in subtitle_files and episode_string:
             season, episode = extract_season_episode_numbers(episode_string)
@@ -510,12 +372,12 @@ def export_analysis_to_csv():
         else:
             unidentified_files.append(filename)
 
-    # Generate match/no-match analysis for the report
+    # Get analysis results
     found_matches, not_found_episodes, _ = analyze_results(
         files, video_files, subtitle_files, video_episodes, temp_video_dict
     )
     
-    # Write formatted report to CSV file
+    # Write results
     txt_filename = "renaming_report.csv"
     txt_path = os.path.join(directory, txt_filename)
     
