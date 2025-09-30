@@ -553,5 +553,9 @@ def export_analysis_to_csv():
     print(f"{txt_path}\n")
 
 if __name__ == "__main__":
+    """
+    Exporting analysis BEFORE any renaming occurs to capture original state.
+    The CSV renaming report export can be enabled/disabled by commenting out the export_analysis_to_csv function in the main execution block.
+    """
     export_analysis_to_csv()
     rename_subtitles_to_match_videos()
