@@ -446,9 +446,63 @@ class OptimizedSubtitleMatcher:
 
     def _write_csv_summary(self, txtfile):
         """Write summary sections to CSV file"""
-        # This method would include the summary writing logic
-        # Implementation details omitted for brevity
-        pass
+        # Collect matched and unmatched episodes
+        found_matches = set()
+        not_found_episodes = set()
+        unidentified_files = []
+
+        # Process subtitles to find matches
+        for subtitle_name, subtitle_info in self.subtitle_files.items():
+            if subtitle_info.episode_string:
+                adjusted_episode = self._get_adjusted_episode(subtitle_info)
+                if adjusted_episode in self.episode_to_video:
+                    found_matches.add(adjusted_episode)
+                else:
+                    not_found_episodes.add(adjusted_episode)
+            else:
+                unidentified_files.append(subtitle_name)
+
+        # Add unmatched videos
+        for video_name, video_info in self.video_files.items():
+            if video_info.episode_string:
+                # Check if this video episode has a matching subtitle
+                has_subtitle_match = False
+                if video_info.season and video_info.episode:
+                    key = (int(video_info.season), int(video_info.episode))
+                    
+                    for subtitle_name, subtitle_info in self.subtitle_files.items():
+                        if subtitle_info.season and subtitle_info.episode:
+                            sub_key = (int(subtitle_info.season), int(subtitle_info.episode))
+                            if sub_key == key:
+                                has_subtitle_match = True
+                                break
+                
+                if not has_subtitle_match:
+                    not_found_episodes.add(video_info.episode_string)
+            elif video_info.name not in [sub.name for sub in self.subtitle_files.values()]:
+                unidentified_files.append(video_name)
+
+        # Write found matches results
+        if found_matches:
+            txtfile.write("FOUND AND RENAMED MATCHING SUBTITLE AND VIEDEO FILES FOR THESE EPISODES:\n")
+            for episode in sorted(found_matches):
+                txtfile.write(f"- {episode}\n")
+            txtfile.write('\n')
+        
+        # Write not found results
+        if not_found_episodes:
+            txtfile.write("COULDN'T FIND MATCHING SUBTITLE AND VIEDEO FILES FOR THESE EPISODES:\n")
+            for episode in sorted(not_found_episodes):
+                if episode != "(None)":
+                    txtfile.write(f"- {episode}\n")
+            txtfile.write('\n')
+        
+        # Write unidentified files summary
+        if unidentified_files:
+            txtfile.write("COULDNT IDENTIFY SEASON#EPISODE# FOR THESE FILES:\n")
+            for filename in sorted(set(unidentified_files)):
+                txtfile.write(f"- {filename}\n")
+
 
 def rename_subtitles_to_match_videos():
     """Main optimized function"""
