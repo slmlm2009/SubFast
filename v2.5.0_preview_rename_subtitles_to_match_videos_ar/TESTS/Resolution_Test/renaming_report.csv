@@ -1,0 +1,40 @@
+# Subtitle Renaming Report
+# Generated: 2025-10-01 18:14:52
+# Directory: C:\Users\slmlm2009\Desktop\Github\rename_subtitles_to_match_videos_ar\v2.5.0_preview_rename_subtitles_to_match_videos_ar\TESTS\Resolution_Test
+# Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass, export=True
+#
+# SUMMARY:
+# Total Videos: 5
+# Total Subtitles: 5
+# Renamed: 4/5 subtitles
+# Videos Missing Subtitles: 0
+# Subtitles Missing Videos: 0
+# Videos Without Episode Pattern: 1
+# Subtitles Without Episode Pattern: 1
+# Movie Mode: No
+# Execution Time: 0.00 seconds
+#
+Original Filename,Detected Episode,New Name,Action
+Anime 5x1050.mkv,S05E1050,No Change,--
+Movie.3x12_720x480.mp4,S03E12,No Change,--
+PureResolution.1920x1080.mkv,(UNIDENTIFIED),No Change,--
+Series_12x103_1280x720_HEVC.mkv,S12E103,No Change,--
+ShowName-2x05_1920x1080.mkv,S02E05,No Change,--
+Anime 5x1050.srt,S05E1050,Anime 5x1050.ar.srt,RENAMED
+Movie.3x12.srt,S03E12,Movie.3x12_720x480.ar.srt,RENAMED
+PureResolution.srt,(UNIDENTIFIED),No Change,--
+Series_12x103.ass,S12E103,Series_12x103_1280x720_HEVC.ar.ass,RENAMED
+ShowName-2x05.srt,S02E05,ShowName-2x05_1920x1080.ar.srt,RENAMED
+#
+# MATCHED EPISODES:
+# S02E05 -> Video: ShowName-2x05_1920x1080.mkv | Subtitle: ShowName-2x05.srt -> ShowName-2x05_1920x1080.ar.srt
+# S03E12 -> Video: Movie.3x12_720x480.mp4 | Subtitle: Movie.3x12.srt -> Movie.3x12_720x480.ar.srt
+# S05E1050 -> Video: Anime 5x1050.mkv | Subtitle: Anime 5x1050.srt -> Anime 5x1050.ar.srt
+# S12E103 -> Video: Series_12x103_1280x720_HEVC.mkv | Subtitle: Series_12x103.ass -> Series_12x103_1280x720_HEVC.ar.ass
+#
+# MISSING MATCHES:
+#
+# FILES WITHOUT EPISODE PATTERN:
+# PureResolution.1920x1080.mkv (no episode pattern detected)
+# PureResolution.srt (no episode pattern detected)
+#

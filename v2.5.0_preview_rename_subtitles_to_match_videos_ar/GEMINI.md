@@ -57,7 +57,7 @@ The script handles several edge cases with clear messaging:
 
 ## Supported Episode Patterns
 - `S##E##` (e.g., S01E01, s02e15)
-- `##x##` (e.g., 2x05, 12x03)
+- `##x##` (e.g., 2x05, 12x03) - seasons 1-99 only to avoid resolution conflicts (1920x1080, 1280x720, etc.)
 - `Season.Episode` (e.g., Season.1.Episode.05, season.2.episode.10)
 - `S##.Episode##` (e.g., S01.Episode.05)
 - `Season##Ep##` (e.g., Season2Ep15, ShowNameSeason2Episode15)
