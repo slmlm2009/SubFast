@@ -1,0 +1,104 @@
+#!/usr/bin/env python3
+"""
+Setup test scenarios for configuration testing.
+Creates test files and config.ini files for each scenario.
+"""
+
+from pathlib import Path
+
+base_dir = Path(__file__).parent
+
+# Test 1: Default Config (no config.ini - will auto-create)
+test1_dir = base_dir / 'Test_Default_Config'
+test1_dir.mkdir(exist_ok=True)
+(test1_dir / 'Show.S01E01.mkv').touch()
+(test1_dir / 'Show.S01E02.mkv').touch()
+(test1_dir / 'Subtitle.01.srt').touch()
+(test1_dir / 'Subtitle.02.srt').touch()
+print(f"[OK] Created Test_Default_Config with 4 test files (no config.ini)")
+
+# Test 2: Custom Language (en instead of ar)
+test2_dir = base_dir / 'Test_Custom_Language'
+test2_dir.mkdir(exist_ok=True)
+(test2_dir / 'Movie.S01E01.mkv').touch()
+(test2_dir / 'Movie.S01E02.mkv').touch()
+(test2_dir / 'Subs.E01.srt').touch()
+(test2_dir / 'Subs.E02.srt').touch()
+
+config2 = """[General]
+enable_export = true
+language_suffix = en
+
+[FileFormats]
+video_extensions = mkv, mp4
+subtitle_extensions = srt, ass
+"""
+(test2_dir / 'config.ini').write_text(config2, encoding='utf-8')
+print(f"[OK] Created Test_Custom_Language with config (language_suffix = en)")
+
+# Test 3: Export Disabled
+test3_dir = base_dir / 'Test_Export_Disabled'
+test3_dir.mkdir(exist_ok=True)
+(test3_dir / 'Series.S01E01.mkv').touch()
+(test3_dir / 'Series.S01E02.mkv').touch()
+(test3_dir / 'Sub.S01E01.srt').touch()
+(test3_dir / 'Sub.S01E02.srt').touch()
+
+config3 = """[General]
+enable_export = false
+language_suffix = ar
+
+[FileFormats]
+video_extensions = mkv, mp4
+subtitle_extensions = srt, ass
+"""
+(test3_dir / 'config.ini').write_text(config3, encoding='utf-8')
+print(f"[OK] Created Test_Export_Disabled with config (enable_export = false)")
+
+# Test 4: Additional Formats (.avi, .webm videos)
+test4_dir = base_dir / 'Test_Additional_Formats'
+test4_dir.mkdir(exist_ok=True)
+(test4_dir / 'Show.S01E01.mkv').touch()
+(test4_dir / 'Show.S01E02.avi').touch()  # .avi video
+(test4_dir / 'Show.S01E03.webm').touch()  # .webm video
+(test4_dir / 'Sub.01.srt').touch()
+(test4_dir / 'Sub.02.srt').touch()
+(test4_dir / 'Sub.03.ass').touch()
+
+config4 = """[General]
+enable_export = true
+language_suffix = ar
+
+[FileFormats]
+video_extensions = mkv, mp4, avi, webm
+subtitle_extensions = srt, ass
+"""
+(test4_dir / 'config.ini').write_text(config4, encoding='utf-8')
+print(f"[OK] Created Test_Additional_Formats with .avi and .webm videos")
+
+# Test 5: Invalid Config (test fallback to defaults)
+test5_dir = base_dir / 'Test_Invalid_Config'
+test5_dir.mkdir(exist_ok=True)
+(test5_dir / 'Video.S01E01.mkv').touch()
+(test5_dir / 'Video.S01E02.mkv').touch()
+(test5_dir / 'Sub.E01.srt').touch()
+(test5_dir / 'Sub.E02.srt').touch()
+
+config5 = """[General]
+enable_export = invalid_value
+language_suffix = ???
+
+[FileFormats]
+video_extensions = 
+subtitle_extensions = 
+"""
+(test5_dir / 'config.ini').write_text(config5, encoding='utf-8')
+print(f"[OK] Created Test_Invalid_Config with invalid values (tests fallback)")
+
+print("\n[SUCCESS] All test scenarios created!")
+print("\nTest scenarios:")
+print("  1. Test_Default_Config - No config.ini (auto-create with defaults)")
+print("  2. Test_Custom_Language - Custom language suffix (en)")
+print("  3. Test_Export_Disabled - CSV export disabled")
+print("  4. Test_Additional_Formats - Additional video formats (.avi, .webm)")
+print("  5. Test_Invalid_Config - Invalid config values (tests error handling)")

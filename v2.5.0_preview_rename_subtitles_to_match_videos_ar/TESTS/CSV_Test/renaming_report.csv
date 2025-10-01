@@ -1,0 +1,24 @@
+# Subtitle Renaming Report
+# Generated: 2025-10-01 06:03:46
+# Directory: C:\Users\slmlm2009\Desktop\Github\rename_subtitles_to_match_videos_ar\v2.5.0_preview_rename_subtitles_to_match_videos_ar\TESTS\CSV_Test
+# Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass, export=True
+#
+# SUMMARY:
+# Total Videos: 2
+# Total Subtitles: 2
+# Renamed: 2/2 subtitles
+# Unmatched Videos: 0
+# Unmatched Subtitles: 0
+# Unidentified Files: 0
+# Movie Mode: No
+#
+Original Filename,Detected Episode,New Name,Action
+MyShow.S01E01.mkv,S01E01,No Change,--
+MyShow.S01E02.mkv,S01E02,No Change,--
+Subtitle.E01.srt,S01E01,MyShow.S01E01.ar.srt,RENAMED
+Subtitle.E02.srt,S01E02,MyShow.S01E02.ar.srt,RENAMED
+#
+# MATCHED EPISODES:
+# S01E01 -> Video: MyShow.S01E01.mkv | Subtitle: Subtitle.E01.srt -> MyShow.S01E01.ar.srt
+# S01E02 -> Video: MyShow.S01E02.mkv | Subtitle: Subtitle.E02.srt -> MyShow.S01E02.ar.srt
+#
