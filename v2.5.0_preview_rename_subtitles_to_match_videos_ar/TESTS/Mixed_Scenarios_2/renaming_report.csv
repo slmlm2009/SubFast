@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Subtitle Renaming Report
 # Generated: 2025-10-01 07:02:55
 # Directory: C:\Users\slmlm2009\Desktop\Github\rename_subtitles_to_match_videos_ar\v2.5.0_preview_rename_subtitles_to_match_videos_ar\TESTS\Mixed_Scenarios_2
@@ -38,3 +39,39 @@ ShowName S02E0160 - Copy - Copy.en.ass,S02E0160,ShowName S02E0160 - Copy - Copy.
 # S04E2 -> Video: Show Season 4 Episode 2.mp4 | Subtitle: Show Season 4 Episode 2.en.ass -> Show Season 4 Episode 2.ar.ass
 # S11E03 -> Video: Long S11E03.mp4 | Subtitle: Long S11E03.en.ass -> Long S11E03.ar.ass
 #
+=======
+FILENAME.EXTENSION >> IDENTIFIED SEASON#EPISODE#
+Long S11E03.mp4 >> S11E03
+Ok Season11.Episode003 - Copy.ass >> S11E03
+OnePiece - 1050.mp4 >> S01E1050
+Program S2Ep10.mkv >> S02E10
+Program Season2 Ep15.mkv >> S02E15
+Show Season 4 Episode 2.mp4 >> S04E2
+ShowName EP8.mkv >> S01E8
+ShowName Episode1050 - Copy.srt >> S01E1050
+ShowName S02E0160 - Copy - Copy.mkv >> S02E0160
+ShowName-11111.mkv >> S01E11111
+Sub Season 4 Episode 02 - Copy.ass >> S04E2
+SubDL S02Ep015.srt >> S02E15
+SubSC Season1 Ep08 - Copy.srt >> S01E8
+Yes Season2.Ep160.ass >> S02E0160
+other. 2x10.ass >> S02E10
+ShowName-Final.mkv >> S(None)E(None)
+subtitle 3.srt >> S(None)E(None)
+
+FOUND AND RENAMED MATCHING SUBTITLE AND VIEDEO FILES FOR THESE EPISODES:
+- S01E1050
+- S01E8
+- S02E0160
+- S02E10
+- S02E15
+- S04E2
+- S11E03
+
+COULDN'T FIND MATCHING SUBTITLE AND VIEDEO FILES FOR THESE EPISODES:
+- S01E11111
+
+COULDNT IDENTIFY SEASON#EPISODE# FOR THESE FILES:
+- ShowName-Final.mkv
+- subtitle 3.srt
+>>>>>>> 4f382a6 (Added support for config.ini and improved CSV export)
