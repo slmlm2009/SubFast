@@ -1,5 +1,5 @@
 # Subtitle Renaming Report
-# Generated: 2025-10-02 00:52:34
+# Generated: 2025-10-02 01:09:49
 # Directory: C:\Users\slmlm2009\Desktop\Github\rename_subtitles_to_match_videos_ar\v2.5.0_preview_rename_subtitles_to_match_videos_ar\TESTS\AIO_Test
 # Configuration: language=ar, videos=mkv|mp4|avi, subtitles=srt|ass|sub, export=True
 #
@@ -31,37 +31,37 @@ ShowName S2 - 14 - 1920x1080.mp4,S02E14,No Change,--
 ShowName S2 - E23.mp4,S02E23,No Change,--
 ShowName S2 - EP25.mp4,S02E25,No Change,--
 SomeShow 2nd Season E17.mkv,S02E17,No Change,--
-Goat - 245.ass,S01E245,Naruto Shippuden - 245.ar.ass,RENAMED
+Detective Conan - 03.sub,S01E03,Detective Conan - 03.ar.sub,RENAMED
+Naruto Shippuden - 245.ass,S01E245,Naruto Shippuden - 245.ar.ass,RENAMED
+ShowName 12th Season - 103.ass,S12E103,ShowName 12th Season - 103.ar.ass,RENAMED
 ShowName 12th Season - 103.srt,S12E103,ShowName 12th Season - 103.ar.srt,RENAMED
 ShowName 1st Season - 05.srt,S01E05,ShowName 1st Season - 05.ar.srt,RENAMED
-ShowName 2nd Season EP17.ass,S02E17,SomeShow 2nd Season E17.ar.ass,RENAMED
-ShowName 3rd Season Episode 8.srt,S03E08,ShowName 3rd Season Episode 8 (3840x2160).ar.srt,RENAMED
-ShowName S2 - 10.ass,S02E10,ShowName 2nd Season EP10.ar.ass,RENAMED
-ShowName Season12 - 103.ass,S12E103,ShowName 12th Season - 103.ar.ass,RENAMED
-Subtitle - 03.sub,S01E03,Detective Conan - 03.ar.sub,RENAMED
-subtitle 1st Season-9.srt,S01E09,ShowName S01 - EP09.ar.srt,RENAMED
-subtitle 2x14.srt,S02E14,ShowName S2 - 14 - 1920x1080.ar.srt,RENAMED
-subtitle S01-EP007.srt,S01E07,ShowName S01 - 07.ar.srt,RENAMED
-subtitle S1 - E8.srt,S01E08,ShowName S01 - E08.ar.srt,RENAMED
-subtitle Season 12 - Episode 149.srt,S12E149,ShowName S12 - 149.ar.srt,RENAMED
-subtitle Season 2 - 23.srt,S02E23,ShowName S2 - E23.ar.srt,RENAMED
-subtitle Season2 EP25.srt,S02E25,ShowName S2 - EP25.ar.srt,RENAMED
+ShowName 2nd Season EP10.ass,S02E10,ShowName 2nd Season EP10.ar.ass,RENAMED
+ShowName 3rd Season Episode 8 (3840x2160).srt,S03E08,ShowName 3rd Season Episode 8 (3840x2160).ar.srt,RENAMED
+ShowName S01 - 07.srt,S01E07,ShowName S01 - 07.ar.srt,RENAMED
+ShowName S01 - E08.srt,S01E08,ShowName S01 - E08.ar.srt,RENAMED
+ShowName S01 - EP09.srt,S01E09,ShowName S01 - EP09.ar.srt,RENAMED
+ShowName S12 - 149.srt,S12E149,ShowName S12 - 149.ar.srt,RENAMED
+ShowName S2 - 14 - 1920x1080.srt,S02E14,ShowName S2 - 14 - 1920x1080.ar.srt,RENAMED
+ShowName S2 - E23.srt,S02E23,ShowName S2 - E23.ar.srt,RENAMED
+ShowName S2 - EP25.srt,S02E25,ShowName S2 - EP25.ar.srt,RENAMED
+SomeShow 2nd Season E17.ass,S02E17,SomeShow 2nd Season E17.ar.ass,RENAMED
 #
 # MATCHED EPISODES:
-# S01E03 -> Video: Detective Conan - 03.mp4 | Subtitle: Subtitle - 03.sub -> Detective Conan - 03.ar.sub
+# S01E03 -> Video: Detective Conan - 03.mp4 | Subtitle: Detective Conan - 03.sub -> Detective Conan - 03.ar.sub
 # S01E05 -> Video: ShowName 1st Season - 05.mkv | Subtitle: ShowName 1st Season - 05.srt -> ShowName 1st Season - 05.ar.srt
-# S01E07 -> Video: ShowName S01 - 07.mkv | Subtitle: subtitle S01-EP007.srt -> ShowName S01 - 07.ar.srt
-# S01E08 -> Video: ShowName S01 - E08.mkv | Subtitle: subtitle S1 - E8.srt -> ShowName S01 - E08.ar.srt
-# S01E09 -> Video: ShowName S01 - EP09.mkv | Subtitle: subtitle 1st Season-9.srt -> ShowName S01 - EP09.ar.srt
-# S01E245 -> Video: Naruto Shippuden - 245.avi | Subtitle: Goat - 245.ass -> Naruto Shippuden - 245.ar.ass
-# S02E10 -> Video: ShowName 2nd Season EP10.mp4 | Subtitle: ShowName S2 - 10.ass -> ShowName 2nd Season EP10.ar.ass
-# S02E14 -> Video: ShowName S2 - 14 - 1920x1080.mp4 | Subtitle: subtitle 2x14.srt -> ShowName S2 - 14 - 1920x1080.ar.srt
-# S02E17 -> Video: SomeShow 2nd Season E17.mkv | Subtitle: ShowName 2nd Season EP17.ass -> SomeShow 2nd Season E17.ar.ass
-# S02E23 -> Video: ShowName S2 - E23.mp4 | Subtitle: subtitle Season 2 - 23.srt -> ShowName S2 - E23.ar.srt
-# S02E25 -> Video: ShowName S2 - EP25.mp4 | Subtitle: subtitle Season2 EP25.srt -> ShowName S2 - EP25.ar.srt
-# S03E08 -> Video: ShowName 3rd Season Episode 8 (3840x2160).mkv | Subtitle: ShowName 3rd Season Episode 8.srt -> ShowName 3rd Season Episode 8 (3840x2160).ar.srt
-# S12E103 -> Video: ShowName 12th Season - 103.mkv | Subtitle: ShowName 12th Season - 103.srt -> ShowName 12th Season - 103.ar.srt
-# S12E149 -> Video: ShowName S12 - 149.mkv | Subtitle: subtitle Season 12 - Episode 149.srt -> ShowName S12 - 149.ar.srt
+# S01E07 -> Video: ShowName S01 - 07.mkv | Subtitle: ShowName S01 - 07.srt -> ShowName S01 - 07.ar.srt
+# S01E08 -> Video: ShowName S01 - E08.mkv | Subtitle: ShowName S01 - E08.srt -> ShowName S01 - E08.ar.srt
+# S01E09 -> Video: ShowName S01 - EP09.mkv | Subtitle: ShowName S01 - EP09.srt -> ShowName S01 - EP09.ar.srt
+# S01E245 -> Video: Naruto Shippuden - 245.avi | Subtitle: Naruto Shippuden - 245.ass -> Naruto Shippuden - 245.ar.ass
+# S02E10 -> Video: ShowName 2nd Season EP10.mp4 | Subtitle: ShowName 2nd Season EP10.ass -> ShowName 2nd Season EP10.ar.ass
+# S02E14 -> Video: ShowName S2 - 14 - 1920x1080.mp4 | Subtitle: ShowName S2 - 14 - 1920x1080.srt -> ShowName S2 - 14 - 1920x1080.ar.srt
+# S02E17 -> Video: SomeShow 2nd Season E17.mkv | Subtitle: SomeShow 2nd Season E17.ass -> SomeShow 2nd Season E17.ar.ass
+# S02E23 -> Video: ShowName S2 - E23.mp4 | Subtitle: ShowName S2 - E23.srt -> ShowName S2 - E23.ar.srt
+# S02E25 -> Video: ShowName S2 - EP25.mp4 | Subtitle: ShowName S2 - EP25.srt -> ShowName S2 - EP25.ar.srt
+# S03E08 -> Video: ShowName 3rd Season Episode 8 (3840x2160).mkv | Subtitle: ShowName 3rd Season Episode 8 (3840x2160).srt -> ShowName 3rd Season Episode 8 (3840x2160).ar.srt
+# S12E103 -> Video: ShowName 12th Season - 103.mkv | Subtitle: ShowName 12th Season - 103.ass -> ShowName 12th Season - 103.ar.ass
+# S12E149 -> Video: ShowName S12 - 149.mkv | Subtitle: ShowName S12 - 149.srt -> ShowName S12 - 149.ar.srt
 #
 # MISSING MATCHES:
 # S01E156 -> Has Video: Naruto Shippuden EP156.mp4 | Missing: Subtitle

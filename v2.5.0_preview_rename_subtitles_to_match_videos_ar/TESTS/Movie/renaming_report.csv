@@ -1,30 +1,7 @@
-# Subtitle Renaming Report
-# Generated: 2025-10-02 00:46:36
-# Directory: C:\Users\slmlm2009\Desktop\Github\rename_subtitles_to_match_videos_ar\v2.5.0_preview_rename_subtitles_to_match_videos_ar\TESTS\Movie
-# Configuration: language=ar, videos=mkv|mp4|avi, subtitles=srt|ass|sub, export=True
-#
-# SUMMARY:
-# Total Videos: 1
-# Total Subtitles: 1
-# Renamed: 1/1 subtitles
-# Videos Missing Subtitles: 0
-# Subtitles Missing Videos: 0
-# Videos Without Episode Pattern: 1
-# Subtitles Without Episode Pattern: 1
-# Movie Mode: Yes
-# Execution Time: 0.00 seconds
-#
-Original Filename,Detected Episode,New Name,Action
-Some Movie (2023)_x264_BDRip_3840x2160.mkv,Movie,No Change,--
-Some Movie (2023)_x264_BDRip.ar.srt,Movie,Some Movie (2023)_x264_BDRip_3840x2160.ar.srt,RENAMED
-#
-# MOVIE MODE DETECTED:
-# Successfully matched single video + subtitle pair
-# Video: Some Movie (2023)_x264_BDRip_3840x2160.mkv
-# Subtitle: Some Movie (2023)_x264_BDRip.ar.srt -> Some Movie (2023)_x264_BDRip_3840x2160.ar.srt
-#
-# MISSING MATCHES:
-#
-# FILES WITHOUT EPISODE PATTERN:
-# (none - movie mode handled files)
-#
+FILENAME.EXTENSION >> IDENTIFIED SEASON#EPISODE#
+Some Movie (2023)_x264_BDRip.mkv >> S(None)E(None)
+Sub for the Movie.srt >> S(None)E(None)
+
+COULDNT IDENTIFY SEASON#EPISODE# FOR THESE FILES:
+- Some Movie (2023)_x264_BDRip.mkv
+- Sub for the Movie.srt
