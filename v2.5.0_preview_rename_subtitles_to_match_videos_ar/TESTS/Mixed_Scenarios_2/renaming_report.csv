@@ -1,7 +1,7 @@
 # Subtitle Renaming Report
-# Generated: 2025-10-01 17:56:53
+# Generated: 2025-10-02 00:47:03
 # Directory: C:\Users\slmlm2009\Desktop\Github\rename_subtitles_to_match_videos_ar\v2.5.0_preview_rename_subtitles_to_match_videos_ar\TESTS\Mixed_Scenarios_2
-# Configuration: language=en, videos=mkv|mp4, subtitles=srt|ass, export=True
+# Configuration: language=ar, videos=mkv|mp4|avi, subtitles=srt|ass|sub, export=True
 #
 # SUMMARY:
 # Total Videos: 9
@@ -19,28 +19,28 @@ Long S11E03.mp4,S11E03,No Change,--
 OnePiece - 1050.mp4,S01E1050,No Change,--
 Program S2Ep10.mkv,S02E10,No Change,--
 Program Season2 Ep15.mkv,S02E15,No Change,--
-Show Season 4 Episode 2.mp4,S04E2,No Change,--
-ShowName EP8.mkv,S01E8,No Change,--
+Show Season 4 Episode 2.mp4,S04E02,No Change,--
+ShowName EP8.mkv,S01E08,No Change,--
 ShowName S02E0160 - Copy - Copy.mkv,S02E0160,No Change,--
 ShowName-11111.mkv,S01E11111,No Change,--
 ShowName-Final.mkv,(UNIDENTIFIED),No Change,--
-Long S11E03.ar_Long S11E03.ar.ass,S11E03,Long S11E03.en.ass,RENAMED
-OnePiece - 1050.ar_OnePiece - 1050.ar.srt,S01E1050,OnePiece - 1050.en.srt,RENAMED
-Program S2Ep10.ar_Program S2Ep10.ar.ass,S02E10,Program S2Ep10.en.ass,RENAMED
-Program Season2 Ep15.ar_Program Season2 Ep15.ar.srt,S02E15,Program Season2 Ep15.en.srt,RENAMED
-Show Season 4 Episode 2.ar_Show Season 4 Episode 2.ar.ass,S04E2,Show Season 4 Episode 2.en.ass,RENAMED
-ShowName EP8.ar_ShowName EP8.ar.srt,S01E8,ShowName EP8.en.srt,RENAMED
-ShowName S02E0160 - Copy - Copy.ar_ShowName S02E0160 - Copy - Copy.ar.ass,S02E0160,ShowName S02E0160 - Copy - Copy.en.ass,RENAMED
+Ok Season11.Episode003 - Copy.ass,S11E03,Long S11E03.ar.ass,RENAMED
+ShowName Episode1050 - Copy.srt,S01E1050,OnePiece - 1050.ar.srt,RENAMED
+Sub Season 4 Episode 02 - Copy.ass,S04E02,Show Season 4 Episode 2.ar.ass,RENAMED
+SubDL S02Ep015.srt,S02E15,Program Season2 Ep15.ar.srt,RENAMED
+SubSC Season1 Ep08 - Copy.srt,S01E08,ShowName EP8.ar.srt,RENAMED
+Yes Season2.Ep160.ass,S02E0160,ShowName S02E0160 - Copy - Copy.ar.ass,RENAMED
+other. 2x10.ass,S02E10,Program S2Ep10.ar.ass,RENAMED
 subtitle 3.srt,(UNIDENTIFIED),No Change,--
 #
 # MATCHED EPISODES:
-# S01E1050 -> Video: OnePiece - 1050.mp4 | Subtitle: OnePiece - 1050.ar_OnePiece - 1050.ar.srt -> OnePiece - 1050.en.srt
-# S01E8 -> Video: ShowName EP8.mkv | Subtitle: ShowName EP8.ar_ShowName EP8.ar.srt -> ShowName EP8.en.srt
-# S02E0160 -> Video: ShowName S02E0160 - Copy - Copy.mkv | Subtitle: ShowName S02E0160 - Copy - Copy.ar_ShowName S02E0160 - Copy - Copy.ar.ass -> ShowName S02E0160 - Copy - Copy.en.ass
-# S02E10 -> Video: Program S2Ep10.mkv | Subtitle: Program S2Ep10.ar_Program S2Ep10.ar.ass -> Program S2Ep10.en.ass
-# S02E15 -> Video: Program Season2 Ep15.mkv | Subtitle: Program Season2 Ep15.ar_Program Season2 Ep15.ar.srt -> Program Season2 Ep15.en.srt
-# S04E2 -> Video: Show Season 4 Episode 2.mp4 | Subtitle: Show Season 4 Episode 2.ar_Show Season 4 Episode 2.ar.ass -> Show Season 4 Episode 2.en.ass
-# S11E03 -> Video: Long S11E03.mp4 | Subtitle: Long S11E03.ar_Long S11E03.ar.ass -> Long S11E03.en.ass
+# S01E08 -> Video: ShowName EP8.mkv | Subtitle: SubSC Season1 Ep08 - Copy.srt -> ShowName EP8.ar.srt
+# S01E1050 -> Video: OnePiece - 1050.mp4 | Subtitle: ShowName Episode1050 - Copy.srt -> OnePiece - 1050.ar.srt
+# S02E0160 -> Video: ShowName S02E0160 - Copy - Copy.mkv | Subtitle: Yes Season2.Ep160.ass -> ShowName S02E0160 - Copy - Copy.ar.ass
+# S02E10 -> Video: Program S2Ep10.mkv | Subtitle: other. 2x10.ass -> Program S2Ep10.ar.ass
+# S02E15 -> Video: Program Season2 Ep15.mkv | Subtitle: SubDL S02Ep015.srt -> Program Season2 Ep15.ar.srt
+# S04E02 -> Video: Show Season 4 Episode 2.mp4 | Subtitle: Sub Season 4 Episode 02 - Copy.ass -> Show Season 4 Episode 2.ar.ass
+# S11E03 -> Video: Long S11E03.mp4 | Subtitle: Ok Season11.Episode003 - Copy.ass -> Long S11E03.ar.ass
 #
 # MISSING MATCHES:
 # S01E11111 -> Has Video: ShowName-11111.mkv | Missing: Subtitle

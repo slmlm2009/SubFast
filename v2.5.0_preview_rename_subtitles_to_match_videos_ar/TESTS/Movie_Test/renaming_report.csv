@@ -1,28 +1,30 @@
 # Subtitle Renaming Report
-# Generated: 2025-10-01 05:53:29
+# Generated: 2025-10-02 00:44:59
 # Directory: C:\Users\slmlm2009\Desktop\Github\rename_subtitles_to_match_videos_ar\v2.5.0_preview_rename_subtitles_to_match_videos_ar\TESTS\Movie_Test
-# Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass, export=True
+# Configuration: language=ar, videos=mkv|mp4|avi, subtitles=srt|ass|sub, export=True
 #
 # SUMMARY:
 # Total Videos: 1
 # Total Subtitles: 1
 # Renamed: 1/1 subtitles
-# Unmatched Videos: 0
-# Unmatched Subtitles: 0
-# Unidentified Files: 0
+# Videos Missing Subtitles: 0
+# Subtitles Missing Videos: 0
+# Videos Without Episode Pattern: 1
+# Subtitles Without Episode Pattern: 1
 # Movie Mode: Yes
+# Execution Time: 0.00 seconds
 #
 Original Filename,Detected Episode,New Name,Action
-Inception (2010).mkv,Movie,No Change,--
-Inception (2010).ar.srt,Movie,Inception (2010).ar.srt,RENAMED
+The Departed Movie (2005).mkv,Movie,No Change,--
+TheDeparted Movie.srt,Movie,The Departed Movie (2005).ar.srt,RENAMED
 #
 # MOVIE MODE DETECTED:
 # Successfully matched single video + subtitle pair
-# Video: Inception (2010).mkv
-# Subtitle: Inception (2010).ar.srt -> Inception (2010).ar.srt
+# Video: The Departed Movie (2005).mkv
+# Subtitle: TheDeparted Movie.srt -> The Departed Movie (2005).ar.srt
 #
 # MISSING MATCHES:
 #
-# UNIDENTIFIED FILES:
+# FILES WITHOUT EPISODE PATTERN:
 # (none - movie mode handled files)
 #

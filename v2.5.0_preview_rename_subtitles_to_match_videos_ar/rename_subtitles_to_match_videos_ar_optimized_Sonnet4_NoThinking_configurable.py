@@ -47,8 +47,8 @@ DEFAULT_CONFIG = {
 }
 
 def get_script_directory():
-    """Get the current working directory where the script will look for config.ini"""
-    return Path.cwd()
+    """Get the script's directory where config.ini should be located"""
+    return Path(__file__).parent
 
 def create_default_config_file(config_path):
     """
@@ -123,12 +123,16 @@ def validate_configuration(config_dict):
         suffix = suffix[1:]
     
     # Check length and characters
-    if 1 <= len(suffix) <= 10 and all(c.isalnum() or c in '-_' for c in suffix):
+    # Empty string is valid (omits suffix), or 1-10 valid characters
+    if len(suffix) == 0:
+        # Empty suffix is valid - will omit language tag from renamed files
+        validated['language_suffix'] = ''
+    elif 1 <= len(suffix) <= 10 and all(c.isalnum() or c in '-_' for c in suffix):
         validated['language_suffix'] = suffix
     else:
-        print(f"[WARNING] Invalid language_suffix: '{suffix}' - using default 'ar'")
-        print("  Valid: 1-10 characters, letters/numbers/hyphens/underscores only")
-        validated['language_suffix'] = 'ar'
+        print(f"[WARNING] Invalid language_suffix: '{suffix}' - omitting suffix from filenames")
+        print("  Valid: empty string (omit suffix) or 1-10 characters (letters/numbers/hyphens/underscores)")
+        validated['language_suffix'] = ''
     
     # Validate video_extensions
     video_exts = config_dict.get('video_extensions', 'mkv,mp4')
@@ -188,7 +192,11 @@ def load_configuration():
         validated = validate_configuration(config_dict)
         
         print(f"[INFO] Configuration loaded from: {config_path}")
-        print(f"  Language suffix: .{validated['language_suffix']}")
+        # Display language suffix (or "none" if empty)
+        if validated['language_suffix']:
+            print(f"  Language suffix: .{validated['language_suffix']}")
+        else:
+            print(f"  Language suffix: (none - omitted from filenames)")
         print(f"  Video formats: {', '.join(validated['video_extensions'])}")
         print(f"  Subtitle formats: {', '.join(validated['subtitle_extensions'])}")
         print(f"  CSV export: {'enabled' if validated['enable_export'] else 'disabled'}")
@@ -207,22 +215,40 @@ CONFIG = load_configuration()
 # Patterns are tried in order, with most common formats first for faster matching
 # Each pattern extracts season and episode numbers, normalizing them to S##E## format
 EPISODE_PATTERNS = [
-    (re.compile(r'[Ss](\d+)[Ee](\d+)'), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'(?:^|[._\s-])(\d{1,2})[xX](\d+)(?=[._\s-]|$)'), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'[Ss]eason\.(\d+)[\s\._-]*[Ee]pisode\.(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'[Ss](\d+)[\s\._-]*[Ee]p(?:isode)?\.(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'[Ss](\d+)[Ee]p(?:isode)?(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'[Ss]eason\s+(\d+)\s+[Ee]pisode\s+(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'[Ss]eason(\d+)[Ee]pisode(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'[Ss]eason(\d+)\s+[Ee]pisode(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'[Ss]eason(\d+)\s+[Ee]p(?:isode)?(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'[Ss]eason(\d+)[Ee]p(?:isode)?(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'(?:^|[._\s-])[Ee](\d+)(?=[._\s-]|$)'), lambda m: ("01", m.group(1))),
-    (re.compile(r'[Ss]eason\s+(\d+)[\s\._-]*[Ee]p(?:isode)?\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'[Ss]eason(\d+)[\s\._-]*[Ee]p(?:isode)?(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'(?:^|[._\s-])[Ee]p(?:isode)?(\d+)(?=[._\s-]|$)', re.IGNORECASE), lambda m: ("01", m.group(1))),
-    (re.compile(r'[Ss]eason\s+(\d+)\s+[Ee]p(?:isode)?\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'-\s*(\d+)'), lambda m: ("01", m.group(1))),
+    (re.compile(r'[Ss](\d+)[Ee](\d+)'), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'(?:^|[._\s-])(\d{1,2})[xX](\d+)(?=[._\s-]|$)'), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    # NEW: S## - ## format (e.g., S01 - 05, S2 - 10)
+    (re.compile(r'[Ss](\d{1,2})\s*-\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    # NEW: S## - E## format (e.g., S01 - E05, S2 - E10)
+    (re.compile(r'[Ss](\d{1,2})\s*-\s*[Ee](\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    # NEW: S## - EP## format (e.g., S01 - EP05, S2 - EP10)
+    (re.compile(r'[Ss](\d{1,2})\s*-\s*[Ee][Pp](\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    # NEW: Ordinal Season patterns (placed HERE to match before generic patterns)
+    # Pattern: 1st Season - 05 → S01E05
+    (re.compile(r'(\d{1,2})(?:st|nd|rd|th)\s+[Ss]eason\s*-\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    # Pattern: 3rd Season Episode 8 → S03E08 (FIXES THE BUG!)
+    (re.compile(r'(\d{1,2})(?:st|nd|rd|th)\s+[Ss]eason\s+[Ee]pisode\s+(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    # Pattern: 2nd Season E10 → S02E10
+    (re.compile(r'(\d{1,2})(?:st|nd|rd|th)\s+[Ss]eason\s+[Ee]\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    # Pattern: 2nd Season EP10 → S02E10
+    (re.compile(r'(\d{1,2})(?:st|nd|rd|th)\s+[Ss]eason\s+[Ee][Pp]\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    # NEW: Season ## - ## format (e.g., Season 2 - 23, Season 12 - 103)
+    (re.compile(r'[Ss]eason\s+(\d{1,2})\s*-\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'[Ss]eason(\d{1,2})\s*-\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'[Ss]eason\.(\d+)[\s\._-]*[Ee]pisode\.(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'[Ss](\d+)[\s\._-]*[Ee]p(?:isode)?\.(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'[Ss](\d+)[Ee]p(?:isode)?(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'[Ss]eason\s+(\d+)\s+[Ee]pisode\s+(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'[Ss]eason(\d+)[Ee]pisode(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'[Ss]eason(\d+)\s+[Ee]pisode(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'[Ss]eason(\d+)\s+[Ee]p(?:isode)?(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'[Ss]eason(\d+)[Ee]p(?:isode)?(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'(?:^|[._\s-])[Ee](\d+)(?=[._\s-]|$)'), lambda m: ("01", m.group(1).zfill(2))),
+    (re.compile(r'[Ss]eason\s+(\d+)[\s\._-]*[Ee]p(?:isode)?\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'[Ss]eason(\d+)[\s\._-]*[Ee]p(?:isode)?(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'(?:^|[._\s-])[Ee]p(?:isode)?(\d+)(?=[._\s-]|$)', re.IGNORECASE), lambda m: ("01", m.group(1).zfill(2))),
+    (re.compile(r'[Ss]eason\s+(\d+)\s+[Ee]p(?:isode)?\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
+    (re.compile(r'-\s*(\d+)'), lambda m: ("01", m.group(1).zfill(2))),
 ]
 
 # Pre-compiled utility regex patterns for filename processing
@@ -242,6 +268,9 @@ COMMON_INDICATORS = {
     'sync', 'syncopated', 'cc', 'sdh', 'hc', 'proper', 'real', 'final', 'post', 'pre', 
     'sync', 'dub', 'dubbed', 'sdh', 'cc'
 }
+
+# Performance optimization: Episode number cache
+_episode_cache = {}
 
 def get_episode_number(filename):
     """
@@ -264,6 +293,12 @@ def get_episode_number(filename):
             season, episode = formatter(match)
             return f"S{season}E{episode}"
     return None
+
+def get_episode_number_cached(filename):
+    """Cached wrapper - extracts episode once per filename."""
+    if filename not in _episode_cache:
+        _episode_cache[filename] = get_episode_number(filename)
+    return _episode_cache[filename]
 
 def extract_season_episode_numbers(episode_string):
     """
@@ -363,7 +398,15 @@ def generate_unique_name(base_name, subtitle_ext, subtitle, directory):
     Returns:
         Tuple of (new_filename, full_path)
     """
-    new_name = f"{base_name}.{CONFIG['language_suffix']}{subtitle_ext}"
+    # Build filename with optional language suffix
+    if CONFIG['language_suffix']:
+        # Build filename with optional language suffix
+        if CONFIG['language_suffix']:
+            new_name = f"{base_name}.{CONFIG['language_suffix']}{subtitle_ext}"
+        else:
+            new_name = f"{base_name}{subtitle_ext}"
+    else:
+        new_name = f"{base_name}{subtitle_ext}"
     new_path = os.path.join(directory, new_name)
     
     if not os.path.exists(new_path):
@@ -412,7 +455,7 @@ def build_episode_context(video_files):
     # Process alphabetically to ensure deterministic pattern selection when multiple
     # videos have the same episode number with different formatting
     for video in sorted(video_files):
-        episode_string = get_episode_number(video)
+        episode_string = get_episode_number_cached(video)
         if episode_string:
             season, episode = extract_season_episode_numbers(episode_string)
             if season and episode:
@@ -455,7 +498,7 @@ def process_subtitles(subtitle_files, video_episodes, temp_video_dict, directory
     print("-" * 40)
     
     for subtitle in sorted(subtitle_files):
-        ep = get_episode_number(subtitle)
+        ep = get_episode_number_cached(subtitle)
         
         # Standardize episode format to match video files (handles padding differences)
         adjusted_episode_string = ep
@@ -524,7 +567,7 @@ def analyze_results(files, video_files, subtitle_files, video_episodes, temp_vid
     # Build map of which episodes have matching subtitles
     subtitle_episodes = {}
     for subtitle in subtitle_files:
-        ep = get_episode_number(subtitle)
+        ep = get_episode_number_cached(subtitle)
         if ep:
             season, episode = extract_season_episode_numbers(ep)
             if season and episode:
@@ -540,7 +583,7 @@ def analyze_results(files, video_files, subtitle_files, video_episodes, temp_vid
     
     # Identify videos that don't have corresponding subtitle files
     for video in video_files:
-        ep = get_episode_number(video)
+        ep = get_episode_number_cached(video)
         if ep:
             season, episode = extract_season_episode_numbers(ep)
             if season and episode:
@@ -554,7 +597,7 @@ def analyze_results(files, video_files, subtitle_files, video_episodes, temp_vid
         video_exts = tuple(f'.{ext}' for ext in CONFIG['video_extensions'])
         subtitle_exts = tuple(f'.{ext}' for ext in CONFIG['subtitle_extensions'])
         if filename.lower().endswith(video_exts + subtitle_exts):
-            if not get_episode_number(filename):
+            if not get_episode_number_cached(filename):
                 unidentified_files.append(filename)
     
     return found_matches, not_found_episodes, unidentified_files
@@ -599,8 +642,8 @@ def rename_subtitles_to_match_videos():
     print()
     
     # Activate movie matching mode if no TV episodes were found
-    remaining_video_files = [v for v in video_files if not get_episode_number(v)]
-    remaining_subtitle_files = [s for s in subtitle_files if not get_episode_number(s)]
+    remaining_video_files = [v for v in video_files if not get_episode_number_cached(v)]
+    remaining_subtitle_files = [s for s in subtitle_files if not get_episode_number_cached(s)]
     movie_mode_detected = False
     
     if renamed_count == 0 and len(remaining_video_files) == 1 and len(remaining_subtitle_files) == 1:
@@ -609,7 +652,15 @@ def rename_subtitles_to_match_videos():
             video_file, subtitle_file = movie_match
             base_name = os.path.splitext(video_file)[0]
             subtitle_ext = os.path.splitext(subtitle_file)[1]
-            new_name = f"{base_name}.{CONFIG['language_suffix']}{subtitle_ext}"
+            # Build filename with optional language suffix
+            if CONFIG['language_suffix']:
+                # Build filename with optional language suffix
+                if CONFIG['language_suffix']:
+                    new_name = f"{base_name}.{CONFIG['language_suffix']}{subtitle_ext}"
+                else:
+                    new_name = f"{base_name}{subtitle_ext}"
+            else:
+                new_name = f"{base_name}{subtitle_ext}"
             old_path = os.path.join(directory, subtitle_file)
             new_path = os.path.join(directory, new_name)
             print("MOVIE MODE: Found potential movie match!")
@@ -710,7 +761,7 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=No
     
     # Process video files first
     for video in sorted(video_files):
-        episode_string = get_episode_number(video)
+        episode_string = get_episode_number_cached(video)
         if episode_string:
             # Standardize episode format
             season, episode = extract_season_episode_numbers(episode_string)
@@ -733,7 +784,7 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=No
     
     # Process subtitle files
     for subtitle in sorted(subtitle_files):
-        episode_string = get_episode_number(subtitle)
+        episode_string = get_episode_number_cached(subtitle)
         
         # Standardize episode format to match video files
         if episode_string:
@@ -752,7 +803,11 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=No
                 video_file = temp_video_dict[episode_string]
                 base_name = os.path.splitext(video_file)[0]
                 subtitle_ext = os.path.splitext(subtitle)[1]
-                new_name = f"{base_name}.{CONFIG['language_suffix']}{subtitle_ext}"
+                # Build filename with optional language suffix
+                if CONFIG['language_suffix']:
+                    new_name = f"{base_name}.{CONFIG['language_suffix']}{subtitle_ext}"
+                else:
+                    new_name = f"{base_name}{subtitle_ext}"
                 action = "RENAMED"
             else:
                 new_name = "No Change"
@@ -767,7 +822,11 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=No
                 video_file = video_files[0]
                 base_name = os.path.splitext(video_file)[0]
                 subtitle_ext = os.path.splitext(subtitle)[1]
-                new_name = f"{base_name}.{CONFIG['language_suffix']}{subtitle_ext}"
+                # Build filename with optional language suffix
+                if CONFIG['language_suffix']:
+                    new_name = f"{base_name}.{CONFIG['language_suffix']}{subtitle_ext}"
+                else:
+                    new_name = f"{base_name}{subtitle_ext}"
                 action = "RENAMED"
             else:
                 new_name = "No Change"
@@ -790,11 +849,11 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=No
     unmatched_videos = len([ep for ep in not_found_episodes if ep in [video_episodes.get((int(s), int(e))) for s, e in [extract_season_episode_numbers(ep)] if s and e]])
     # Calculate unmatched subtitles properly:
     # Unmatched = subtitles with episodes that weren't renamed (excluding unidentified)
-    unidentified_subtitle_count = len([s for s in subtitle_files if not get_episode_number(s)])
-    unmatched_subtitles = total_subtitles - renamed_count - unidentified_subtitle_count
+    unidentified_subtitle_count = len([s for s in subtitle_files if not get_episode_number_cached(s)])
+    unmatched_subtitles = max(0, total_subtitles - renamed_count - unidentified_subtitle_count)
     
     # Calculate unidentified videos separately
-    unidentified_video_count = len([v for v in video_files if not get_episode_number(v)])
+    unidentified_video_count = len([v for v in video_files if not get_episode_number_cached(v)])
     
     # For movie mode, don't count files in unidentified if they were handled
     unidentified_count = len(unidentified_files)
@@ -807,7 +866,8 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=No
     csv_path = os.path.join(directory, csv_filename)
     
     # Get configuration display string
-    config_str = f"language={CONFIG['language_suffix']}, videos={'|'.join(CONFIG['video_extensions'])}, subtitles={'|'.join(CONFIG['subtitle_extensions'])}, export={CONFIG['enable_export']}"
+    lang_str = CONFIG['language_suffix'] if CONFIG['language_suffix'] else '(none)'
+    config_str = f"language={lang_str}, videos={'|'.join(CONFIG['video_extensions'])}, subtitles={'|'.join(CONFIG['subtitle_extensions'])}, export={CONFIG['enable_export']}"
     
     with open(csv_path, 'w', encoding='utf-8', newline='') as csvfile:
         # SECTION 1: Summary Header
@@ -843,7 +903,11 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=No
                 subtitle_file = subtitle_files[0]
                 base_name = os.path.splitext(video_file)[0]
                 subtitle_ext = os.path.splitext(subtitle_file)[1]
-                new_name = f"{base_name}.{CONFIG['language_suffix']}{subtitle_ext}"
+                # Build filename with optional language suffix
+                if CONFIG['language_suffix']:
+                    new_name = f"{base_name}.{CONFIG['language_suffix']}{subtitle_ext}"
+                else:
+                    new_name = f"{base_name}{subtitle_ext}"
                 csvfile.write("# Successfully matched single video + subtitle pair\n")
                 csvfile.write(f"# Video: {video_file}\n")
                 csvfile.write(f"# Subtitle: {subtitle_file} -> {new_name}\n")
@@ -859,7 +923,7 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=No
                     # Look for renamed subtitle
                     matched_subtitle = None
                     for sub in subtitle_files:
-                        sub_ep = get_episode_number(sub)
+                        sub_ep = get_episode_number_cached(sub)
                         if sub_ep:
                             season, ep = extract_season_episode_numbers(sub_ep)
                             if season and ep:
@@ -870,7 +934,11 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=No
                     
                     if matched_subtitle:
                         subtitle_ext = os.path.splitext(matched_subtitle)[1]
-                        new_name = f"{base_name}.{CONFIG['language_suffix']}{subtitle_ext}"
+                        # Build filename with optional language suffix
+                        if CONFIG['language_suffix']:
+                            new_name = f"{base_name}.{CONFIG['language_suffix']}{subtitle_ext}"
+                        else:
+                            new_name = f"{base_name}{subtitle_ext}"
                         csvfile.write(f"# {episode} -> Video: {video_file} | Subtitle: {matched_subtitle} -> {new_name}\n")
             csvfile.write("#\n")
         
@@ -878,7 +946,7 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=No
             # Build subtitle lookup dict for missing matches section
             temp_subtitle_dict = {}
             for subtitle in subtitle_files:
-                ep = get_episode_number(subtitle)
+                ep = get_episode_number_cached(subtitle)
                 if ep:
                     season, episode = extract_season_episode_numbers(ep)
                     if season and episode:

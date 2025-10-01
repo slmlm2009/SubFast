@@ -31,6 +31,7 @@ from collections import defaultdict
 import configparser
 from pathlib import Path
 from datetime import datetime
+import time
 
 
 # ============================================================================
@@ -207,7 +208,7 @@ CONFIG = load_configuration()
 # Each pattern extracts season and episode numbers, normalizing them to S##E## format
 EPISODE_PATTERNS = [
     (re.compile(r'[Ss](\d+)[Ee](\d+)'), lambda m: (m.group(1).zfill(2), m.group(2))),
-    (re.compile(r'(?:^|[._\s-])(\d+)[xX](\d+)(?=[._\s-]|$)'), lambda m: (m.group(1).zfill(2), m.group(2))),
+    (re.compile(r'(?:^|[._\s-])(\d{1,2})[xX](\d+)(?=[._\s-]|$)'), lambda m: (m.group(1).zfill(2), m.group(2))),
     (re.compile(r'[Ss]eason\.(\d+)[\s\._-]*[Ee]pisode\.(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
     (re.compile(r'[Ss](\d+)[\s\._-]*[Ee]p(?:isode)?\.(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
     (re.compile(r'[Ss](\d+)[Ee]p(?:isode)?(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2))),
@@ -426,7 +427,7 @@ def build_episode_context(video_files):
     
     return video_episodes, temp_video_dict
 
-def process_subtitles(subtitle_files, video_episodes, temp_video_dict, directory):
+def process_subtitles(subtitle_files, video_episodes, temp_video_dict, directory, rename_mapping=None):
     """
     Process and rename subtitle files to match their corresponding videos.
     
@@ -447,6 +448,8 @@ def process_subtitles(subtitle_files, video_episodes, temp_video_dict, directory
         Number of successfully renamed files
     """
     renamed_count = 0
+    if rename_mapping is None:
+        rename_mapping = {}
     
     print("PROCESSING SUBTITLES:")
     print("-" * 40)
@@ -565,6 +568,11 @@ def rename_subtitles_to_match_videos():
     subtitle_exts = tuple(f'.{ext}' for ext in CONFIG['subtitle_extensions'])
     video_files = [f for f in files if f.lower().endswith(video_exts)]
     subtitle_files = [f for f in files if f.lower().endswith(subtitle_exts)]
+    
+    # Store original file lists for CSV export (before any renaming)
+    original_video_files = video_files.copy()
+    original_subtitle_files = subtitle_files.copy()
+    rename_mapping = {}  # Maps original_name -> new_name (or None if not renamed)
 
     print(f"\nFILES FOUND: {len(video_files)} videos | {len(subtitle_files)} subtitles")
     print("=" * 60)
@@ -585,7 +593,7 @@ def rename_subtitles_to_match_videos():
     print()
 
     # Rename subtitle files to match corresponding videos
-    renamed_count = process_subtitles(subtitle_files, video_episodes, temp_video_dict, directory)
+    renamed_count = process_subtitles(subtitle_files, video_episodes, temp_video_dict, directory, rename_mapping)
     
     print("-" * 40)
     print()
@@ -607,6 +615,7 @@ def rename_subtitles_to_match_videos():
             print("MOVIE MODE: Found potential movie match!")
             print(f"RENAMED: '{subtitle_file}' -> '{new_name}'")
             os.rename(old_path, new_path)
+            rename_mapping[subtitle_file] = new_name
             renamed_count += 1
             movie_mode_detected = True
         else:
@@ -649,31 +658,44 @@ def rename_subtitles_to_match_videos():
             print(f"- {filename}")
         print()
     
-    return renamed_count, movie_mode_detected
+    return renamed_count, movie_mode_detected, original_video_files, original_subtitle_files, rename_mapping
 
-def export_analysis_to_csv(renamed_count=0, movie_mode=False):
+def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=None, original_subtitles=None, rename_map=None, execution_time=None):
     """
     Export detailed analysis to renaming_report.csv in improved format.
     
     Creates a comprehensive report with:
     - Summary header with timestamp, config, and statistics
-    - Proper CSV table showing all files with detected episodes and actions
+    - Proper CSV table showing ORIGINAL filenames with detected episodes and actions
     - Match summary showing successful pairings
     - Missing matches and unidentified files
     
     Args:
         renamed_count: Number of subtitles successfully renamed
         movie_mode: Whether movie matching mode was activated
+        original_videos: List of original video filenames (before renaming)
+        original_subtitles: List of original subtitle filenames (before renaming)
+        rename_map: Dictionary mapping original names to new names
     
     Output file: renaming_report.csv in the current directory
     """
     directory = os.getcwd()
-    files = os.listdir(directory)
     
-    video_exts = tuple(f'.{ext}' for ext in CONFIG['video_extensions'])
-    subtitle_exts = tuple(f'.{ext}' for ext in CONFIG['subtitle_extensions'])
-    video_files = [f for f in files if f.lower().endswith(video_exts)]
-    subtitle_files = [f for f in files if f.lower().endswith(subtitle_exts)]
+    # Use provided original file lists, or fall back to current directory
+    if original_videos is None or original_subtitles is None:
+        files = os.listdir(directory)
+        video_exts = tuple(f'.{ext}' for ext in CONFIG['video_extensions'])
+        subtitle_exts = tuple(f'.{ext}' for ext in CONFIG['subtitle_extensions'])
+        video_files = [f for f in files if f.lower().endswith(video_exts)]
+        subtitle_files = [f for f in files if f.lower().endswith(subtitle_exts)]
+    else:
+        video_files = original_videos
+        subtitle_files = original_subtitles
+        # Build files list from original videos and subtitles
+        files = original_videos + original_subtitles
+    
+    if rename_map is None:
+        rename_map = {}
     
     # Build episode mappings for analysis
     video_episodes, temp_video_dict = build_episode_context(video_files)
@@ -722,8 +744,11 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False):
                     episode_string = video_episodes[key]
             detected_episode = episode_string
             
-            # Determine new name based on matching
-            if episode_string in temp_video_dict:
+            # Determine new name based on matching or rename_map
+            if subtitle in rename_map and rename_map[subtitle]:
+                new_name = rename_map[subtitle]
+                action = "RENAMED"
+            elif episode_string in temp_video_dict:
                 video_file = temp_video_dict[episode_string]
                 base_name = os.path.splitext(video_file)[0]
                 subtitle_ext = os.path.splitext(subtitle)[1]
@@ -734,8 +759,11 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False):
                 action = "NO MATCH"
         elif movie_mode:
             detected_episode = "Movie"
-            # Find the video file for movie mode
-            if len(video_files) == 1:
+            # Check rename_map first, then calculate
+            if subtitle in rename_map and rename_map[subtitle]:
+                new_name = rename_map[subtitle]
+                action = "RENAMED"
+            elif len(video_files) == 1:
                 video_file = video_files[0]
                 base_name = os.path.splitext(video_file)[0]
                 subtitle_ext = os.path.splitext(subtitle)[1]
@@ -760,7 +788,13 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False):
     total_videos = len(video_files)
     total_subtitles = len(subtitle_files)
     unmatched_videos = len([ep for ep in not_found_episodes if ep in [video_episodes.get((int(s), int(e))) for s, e in [extract_season_episode_numbers(ep)] if s and e]])
-    unmatched_subtitles = len([s for s in subtitle_files if get_episode_number(s) and get_episode_number(s) not in temp_video_dict.keys()])
+    # Calculate unmatched subtitles properly:
+    # Unmatched = subtitles with episodes that weren't renamed (excluding unidentified)
+    unidentified_subtitle_count = len([s for s in subtitle_files if not get_episode_number(s)])
+    unmatched_subtitles = total_subtitles - renamed_count - unidentified_subtitle_count
+    
+    # Calculate unidentified videos separately
+    unidentified_video_count = len([v for v in video_files if not get_episode_number(v)])
     
     # For movie mode, don't count files in unidentified if they were handled
     unidentified_count = len(unidentified_files)
@@ -786,10 +820,12 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False):
         csvfile.write(f"# Total Videos: {total_videos}\n")
         csvfile.write(f"# Total Subtitles: {total_subtitles}\n")
         csvfile.write(f"# Renamed: {renamed_count}/{total_subtitles} subtitles\n")
-        csvfile.write(f"# Unmatched Videos: {unmatched_videos}\n")
-        csvfile.write(f"# Unmatched Subtitles: {unmatched_subtitles}\n")
-        csvfile.write(f"# Unidentified Files: {unidentified_count}\n")
+        csvfile.write(f"# Videos Missing Subtitles: {unmatched_videos}\n")
+        csvfile.write(f"# Subtitles Missing Videos: {unmatched_subtitles}\n")
+        csvfile.write(f"# Videos Without Episode Pattern: {unidentified_video_count}\n")
+        csvfile.write(f"# Subtitles Without Episode Pattern: {unidentified_subtitle_count}\n")
         csvfile.write(f"# Movie Mode: {'Yes' if movie_mode else 'No'}\n")
+        csvfile.write(f"# Execution Time: {execution_time if execution_time else 'N/A'}\n")
         csvfile.write("#\n")
         
         # SECTION 2: File Analysis Table
@@ -839,6 +875,20 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False):
             csvfile.write("#\n")
         
         if not_found_episodes:
+            # Build subtitle lookup dict for missing matches section
+            temp_subtitle_dict = {}
+            for subtitle in subtitle_files:
+                ep = get_episode_number(subtitle)
+                if ep:
+                    season, episode = extract_season_episode_numbers(ep)
+                    if season and episode:
+                        key = (int(season), int(episode))
+                        adjusted_ep = video_episodes.get(key, ep)
+                        if adjusted_ep not in temp_subtitle_dict:
+                            temp_subtitle_dict[adjusted_ep] = subtitle
+                        if ep not in temp_subtitle_dict:
+                            temp_subtitle_dict[ep] = subtitle
+            
             csvfile.write("# MISSING MATCHES:\n")
             for episode in sorted(not_found_episodes):
                 if episode != "(None)":
@@ -846,11 +896,11 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False):
                     if episode in temp_video_dict:
                         csvfile.write(f"# {episode} -> Has Video: {temp_video_dict[episode]} | Missing: Subtitle\n")
                     else:
-                        csvfile.write(f"# {episode} -> Has Subtitle | Missing: Video\n")
+                        csvfile.write(f"# {episode} -> Has Subtitle: {temp_subtitle_dict.get(episode, '(unknown)')} | Missing: Video\n")
             csvfile.write("#\n")
         
         if unidentified_files:
-            csvfile.write("# UNIDENTIFIED FILES:\n")
+            csvfile.write("# FILES WITHOUT EPISODE PATTERN:\n")
             if movie_mode:
                 csvfile.write("# (none - movie mode handled files)\n")
             else:
@@ -867,6 +917,35 @@ if __name__ == "__main__":
     CSV export is now performed AFTER renaming to accurately report results.
     Export is controlled by config.ini (enable_export setting).
     """
-    renamed_count, movie_mode_detected = rename_subtitles_to_match_videos()
+    # Track execution time
+    start_time = time.time()
+    
+    renamed_count, movie_mode_detected, original_videos, original_subtitles, rename_map = rename_subtitles_to_match_videos()
+    
+    # Calculate execution time
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    
+    # Format time (human-readable)
+    if elapsed_time < 60:
+        time_str = f"{elapsed_time:.2f} seconds"
+    elif elapsed_time < 3600:
+        minutes = int(elapsed_time // 60)
+        seconds = elapsed_time % 60
+        time_str = f"{minutes}m {seconds:.2f}s"
+    else:
+        hours = int(elapsed_time // 3600)
+        minutes = int((elapsed_time % 3600) // 60)
+        seconds = elapsed_time % 60
+        time_str = f"{hours}h {minutes}m {seconds:.0f}s"
+    
+    # Display performance summary
+    print("PERFORMANCE:")
+    print("=" * 60)
+    print(f"Total Execution Time: {time_str}")
+    print(f"Files Processed: {len(original_videos) + len(original_subtitles)}")
+    print(f"Subtitles Renamed: {renamed_count}/{len(original_subtitles)}")
+    print("=" * 60)
+    
     if CONFIG['enable_export']:
-        export_analysis_to_csv(renamed_count, movie_mode_detected)
+        export_analysis_to_csv(renamed_count, movie_mode_detected, original_videos, original_subtitles, rename_map, time_str)
