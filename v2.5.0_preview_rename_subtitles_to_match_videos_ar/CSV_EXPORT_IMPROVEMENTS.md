@@ -388,5 +388,51 @@ Built a `temp_subtitle_dict` to look up subtitle filenames by episode, similar t
 
 ---
 
-**Final Status:** ✅ All Issues Resolved  
+## Update: Added Execution Time Tracking (2025-01-10)
+
+### New Feature
+Added execution time tracking to provide visibility into script performance.
+
+### Implementation
+1. **Time tracking** starts at beginning of main execution
+2. **Human-readable formatting** adapts to duration:
+   - `< 60s` → "X.XX seconds"
+   - `< 1h` → "Xm Y.YYs"
+   - `≥ 1h` → "Xh Ym Zs"
+
+### Console Output
+Added PERFORMANCE summary section after completion:
+```
+PERFORMANCE:
+============================================================
+Total Execution Time: 0.00 seconds
+Files Processed: 17
+Subtitles Renamed: 7/8
+============================================================
+```
+
+### CSV Report
+Added execution time to summary statistics:
+```csv
+# SUMMARY:
+# Total Videos: 9
+# Total Subtitles: 8
+# Renamed: 7/8 subtitles
+# Videos Missing Subtitles: 1
+# Subtitles Missing Videos: 0
+# Videos Without Episode Pattern: 1
+# Subtitles Without Episode Pattern: 1
+# Movie Mode: No
+# Execution Time: 0.00 seconds
+```
+
+### Benefits
+✅ **Performance visibility** - See how long processing takes  
+✅ **Benchmark capability** - Compare performance across different runs  
+✅ **Professional output** - Complete execution metadata  
+✅ **Debugging aid** - Identify slow operations on large datasets  
+
+---
+
+**Final Status:** ✅ All Issues Resolved + Execution Time Tracking Added  
 **Tested On:** Multiple scenarios (TV series, movies, unidentified files, mixed scenarios)

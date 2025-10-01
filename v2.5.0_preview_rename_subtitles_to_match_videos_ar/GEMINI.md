@@ -1,11 +1,19 @@
 # Subtitle Renaming Script - Documentation
 
 ## Overview
-This script automatically renames subtitle files (.srt, .ass) to match their corresponding video files (.mkv, .mp4) based on episode patterns found in the filenames then will add .ar before the subtitle extension to specify the language of the subtitle in video players as this script was originally made for ARAB STREAM media community. 
+This script automatically renames subtitle files to match their corresponding video files based on episode patterns found in the filenames, then adds a configurable language suffix before the subtitle extension to specify the language in video players.
+
+Originally created for the ARAB STREAM media community with `.ar` as the default language suffix, the script is now **fully configurable** through a `config.ini` file that allows customization of:
+- **Language suffix** (default: `.ar` for Arabic)
+- **Video file formats** (default: `.mkv`, `.mp4`)
+- **Subtitle file formats** (default: `.srt`, `.ass`)
+- **CSV export** (default: enabled)
+
 The script handles various naming conventions and provides context-aware matching for proper episode identification.
 
 ## Features
-- **Multi-format Support**: Handles both .srt and .ass subtitle files with .mkv and .mp4 video files
+- **Fully Configurable**: Customize language suffix, video formats, and subtitle formats via `config.ini`
+- **Multi-format Support**: Default support for .srt and .ass subtitle files with .mkv and .mp4 video files (easily expandable)
 - **Advanced Pattern Detection**: Recognizes various episode naming patterns including S01E01, 2x05, Season.Episode, etc.
 - **Context-Aware Matching**: Correctly matches episodes with different padding (S02E015 vs S02E15)
 - **Single-Digit Episode Support**: Detects and handles single-digit episodes (E6, Ep7, etc.)
@@ -87,14 +95,62 @@ The script handles several edge cases with clear messaging:
   - Files with no detectable episode information
 
 ## CSV Export Function
-- Creates a renaming report in template format at the beginning of execution
-- Shows file-by-file episode detection
-- Categorizes results by match status
-- Uses original file names before any renaming
-- Filename: `renaming_report.csv`
+
+The script generates a comprehensive CSV report (`renaming_report.csv`) with professional formatting and detailed statistics:
+
+### Report Structure
+1. **Summary Header**
+   - Timestamp of execution
+   - Working directory path
+   - Configuration settings (language suffix, file formats, export status)
+
+2. **Summary Statistics**
+   - Total Videos / Total Subtitles
+   - Renamed subtitles (X/Y format)
+   - Videos Missing Subtitles (videos without matching subtitles)
+   - Subtitles Missing Videos (subtitles without matching videos)
+   - Videos Without Episode Pattern (unidentified videos)
+   - Subtitles Without Episode Pattern (unidentified subtitles)
+   - Movie Mode status
+   - Execution Time (with human-readable formatting)
+
+3. **File Analysis Table**
+   - CSV format showing: Original Filename, Detected Episode, New Name, Action
+   - Uses original filenames before any renaming occurred
+   - Shows episode pattern detected or (UNIDENTIFIED) for files without patterns
+
+4. **Matched Episodes Section**
+   - Lists all successful video-subtitle pairings
+   - Shows original subtitle name → renamed subtitle name
+
+5. **Missing Matches Section**
+   - Videos that have no matching subtitles (shows video filename)
+   - Subtitles that have no matching videos (shows subtitle filename)
+
+6. **Files Without Episode Pattern Section**
+   - Lists all files where no episode pattern could be detected
+   - Includes both videos and subtitles
+
+### Key Features
+- **Original Filenames**: Always shows filenames before renaming for accurate tracking
+- **Clear Labels**: Self-documenting statistics that explain what each number represents
+- **Granular Reporting**: Separate counts for videos vs subtitles in each category
+- **Accurate Calculations**: Proper math for unmatched counts (Total - Renamed - Unidentified)
+- **Consistent Formatting**: Headers match summary label terminology
+- **Complete Information**: Both video and subtitle filenames shown in MISSING MATCHES section
+- **Excel Compatible**: Proper CSV format opens cleanly in spreadsheet applications
+
+### Performance Tracking
+The script tracks and displays execution time in both the console output and CSV report:
+- Time format adapts to duration: "X.XX seconds", "Xm Y.YYs", or "Xh Ym Zs"
+- Console shows PERFORMANCE section with execution time, files processed, and rename statistics
+- CSV includes execution time in the summary for benchmarking and performance analysis
 
 ## Configuration
-- The CSV renaming report export can be enabled/disabled by commenting out the export_analysis_to_csv function in the main execution block.
+- The CSV renaming report export can be controlled via `config.ini`
+- Set `enable_export = True` or `False` in the configuration file
+- Other configurable options include language suffix, video formats, and subtitle formats
+- Configuration file is auto-generated with defaults if not present
 
 ## Key Functions
 - `get_episode_number(filename)`: Extracts episode pattern from filename

@@ -31,6 +31,7 @@ from collections import defaultdict
 import configparser
 from pathlib import Path
 from datetime import datetime
+import time
 
 
 # ============================================================================
@@ -659,7 +660,7 @@ def rename_subtitles_to_match_videos():
     
     return renamed_count, movie_mode_detected, original_video_files, original_subtitle_files, rename_mapping
 
-def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=None, original_subtitles=None, rename_map=None):
+def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=None, original_subtitles=None, rename_map=None, execution_time=None):
     """
     Export detailed analysis to renaming_report.csv in improved format.
     
@@ -824,6 +825,7 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=No
         csvfile.write(f"# Videos Without Episode Pattern: {unidentified_video_count}\n")
         csvfile.write(f"# Subtitles Without Episode Pattern: {unidentified_subtitle_count}\n")
         csvfile.write(f"# Movie Mode: {'Yes' if movie_mode else 'No'}\n")
+        csvfile.write(f"# Execution Time: {execution_time if execution_time else 'N/A'}\n")
         csvfile.write("#\n")
         
         # SECTION 2: File Analysis Table
@@ -915,6 +917,35 @@ if __name__ == "__main__":
     CSV export is now performed AFTER renaming to accurately report results.
     Export is controlled by config.ini (enable_export setting).
     """
+    # Track execution time
+    start_time = time.time()
+    
     renamed_count, movie_mode_detected, original_videos, original_subtitles, rename_map = rename_subtitles_to_match_videos()
+    
+    # Calculate execution time
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    
+    # Format time (human-readable)
+    if elapsed_time < 60:
+        time_str = f"{elapsed_time:.2f} seconds"
+    elif elapsed_time < 3600:
+        minutes = int(elapsed_time // 60)
+        seconds = elapsed_time % 60
+        time_str = f"{minutes}m {seconds:.2f}s"
+    else:
+        hours = int(elapsed_time // 3600)
+        minutes = int((elapsed_time % 3600) // 60)
+        seconds = elapsed_time % 60
+        time_str = f"{hours}h {minutes}m {seconds:.0f}s"
+    
+    # Display performance summary
+    print("PERFORMANCE:")
+    print("=" * 60)
+    print(f"Total Execution Time: {time_str}")
+    print(f"Files Processed: {len(original_videos) + len(original_subtitles)}")
+    print(f"Subtitles Renamed: {renamed_count}/{len(original_subtitles)}")
+    print("=" * 60)
+    
     if CONFIG['enable_export']:
-        export_analysis_to_csv(renamed_count, movie_mode_detected, original_videos, original_subtitles, rename_map)
+        export_analysis_to_csv(renamed_count, movie_mode_detected, original_videos, original_subtitles, rename_map, time_str)

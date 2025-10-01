@@ -1,7 +1,7 @@
 {
   "Mixed_Scenarios_1": {
     "original": {
-      "execution_time": 0.03749489784240723,
+      "execution_time": 0.038587093353271484,
       "memory_peak_mb": 0.04295063018798828,
       "memory_current_mb": 0.005972862243652344,
       "returncode": 0,
@@ -18,9 +18,9 @@
       "renamed_count": 7
     },
     "no_thinking": {
-      "execution_time": 0.04642033576965332,
+      "execution_time": 0.05656266212463379,
       "memory_peak_mb": 0.04071044921875,
-      "memory_current_mb": 0.003972053527832031,
+      "memory_current_mb": 0.0041751861572265625,
       "returncode": 0,
       "success": true,
       "renamed_files": [
@@ -35,7 +35,7 @@
       "renamed_count": 7
     },
     "thinking": {
-      "execution_time": 0.037857770919799805,
+      "execution_time": 0.03856539726257324,
       "memory_peak_mb": 0.043792724609375,
       "memory_current_mb": 0.005419731140136719,
       "returncode": 0,
@@ -54,7 +54,7 @@
   },
   "Mixed_Scenarios_2": {
     "original": {
-      "execution_time": 0.03931140899658203,
+      "execution_time": 0.036679744720458984,
       "memory_peak_mb": 0.04039573669433594,
       "memory_current_mb": 0.00382232666015625,
       "returncode": 0,
@@ -71,9 +71,9 @@
       "renamed_count": 7
     },
     "no_thinking": {
-      "execution_time": 0.045865774154663086,
-      "memory_peak_mb": 0.040413856506347656,
-      "memory_current_mb": 0.004101753234863281,
+      "execution_time": 0.046085357666015625,
+      "memory_peak_mb": 0.040863037109375,
+      "memory_current_mb": 0.0043048858642578125,
       "returncode": 0,
       "success": true,
       "renamed_files": [
@@ -88,9 +88,9 @@
       "renamed_count": 7
     },
     "thinking": {
-      "execution_time": 0.039357662200927734,
-      "memory_peak_mb": 0.04022502899169922,
-      "memory_current_mb": 0.0049915313720703125,
+      "execution_time": 0.03783011436462402,
+      "memory_peak_mb": 0.04028129577636719,
+      "memory_current_mb": 0.005047798156738281,
       "returncode": 0,
       "success": true,
       "renamed_files": [
@@ -107,9 +107,9 @@
   },
   "Movie": {
     "original": {
-      "execution_time": 0.0376126766204834,
-      "memory_peak_mb": 0.04004192352294922,
-      "memory_current_mb": 0.0025300979614257812,
+      "execution_time": 0.03417801856994629,
+      "memory_peak_mb": 0.04013824462890625,
+      "memory_current_mb": 0.0026264190673828125,
       "returncode": 0,
       "success": true,
       "renamed_files": [
@@ -118,9 +118,9 @@
       "renamed_count": 1
     },
     "no_thinking": {
-      "execution_time": 0.04575014114379883,
-      "memory_peak_mb": 0.040144920349121094,
-      "memory_current_mb": 0.0030689239501953125,
+      "execution_time": 0.04377484321594238,
+      "memory_peak_mb": 0.04020118713378906,
+      "memory_current_mb": 0.0033273696899414062,
       "returncode": 0,
       "success": true,
       "renamed_files": [
@@ -129,8 +129,8 @@
       "renamed_count": 1
     },
     "thinking": {
-      "execution_time": 0.03599143028259277,
-      "memory_peak_mb": 0.03995323181152344,
+      "execution_time": 0.03643488883972168,
+      "memory_peak_mb": 0.03982353210449219,
       "memory_current_mb": 0.0025348663330078125,
       "returncode": 0,
       "success": true,
@@ -142,8 +142,8 @@
   },
   "Long_Anime": {
     "original": {
-      "execution_time": 10.862812757492065,
-      "memory_peak_mb": 0.5629339218139648,
+      "execution_time": 10.829898118972778,
+      "memory_peak_mb": 0.5708160400390625,
       "memory_current_mb": 0.17779922485351562,
       "returncode": 0,
       "success": true,
@@ -1297,9 +1297,9 @@
       "renamed_count": 1145
     },
     "no_thinking": {
-      "execution_time": 3.5789670944213867,
-      "memory_peak_mb": 0.3202972412109375,
-      "memory_current_mb": 0.09814262390136719,
+      "execution_time": 3.608241081237793,
+      "memory_peak_mb": 0.32094669342041016,
+      "memory_current_mb": 0.09835338592529297,
       "returncode": 0,
       "success": true,
       "renamed_files": [
@@ -2452,7 +2452,7 @@
       "renamed_count": 1145
     },
     "thinking": {
-      "execution_time": 0.4678182601928711,
+      "execution_time": 0.47174835205078125,
       "memory_peak_mb": 0.40404319763183594,
       "memory_current_mb": 0.12297725677490234,
       "returncode": 0,
