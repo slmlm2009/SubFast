@@ -48,7 +48,10 @@ The script recognizes various episode naming conventions:
 - **Edge case handling** tested across 65+ scenarios
 - **Episode number caching** for 12x faster performance on large datasets
 
-## Installation and Usage
+## Installation and Usage ##
+*Step-by-step video walkthrough for v2.0.0 (Arabic):*  
+*https://www.youtube.com/watch?v=et1uv5DbEmA&t=12s*
+
 
 ### Method 1: Windows Context Menu Integration (Recommended)
 
