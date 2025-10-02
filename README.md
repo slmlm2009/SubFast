@@ -256,9 +256,8 @@ rename_subtitles_to_match_videos_ar/
 ├── config.ini
 ├── add_subtitle_rename_menu.reg
 ├── remove_subtitle_rename_menu.reg
-├── ARAB_STREAMS_LOGO.ico
-├── CONFIGURATION_README.md
-└── CHANGELOG.md
+├── ARAB_STREAMS_LOGO.icon
+└── CONFIGURATION_README.md
 ```
 
 ### Performance
