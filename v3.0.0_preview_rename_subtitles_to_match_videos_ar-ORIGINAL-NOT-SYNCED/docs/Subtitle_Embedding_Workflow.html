@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow Visualizer</title>
+    <!-- Tailwind CSS for modern styling -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Custom font and minor style adjustments */
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+     <!-- Google Fonts for Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="bg-gray-100 dark:bg-gray-900 text-gray-800 dark:text-gray-200 flex items-center justify-center min-h-screen p-4">
+
+    <div class="w-full max-w-4xl bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 md:p-8">
+        <header class="text-center mb-8">
+            <h1 class="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">Subtitle Embedding Workflow</h1>
+            <p class="text-gray-500 dark:text-gray-400 mt-2">A visual representation of the script's process flow.</p>
+        </header>
+        
+        <!-- Mermaid graph container -->
+        <div class="mermaid bg-gray-50 dark:bg-gray-700 p-4 rounded-lg border border-gray-200 dark:border-gray-600">
+          graph TD
+              A[<i class='fa-solid fa-folder'></i> User Right-Clicks Folder] --> B{<i class='fa-brands fa-windows'></i> Windows Shell};
+              B -- Executes --> C[<i class='fa-brands fa-python'></i> embed_subtitles_to_match_videos_ar.py];
+              C -- Reads --> D[<i class='fa-solid fa-gear'></i> config.ini];
+              C -- Finds & Matches --> E{<i class='fa-solid fa-file-video'></i> & <i class='fa-solid fa-closed-captioning'></i> Video & Subtitle Files};
+              C -- Invokes --> F[<i class='fa-solid fa-rocket'></i> mkvmerge.exe];
+              F -- Creates --> G[<i class='fa-solid fa-circle-check'></i> New Merged '.mkv' File];
+              C -- Generates --> H[<i class='fa-solid fa-file-csv'></i> embedding_report.csv];
+        </div>
+    </div>
+
+    <!-- Font Awesome for icons in the graph -->
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+    <!-- Mermaid.js library for rendering the graph -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        // Initialize Mermaid to find and render the graph
+        mermaid.initialize({ 
+            startOnLoad: true,
+            theme: 'base',
+            themeVariables: {
+                background: '#ffffff',
+                primaryColor: '#F3F4F6',
+                primaryTextColor: '#1F2937',
+                primaryBorderColor: '#D1D5DB',
+                lineColor: '#4B5563',
+                textColor: '#111827',
+                fontSize: '16px'
+            }
+        });
+    </script>
+
+</body>
+</html>
