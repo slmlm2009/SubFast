@@ -1,0 +1,11 @@
+The project is called "Subtitle Renamer Tool [AR]" it's a Python Script to auto-rename subtitle files to match video filenames in the same folder by detecting episode patterns, then adds a configurable language suffix before the subtitle extension to specify the language in video players. Supports multiple naming conventions for accurate episode matching. It has a fully working code main script is the attached "rename_subtitles_to_match_videos_ar.py". Also it has a Windows Right-Click Context Menu Integration to call the script from any folder. It is implemented through registry modification (attached "add_subtitle_rename_menu.reg"). The script folder contains the following files:
+rename_subtitles_to_match_videos_ar/
+├── rename_subtitles_to_match_videos_ar.py
+├── config.ini
+├── add_subtitle_rename_menu.reg
+├── remove_subtitle_rename_menu.reg
+├── ARAB_STREAMS_LOGO.ico
+├── CONFIGURATION_README.md
+└── CHANGELOG.md
+
+The tool is working greatly! however I want to extend the tool functionality by adding another great feature through a script that will be called "embed_subtitles_to_match_videos_ar.py". The main problem to solve with this new script is to single/batch embed/merge all detected subtitles into their corresponding ".mkv" episode/movie using the awesome open-source program "mkvmerge.exe" through CLI commands. (Attached mkvmerge docs "mkvmerge-docs.html"). This new feature should have the same Windows Right-Click Context Menu Integration as "rename_subtitles_to_match_videos_ar.py"
