@@ -50,7 +50,7 @@ The script recognizes various episode naming conventions:
 
 ## Installation and Usage ##
 *Step-by-step video walkthrough for v2.0.0 (Arabic):*  
-*(https://www.youtube.com/watch?v=et1uv5DbEmA&t=12s)*
+*https://www.youtube.com/watch?v=et1uv5DbEmA&t=12s*
 
 
 ### Method 1: Windows Context Menu Integration (Recommended)
