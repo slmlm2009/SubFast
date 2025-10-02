@@ -10,8 +10,8 @@ enable_export = false          # Disable CSV report (14% faster)
 language_suffix = en           # Use .en instead of .ar
 
 [FileFormats]
-video_extensions = mkv, mp4, avi, webm
-subtitle_extensions = srt, ass, sub, vtt
+video_extensions = mkv, mp4, avi, webm			# Adding .avi and .webm support in addition to default .mkv, .mp4
+subtitle_extensions = srt, ass, ssa, sub	    # Adding .sub and .ssa support in addition to default .srt, .ass
 ```
 
 **Re-run the script** - it will use your custom settings!
@@ -73,9 +73,9 @@ video_extensions = mkv, mp4, avi, mov, flv, m4v  # Maximum support
 
 **Common formats:**
 ```ini
-subtitle_extensions = srt, ass                # Default
-subtitle_extensions = srt, ass, sub, vtt      # Add more formats
-subtitle_extensions = srt, ass, ssa, vtt, smi # Maximum support
+subtitle_extensions = srt, ass                      # Default
+subtitle_extensions = srt, ass, ssa, sub            # Add more formats
+subtitle_extensions = srt, ass, ssa, sub, vtt, smi 	# Maximum support
 ```
 
 ---

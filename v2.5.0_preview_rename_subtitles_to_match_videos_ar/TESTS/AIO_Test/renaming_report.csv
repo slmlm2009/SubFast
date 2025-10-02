@@ -1,14 +1,14 @@
 # Subtitle Renaming Report
-# Generated: 2025-10-02 01:09:49
+# Generated: 2025-10-02 04:30:36
 # Directory: C:\Users\slmlm2009\Desktop\Github\rename_subtitles_to_match_videos_ar\v2.5.0_preview_rename_subtitles_to_match_videos_ar\TESTS\AIO_Test
-# Configuration: language=ar, videos=mkv|mp4|avi, subtitles=srt|ass|sub, export=True
+# Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass, export=True
 #
 # SUMMARY:
-# Total Videos: 16
-# Total Subtitles: 15
-# Renamed: 15/15 subtitles
-# Videos Missing Subtitles: 1
-# Subtitles Missing Videos: 0
+# Total Videos: 15
+# Total Subtitles: 14
+# Renamed: 13/14 subtitles
+# Videos Missing Subtitles: 2
+# Subtitles Missing Videos: 1
 # Videos Without Episode Pattern: 1
 # Subtitles Without Episode Pattern: 0
 # Movie Mode: No
@@ -16,7 +16,6 @@
 #
 Original Filename,Detected Episode,New Name,Action
 Detective Conan - 03.mp4,S01E03,No Change,--
-Naruto Shippuden - 245.avi,S01E245,No Change,--
 Naruto Shippuden EP156.mp4,S01E156,No Change,--
 ShowName 12th Season - 103.mkv,S12E103,No Change,--
 ShowName 1st Season - 05.mkv,S01E05,No Change,--
@@ -31,8 +30,7 @@ ShowName S2 - 14 - 1920x1080.mp4,S02E14,No Change,--
 ShowName S2 - E23.mp4,S02E23,No Change,--
 ShowName S2 - EP25.mp4,S02E25,No Change,--
 SomeShow 2nd Season E17.mkv,S02E17,No Change,--
-Detective Conan - 03.sub,S01E03,Detective Conan - 03.ar.sub,RENAMED
-Naruto Shippuden - 245.ass,S01E245,Naruto Shippuden - 245.ar.ass,RENAMED
+Naruto Shippuden - 245.ass,S01E245,No Change,NO MATCH
 ShowName 12th Season - 103.ass,S12E103,ShowName 12th Season - 103.ar.ass,RENAMED
 ShowName 12th Season - 103.srt,S12E103,ShowName 12th Season - 103.ar.srt,RENAMED
 ShowName 1st Season - 05.srt,S01E05,ShowName 1st Season - 05.ar.srt,RENAMED
@@ -48,12 +46,10 @@ ShowName S2 - EP25.srt,S02E25,ShowName S2 - EP25.ar.srt,RENAMED
 SomeShow 2nd Season E17.ass,S02E17,SomeShow 2nd Season E17.ar.ass,RENAMED
 #
 # MATCHED EPISODES:
-# S01E03 -> Video: Detective Conan - 03.mp4 | Subtitle: Detective Conan - 03.sub -> Detective Conan - 03.ar.sub
 # S01E05 -> Video: ShowName 1st Season - 05.mkv | Subtitle: ShowName 1st Season - 05.srt -> ShowName 1st Season - 05.ar.srt
 # S01E07 -> Video: ShowName S01 - 07.mkv | Subtitle: ShowName S01 - 07.srt -> ShowName S01 - 07.ar.srt
 # S01E08 -> Video: ShowName S01 - E08.mkv | Subtitle: ShowName S01 - E08.srt -> ShowName S01 - E08.ar.srt
 # S01E09 -> Video: ShowName S01 - EP09.mkv | Subtitle: ShowName S01 - EP09.srt -> ShowName S01 - EP09.ar.srt
-# S01E245 -> Video: Naruto Shippuden - 245.avi | Subtitle: Naruto Shippuden - 245.ass -> Naruto Shippuden - 245.ar.ass
 # S02E10 -> Video: ShowName 2nd Season EP10.mp4 | Subtitle: ShowName 2nd Season EP10.ass -> ShowName 2nd Season EP10.ar.ass
 # S02E14 -> Video: ShowName S2 - 14 - 1920x1080.mp4 | Subtitle: ShowName S2 - 14 - 1920x1080.srt -> ShowName S2 - 14 - 1920x1080.ar.srt
 # S02E17 -> Video: SomeShow 2nd Season E17.mkv | Subtitle: SomeShow 2nd Season E17.ass -> SomeShow 2nd Season E17.ar.ass
@@ -64,7 +60,9 @@ SomeShow 2nd Season E17.ass,S02E17,SomeShow 2nd Season E17.ar.ass,RENAMED
 # S12E149 -> Video: ShowName S12 - 149.mkv | Subtitle: ShowName S12 - 149.srt -> ShowName S12 - 149.ar.srt
 #
 # MISSING MATCHES:
+# S01E03 -> Has Video: Detective Conan - 03.mp4 | Missing: Subtitle
 # S01E156 -> Has Video: Naruto Shippuden EP156.mp4 | Missing: Subtitle
+# S01E245 -> Has Subtitle: Naruto Shippuden - 245.ass | Missing: Video
 #
 # FILES WITHOUT EPISODE PATTERN:
 # ShowName 21st Season.mp4 (no episode pattern detected)
