@@ -29,16 +29,23 @@ As a user, I want the script to automatically find and match video files with th
 ## Story 2.2: Implement Backup and Output File Management
 
 **Story:**
-As a user, I want the script to create backups of my original files and generate new merged files safely, so that I don't lose any data if something goes wrong.
+As a user, I want the script to create embedded videos with temporary names, then safely move originals to a `backups/` directory after successful merge, so that I don't lose any data and my working directory only contains the final embedded videos.
 
 **Acceptance Criteria:**
-1. Before embedding, original video files are renamed to `[Original_Filename].original.mkv`
-2. The new merged file is created with the original filename `[Original_Filename].mkv`
-3. If a `.original.mkv` file already exists, the script asks for user confirmation before overwriting
-4. If the merge operation fails, the original file remains intact with the `.original` suffix
-5. Sufficient disk space is checked before starting the merge operation
-6. The output filename pattern is configurable via the config file
-7. Users can verify successful merges before manually deleting `.original` backup files
+1. The embedded file is created with temporary name `[Original_Filename].embedded.mkv`
+2. If merge succeeds, a `backups/` directory is created if it doesn't exist
+3. Original `[Original_Filename].mkv` is moved to `backups/[Original_Filename].mkv`
+4. Original subtitle file is moved to `backups/[Subtitle_Filename].[ext]` (ext = srt/ass/ssa)
+5. The temporary `.embedded.mkv` file is renamed to `[Original_Filename].mkv`
+6. If merge fails, the temporary `.embedded.mkv` file is deleted and originals remain untouched
+7. Sufficient disk space is checked before starting the merge operation
+8. Backup collision handling is intelligent:
+   - If video already exists in `backups/`: skip video backup
+   - If subtitle already exists in `backups/`: skip subtitle backup
+   - Each file is checked independently
+   - Subtitle is only deleted from working directory if it exists in `backups/`
+   - A warning is logged for each skipped backup
+9. Users can restore originals from `backups/` directory if needed
 
 ---
 

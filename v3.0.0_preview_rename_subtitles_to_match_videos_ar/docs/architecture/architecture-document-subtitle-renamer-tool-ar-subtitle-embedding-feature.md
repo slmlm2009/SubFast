@@ -121,7 +121,13 @@ subprocess.run(cmd, shell=True)
 * **`file_matcher`**: Reused/adapted from `rename_subtitles_to_match_videos_ar.py`. It contains the logic to scan a directory and accurately match video and subtitle files.
 * **`command_builder`**: Constructs the precise `mkvmerge` command-line string for each matched pair.
 * **`process_runner`**: Executes the generated `mkvmerge` command using Python's `subprocess` module.
-* **`file_manager`**: Handles the file system operations as defined in the PRD (renaming the original video file).
+* **`file_manager`**: Handles file system operations for the backup and output workflow:
+  - Creates `backups/` directory on first successful merge
+  - Moves original video and subtitle files to `backups/` directory
+  - Handles collision detection (skip backup if files already exist)
+  - Renames `.embedded.mkv` temporary files to final `.mkv` names
+  - Cleans up temporary `.embedded.mkv` files on merge failures
+  - Removes subtitle files from working directory after successful backup
 * **`report_generator`**: Implements the logic for writing the `embedding_report.csv` file if enabled.
 
 
@@ -132,6 +138,7 @@ sequenceDiagram
     participant User
     participant WindowsExplorer
     participant EmbedScript as embed_subtitles_to_match_videos_ar.py
+    participant FileSystem as File System
     participant MKVMerge as mkvmerge.exe
 
     User->>WindowsExplorer: Right-click folder, select "Embed subtitles"
@@ -139,13 +146,27 @@ sequenceDiagram
     EmbedScript->>EmbedScript: load_configuration()
     EmbedScript->>EmbedScript: find_and_match_files()
     loop For each matched pair
-        EmbedScript->>EmbedScript: rename_original_video()
-        EmbedScript->>EmbedScript: build_mkvmerge_command()
-        EmbedScript->>MKVMerge: Execute command
+        EmbedScript->>EmbedScript: check_disk_space()
+        EmbedScript->>MKVMerge: Create video.embedded.mkv
         MKVMerge-->>EmbedScript: Return exit code
-        EmbedScript->>EmbedScript: Log success/failure
+        alt Merge succeeded
+            EmbedScript->>FileSystem: Create backups/ directory
+            alt Backup doesn't exist
+                EmbedScript->>FileSystem: Move video.mkv → backups/
+                EmbedScript->>FileSystem: Move subtitle.srt → backups/
+            else Backup exists
+                EmbedScript->>EmbedScript: Log: Backup exists, updating file
+                EmbedScript->>FileSystem: Delete subtitle.srt (if in backups/)
+            end
+            EmbedScript->>FileSystem: Rename video.embedded.mkv → video.mkv
+            EmbedScript->>EmbedScript: Log success
+        else Merge failed
+            EmbedScript->>FileSystem: Delete video.embedded.mkv
+            EmbedScript->>EmbedScript: Log failure
+        end
     end
     EmbedScript->>EmbedScript: generate_csv_report()
+    EmbedScript-->>User: Display summary
 ```
 
 

@@ -33,6 +33,7 @@ import re
 import argparse
 import configparser
 import subprocess
+import shutil
 from pathlib import Path
 
 __version__ = "1.0.0"
@@ -559,6 +560,141 @@ def build_mkvmerge_command(video_file, subtitle_file, output_file, config):
     return command
 
 
+# ============================================================================
+# Story 2.2: Backup and Output File Management Functions
+# ============================================================================
+
+def has_sufficient_space(video_file, subtitle_file):
+    """
+    Check if there is sufficient disk space for the embedding operation.
+    
+    Required space = video file size + subtitle file size + 10% overhead
+    
+    Args:
+        video_file (Path): Path to video file
+        subtitle_file (Path): Path to subtitle file
+    
+    Returns:
+        bool: True if sufficient space available, False otherwise
+    """
+    video_size = video_file.stat().st_size
+    subtitle_size = subtitle_file.stat().st_size
+    required_space = video_size + subtitle_size + int((video_size + subtitle_size) * 0.10)
+    
+    # Check available space on the drive containing the video file
+    disk_usage = shutil.disk_usage(video_file.parent)
+    available_space = disk_usage.free
+    
+    return available_space > required_space
+
+
+def ensure_backups_directory(working_dir):
+    """
+    Create backups/ directory if it doesn't exist.
+    
+    Args:
+        working_dir (Path): Working directory where backups/ should be created
+    
+    Returns:
+        Path: Path to the backups directory
+    """
+    backups_dir = working_dir / 'backups'
+    if not backups_dir.exists():
+        backups_dir.mkdir(exist_ok=True)
+        print("[BACKUP] Creating backups/ directory...")
+    return backups_dir
+
+
+def backup_originals(video_file, subtitle_file, backups_dir):
+    """
+    Intelligently backup original files to backups directory.
+    
+    Checks each file independently - only moves files that don't already
+    exist in the backups directory.
+    
+    Args:
+        video_file (Path): Path to original video file
+        subtitle_file (Path): Path to original subtitle file
+        backups_dir (Path): Path to backups directory
+    
+    Returns:
+        tuple[bool, bool]: (video_backed_up, subtitle_backed_up)
+            - True if file was backed up in this operation
+            - False if file already exists in backups (skipped)
+    """
+    video_backup = backups_dir / video_file.name
+    subtitle_backup = backups_dir / subtitle_file.name
+    
+    video_backed_up = False
+    subtitle_backed_up = False
+    
+    # Check and backup video if needed
+    if video_backup.exists():
+        print(f"[INFO] Video backup already exists: {video_file.name}")
+    else:
+        shutil.move(str(video_file), str(video_backup))
+        video_backed_up = True
+        print(f"[BACKUP] Moved {video_file.name} -> backups/")
+    
+    # Check and backup subtitle if needed
+    if subtitle_backup.exists():
+        print(f"[INFO] Subtitle backup already exists: {subtitle_file.name}")
+    else:
+        shutil.move(str(subtitle_file), str(subtitle_backup))
+        subtitle_backed_up = True
+        print(f"[BACKUP] Moved {subtitle_file.name} -> backups/")
+    
+    return video_backed_up, subtitle_backed_up
+
+
+def safe_delete_subtitle(subtitle_file, backups_dir):
+    """
+    Delete subtitle from working directory ONLY if it exists in backups.
+    
+    Safety check prevents data loss if backup failed silently.
+    
+    Args:
+        subtitle_file (Path): Path to subtitle file in working directory
+        backups_dir (Path): Path to backups directory
+    """
+    subtitle_backup = backups_dir / subtitle_file.name
+    
+    if subtitle_backup.exists() and subtitle_file.exists():
+        subtitle_file.unlink()
+        print(f"[CLEANUP] Removed subtitle from working dir: {subtitle_file.name}")
+    elif not subtitle_backup.exists():
+        print(f"[WARNING] Subtitle not in backups/ - keeping in working dir: {subtitle_file.name}")
+
+
+def rename_embedded_to_final(embedded_file, final_name):
+    """
+    Rename .embedded.mkv to final .mkv filename (overwrites if exists).
+    
+    Args:
+        embedded_file (Path): Path to temporary .embedded.mkv file
+        final_name (Path): Path to final .mkv filename
+    """
+    embedded_file.rename(final_name)
+
+
+def cleanup_failed_merge(embedded_file):
+    """
+    Delete temporary .embedded.mkv file after merge failure.
+    Original files remain untouched.
+    
+    Args:
+        embedded_file (Path): Path to temporary .embedded.mkv file
+    """
+    if embedded_file.exists():
+        embedded_file.unlink()
+        print(f"[CLEANUP] Removed temporary file: {embedded_file.name}")
+
+
+# ============================================================================
+# End of Story 2.2 Functions
+# ============================================================================
+
+
 def validate_file_pair(video_file, subtitle_file):
     """
     Validate that video and subtitle files are suitable for embedding.
@@ -608,24 +744,29 @@ def validate_file_pair(video_file, subtitle_file):
     return True, None
 
 
-def embed_subtitle_pair(video_path, subtitle_path, config):
+def embed_subtitle_pair(video_path, subtitle_path, config, backups_dir=None):
     """
-    Embed a single subtitle file into a video file.
+    Embed a single subtitle file into a video file with intelligent backup management.
     
-    Orchestrates the complete embedding process: validation, language detection,
-    command building, and mkvmerge execution.
+    Story 2.2: Implements the complete workflow:
+    1. Check disk space
+    2. Create temporary .embedded.mkv file
+    3. On success: backup originals to backups/, rename embedded to final
+    4. On failure: cleanup temp file, originals untouched
     
     Args:
         video_path (str or Path): Path to source MKV video file
         subtitle_path (str or Path): Path to subtitle file to embed
         config (dict): Configuration dictionary from load_config()
+        backups_dir (Path, optional): Path to backups directory (created if None)
     
     Returns:
-        tuple: (success: bool, output_file: Path or None, error_message: str or None)
+        tuple: (success: bool, output_file: Path or None, error_message: str or None, backups_dir: Path or None)
+            - backups_dir is returned so batch processing can reuse it
     
     Example:
         >>> config = load_config()
-        >>> success, output, error = embed_subtitle_pair('video.mkv', 'sub.ar.srt', config)
+        >>> success, output, error, backups = embed_subtitle_pair('video.mkv', 'sub.ar.srt', config)
         >>> if success:
         ...     print(f"Created: {output}")
     """
@@ -635,11 +776,17 @@ def embed_subtitle_pair(video_path, subtitle_path, config):
     # Validate file pair
     valid, error_msg = validate_file_pair(video_path, subtitle_path)
     if not valid:
-        return False, None, error_msg
+        return False, None, error_msg, backups_dir
     
-    # Generate output filename (temporary pattern for Story 1.2)
-    # Story 2.2 will handle proper backup and final naming
-    output_file = video_path.parent / f"{video_path.stem}.embedded.mkv"
+    # Story 2.2: Check disk space before operations
+    if not has_sufficient_space(video_path, subtitle_path):
+        error_msg = f"Insufficient disk space for {video_path.name}"
+        print(f"[ERROR] {error_msg}")
+        return False, None, error_msg, backups_dir
+    
+    # Generate temporary embedded filename
+    embedded_file = video_path.parent / f"{video_path.stem}.embedded.mkv"
+    final_file = video_path  # Final name is the original video name
     
     # Detect language for logging
     language = detect_language_from_filename(subtitle_path)
@@ -654,25 +801,49 @@ def embed_subtitle_pair(video_path, subtitle_path, config):
     
     # Build mkvmerge command
     try:
-        command = build_mkvmerge_command(video_path, subtitle_path, output_file, config)
+        command = build_mkvmerge_command(video_path, subtitle_path, embedded_file, config)
     except FileNotFoundError as e:
-        return False, None, str(e)
+        return False, None, str(e), backups_dir
     
     print(f"[INFO] Executing mkvmerge...")
     print(f"  Video: {video_path.name}")
     print(f"  Subtitle: {subtitle_path.name}")
-    print(f"  Output: {output_file.name}")
+    print(f"  Temporary output: {embedded_file.name}")
     
     # Execute mkvmerge command
     success, stdout, stderr = run_command(command)
     
-    if success:
-        print(f"[SUCCESS] Created: {output_file}")
-        return True, output_file, None
-    else:
+    if not success:
+        # Merge failed - cleanup temp file
+        cleanup_failed_merge(embedded_file)
         error_msg = f"mkvmerge failed: {stderr if stderr else 'Unknown error'}"
         print(f"[ERROR] {error_msg}")
-        return False, None, error_msg
+        return False, None, error_msg, backups_dir
+    
+    # Merge succeeded - Story 2.2: Backup workflow
+    try:
+        # Create backups directory on first success
+        if backups_dir is None:
+            backups_dir = ensure_backups_directory(video_path.parent)
+        
+        # Intelligently backup originals (checks each file independently)
+        video_backed_up, subtitle_backed_up = backup_originals(video_path, subtitle_path, backups_dir)
+        
+        # Only delete subtitle if it's safely in backups/
+        safe_delete_subtitle(subtitle_path, backups_dir)
+        
+        # Rename embedded file to original name (overwrites original video)
+        rename_embedded_to_final(embedded_file, final_file)
+        
+        print(f"[SUCCESS] Created: {final_file.name}")
+        return True, final_file, None, backups_dir
+        
+    except Exception as e:
+        # Ensure temp file cleanup on any error
+        cleanup_failed_merge(embedded_file)
+        error_msg = f"Backup workflow failed: {str(e)}"
+        print(f"[ERROR] {error_msg}")
+        return False, None, error_msg, backups_dir
 
 
 def run_command(command):
@@ -912,15 +1083,17 @@ def main():
     print(f"[INFO] Found {len(file_pairs)} video-subtitle pair(s)")
     print()
     
-    # Process each file pair with resilient batch processing
+    # Process each file pair with resilient batch processing (Story 2.2)
     results = []
+    backups_dir = None  # Lazy creation on first successful merge
+    
     for idx, (video_file, subtitle_file) in enumerate(file_pairs, 1):
         print(f"[{idx}/{len(file_pairs)}] Processing: {video_file.name}")
         print(f"           Subtitle: {subtitle_file.name}")
         
-        # Process the pair
-        success, output_file, error_message = embed_subtitle_pair(
-            video_file, subtitle_file, config
+        # Process the pair (Story 2.2: pass backups_dir for reuse)
+        success, output_file, error_message, backups_dir = embed_subtitle_pair(
+            video_file, subtitle_file, config, backups_dir
         )
         
         # Track result
@@ -934,13 +1107,21 @@ def main():
         
         # Display result
         if success:
-            print(f"  ✓ Success: {output_file.name}")
+            print(f"  [OK] Success: {output_file.name}")
         else:
-            print(f"  ✗ Failed: {error_message}")
+            print(f"  [FAIL] Failed: {error_message}")
         print()
     
     # Display operation summary
     print_operation_summary(results)
+    
+    # Story 2.2: Final tip about backups
+    if backups_dir and backups_dir.exists():
+        print()
+        print("=" * 60)
+        print("Tip: Verify merged files before manually deleting backups/ directory")
+        print(f"     Backups location: {backups_dir}")
+        print("=" * 60)
     
     # Return appropriate exit code
     return determine_exit_code(results)
