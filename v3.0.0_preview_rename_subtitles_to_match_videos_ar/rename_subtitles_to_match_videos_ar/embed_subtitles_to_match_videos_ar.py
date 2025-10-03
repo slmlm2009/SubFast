@@ -34,6 +34,7 @@ import argparse
 import configparser
 import subprocess
 import shutil
+import time
 from pathlib import Path
 
 __version__ = "1.0.0"
@@ -674,7 +675,7 @@ def rename_embedded_to_final(embedded_file, final_name):
         embedded_file (Path): Path to temporary .embedded.mkv file
         final_name (Path): Path to final .mkv filename
     """
-    embedded_file.rename(final_name)
+    embedded_file.replace(final_name)
 
 
 def cleanup_failed_merge(embedded_file):
@@ -959,6 +960,67 @@ def determine_exit_code(results, mkvmerge_valid=True):
         return EXIT_PARTIAL_FAILURE
 
 
+def display_batch_progress(current: int, total: int, filename: str) -> None:
+    """
+    Display progress for current file in batch processing.
+    
+    Args:
+        current: Current file number (1-indexed)
+        total: Total number of files to process
+        filename: Name of the file being processed
+    """
+    percentage = int((current / total) * 100)
+    print(f"\n[{current}/{total}] ({percentage}%) Processing: {filename}...")
+    print("-" * 60)
+
+
+def format_duration(seconds: float) -> str:
+    """
+    Convert seconds to human-readable duration format.
+    
+    Args:
+        seconds: Duration in seconds
+        
+    Returns:
+        Formatted string (e.g., "2m 35s", "1h 15m 30s")
+    """
+    if seconds < 60:
+        return f"{int(seconds)}s"
+    elif seconds < 3600:
+        minutes = int(seconds // 60)
+        remaining_seconds = int(seconds % 60)
+        return f"{minutes}m {remaining_seconds}s"
+    else:
+        hours = int(seconds // 3600)
+        minutes = int((seconds % 3600) // 60)
+        remaining_seconds = int(seconds % 60)
+        return f"{hours}h {minutes}m {remaining_seconds}s"
+
+
+def display_batch_summary(total: int, successful: int, failed: int, duration: float) -> None:
+    """
+    Display comprehensive summary after batch processing.
+    
+    Args:
+        total: Total number of pairs found
+        successful: Number of successful operations
+        failed: Number of failed operations
+        duration: Total processing time in seconds
+    """
+    success_rate = (successful / total * 100) if total > 0 else 0
+    formatted_time = format_duration(duration)
+    
+    print("\n" + "=" * 40)
+    print("=== BATCH PROCESSING COMPLETE ===")
+    print("=" * 40)
+    print(f"Total pairs found: {total}")
+    print(f"Successfully processed: {successful}")
+    print(f"Failed operations: {failed}")
+    print(f"Success rate: {success_rate:.1f}%")
+    print(f"Total time: {formatted_time}")
+    print("=" * 40)
+
+
 def parse_arguments():
     """
     Parse command-line arguments.
@@ -1083,45 +1145,73 @@ def main():
     print(f"[INFO] Found {len(file_pairs)} video-subtitle pair(s)")
     print()
     
-    # Process each file pair with resilient batch processing (Story 2.2)
+    # Initialize tracking (Story 2.3)
+    total_pairs = len(file_pairs)
+    successful_count = 0
+    failed_count = 0
+    start_time = time.time()
+    
+    # Process each file pair with resilient batch processing (Story 2.2 + 2.3)
     results = []
     backups_dir = None  # Lazy creation on first successful merge
     
     for idx, (video_file, subtitle_file) in enumerate(file_pairs, 1):
-        print(f"[{idx}/{len(file_pairs)}] Processing: {video_file.name}")
+        # Display progress (Story 2.3)
+        display_batch_progress(idx, total_pairs, video_file.name)
         print(f"           Subtitle: {subtitle_file.name}")
         
-        # Process the pair (Story 2.2: pass backups_dir for reuse)
-        success, output_file, error_message, backups_dir = embed_subtitle_pair(
-            video_file, subtitle_file, config, backups_dir
-        )
+        # Process the pair with error recovery (Story 2.2 + 2.3)
+        try:
+            success, output_file, error_message, backups_dir = embed_subtitle_pair(
+                video_file, subtitle_file, config, backups_dir
+            )
+            
+            # Track result
+            results.append({
+                'video': video_file,
+                'subtitle': subtitle_file,
+                'success': success,
+                'output': output_file,
+                'error': error_message
+            })
+            
+            # Display result and update counters (Story 2.3)
+            if success:
+                successful_count += 1
+                print(f"[SUCCESS] Completed: {video_file.name}")
+            else:
+                failed_count += 1
+                print(f"[ERROR] Failed: {error_message}")
+        except Exception as e:
+            # Graceful error recovery (Story 2.3)
+            failed_count += 1
+            error_msg = str(e)
+            print(f"[ERROR] Failed to process pair: {video_file.name} + {subtitle_file.name}")
+            print(f"Error details: {error_msg}")
+            
+            # Track failed result
+            results.append({
+                'video': video_file,
+                'subtitle': subtitle_file,
+                'success': False,
+                'output': None,
+                'error': error_msg
+            })
+            # Continue to next pair - don't stop batch processing
         
-        # Track result
-        results.append({
-            'video': video_file,
-            'subtitle': subtitle_file,
-            'success': success,
-            'output': output_file,
-            'error': error_message
-        })
-        
-        # Display result
-        if success:
-            print(f"  [OK] Success: {output_file.name}")
-        else:
-            print(f"  [FAIL] Failed: {error_message}")
         print()
     
-    # Display operation summary
-    print_operation_summary(results)
+    # Calculate total duration (Story 2.3)
+    total_duration = time.time() - start_time
+    
+    # Display comprehensive batch summary (Story 2.3)
+    display_batch_summary(total_pairs, successful_count, failed_count, total_duration)
     
     # Story 2.2: Final tip about backups
     if backups_dir and backups_dir.exists():
         print()
-        print("=" * 60)
         print("Tip: Verify merged files before manually deleting backups/ directory")
         print(f"     Backups location: {backups_dir}")
-        print("=" * 60)
     
     # Return appropriate exit code
     return determine_exit_code(results)

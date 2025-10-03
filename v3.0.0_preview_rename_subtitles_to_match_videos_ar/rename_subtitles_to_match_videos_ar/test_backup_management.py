@@ -254,6 +254,21 @@ class TestFileRenamingAndCleanup(unittest.TestCase):
         self.assertTrue(self.final_file.exists(), "Final file should exist")
         self.assertEqual(self.final_file.read_text(), "embedded content")
     
+    def test_rename_embedded_to_final_overwrite(self):
+        """Test renaming overwrites existing file (bug fix for re-processing)"""
+        # Create existing final file (simulating re-run scenario)
+        self.final_file.write_text("old video content")
+        
+        # Rename should overwrite
+        rename_embedded_to_final(self.embedded_file, self.final_file)
+        
+        # Verify embedded file gone
+        self.assertFalse(self.embedded_file.exists(), "Embedded file should be renamed")
+        
+        # Verify final file exists with NEW content (overwritten)
+        self.assertTrue(self.final_file.exists(), "Final file should exist")
+        self.assertEqual(self.final_file.read_text(), "embedded content", "Should overwrite with new content")
+    
     def test_cleanup_failed_merge(self):
         """Test cleanup of temporary .embedded.mkv file"""
         cleanup_failed_merge(self.embedded_file)
