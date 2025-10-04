@@ -1,6 +1,6 @@
-# Subtitle Renamer Tool [AR]
+# ![logo](https://i.imgur.com/pleZZjw.png)    SubFast
 
-A powerful Python script that automatically renames subtitle files to match their corresponding video files, with intelligent episode detection, full configuration support, and Windows context menu integration.
+Fast subtitle renaming and embedding for all languages
 
 ## Features
 
