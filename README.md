@@ -12,7 +12,7 @@ A powerful Python script that automatically renames subtitle files to match thei
 - **Movie mode** for single video/subtitle pairs
 - **Collision handling** prevents file overwrites with smart naming
 - **Configuration system** via `config.ini` for customization
-- **Performance oriented** with caching and regex precombilation optimizations achivieng multible folds speed improvements on large datasets compared to basic python scripting
+- **Performance oriented** with caching and regex precombilation optimizations
 
 ### Episode Pattern Recognition
 The script recognizes various episode naming conventions:
