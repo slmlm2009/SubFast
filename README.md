@@ -30,7 +30,7 @@ The script recognizes various episode naming conventions:
 - And many more variations with flexible spacing and separators
 
 ### Windows Right-Click Context Menu Integration (v2.0.0+)
-![Demo]([https://assets.digitalocean.com/articles/alligator/boo.svg](https://i.imgur.com/7y839Yy.gif))
+![Funny cat GIF](https://i.imgur.com/7y839Yy.gif)
 - **Right-click context menu** integration
 - **Custom icon** for professional appearance
 - **One-click execution** from Windows Explorer
