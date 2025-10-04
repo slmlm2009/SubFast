@@ -40,7 +40,7 @@ import time
 
 # Default configuration values (used if config.ini is missing or invalid)
 DEFAULT_CONFIG = {
-    'enable_export': True,
+    'enable_export': False,  # Story 3.1: fallback is false, not true
     'language_suffix': 'ar',
     'video_extensions': ['mkv', 'mp4'],
     'subtitle_extensions': ['srt', 'ass']
@@ -87,7 +87,7 @@ subtitle_extensions = srt, ass
 
 # ============================================================================
 # IMPORTANT: Invalid or missing config values will use ALL default values:
-#   - enable_export = true
+#   - enable_export = false  # Story 3.1: changed from true to false
 #   - language_suffix = ar
 #   - video_extensions = mkv, mp4
 #   - subtitle_extensions = srt, ass
@@ -112,8 +112,8 @@ def validate_configuration(config_dict):
     """
     validated = {}
     
-    # Validate enable_export
-    export_val = str(config_dict.get('enable_export', 'true')).lower()
+    # Validate enable_export (Story 3.1: fallback false)
+    export_val = str(config_dict.get('enable_export', 'false')).lower()
     validated['enable_export'] = export_val in ('true', 'yes', '1', 'on')
     
     # Validate language_suffix
@@ -182,7 +182,7 @@ def load_configuration():
         
         # Extract values
         config_dict = {
-            'enable_export': config.get('General', 'enable_export', fallback='true'),
+            'enable_export': config.get('General', 'enable_export', fallback='false'),  # Story 3.1
             'language_suffix': config.get('General', 'language_suffix', fallback='ar'),
             'video_extensions': config.get('FileFormats', 'video_extensions', fallback='mkv, mp4'),
             'subtitle_extensions': config.get('FileFormats', 'subtitle_extensions', fallback='srt, ass')

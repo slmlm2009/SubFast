@@ -45,6 +45,48 @@ EXIT_FATAL_ERROR = 1       # Fatal error: mkvmerge not found, config invalid, et
 EXIT_PARTIAL_FAILURE = 2   # Some operations failed, some succeeded
 EXIT_COMPLETE_FAILURE = 3  # All operations attempted failed
 
+# Valid ISO-639 language codes (Set 1 and Set 3)
+# Loaded from ISO-639_set1_and_set3.txt resource file
+VALID_LANGUAGE_CODES = {
+    'ab', 'abk', 'aa', 'aar', 'af', 'afr', 'ak', 'aka', 'sq', 'sqi',
+    'am', 'amh', 'ar', 'ara', 'an', 'arg', 'hy', 'hye', 'as', 'asm',
+    'av', 'ava', 'ae', 'ave', 'ay', 'aym', 'az', 'aze', 'bm', 'bam',
+    'ba', 'bak', 'eu', 'eus', 'be', 'bel', 'bn', 'ben', 'bi', 'bis',
+    'bs', 'bos', 'br', 'bre', 'bg', 'bul', 'my', 'mya', 'ca', 'cat',
+    'km', 'khm', 'ch', 'cha', 'ce', 'che', 'ny', 'nya', 'zh', 'zho',
+    'cu', 'chu', 'cv', 'chv', 'kw', 'cor', 'co', 'cos', 'cr', 'cre',
+    'hr', 'hrv', 'cs', 'ces', 'da', 'dan', 'dv', 'div', 'nl', 'nld',
+    'dz', 'dzo', 'en', 'eng', 'eo', 'epo', 'et', 'est', 'ee', 'ewe',
+    'fo', 'fao', 'fj', 'fij', 'fi', 'fin', 'fr', 'fra', 'ff', 'ful',
+    'gd', 'gla', 'gl', 'glg', 'lg', 'lug', 'ka', 'kat', 'de', 'deu',
+    'el', 'ell', 'gn', 'grn', 'gu', 'guj', 'ht', 'hat', 'ha', 'hau',
+    'he', 'heb', 'hz', 'her', 'hi', 'hin', 'ho', 'hmo', 'hu', 'hun',
+    'is', 'isl', 'io', 'ido', 'ig', 'ibo', 'id', 'ind', 'ia', 'ina',
+    'ie', 'ile', 'iu', 'iku', 'ik', 'ipk', 'ga', 'gle', 'it', 'ita',
+    'ja', 'jpn', 'jv', 'jav', 'kl', 'kal', 'kn', 'kan', 'kr', 'kau',
+    'ks', 'kas', 'kk', 'kaz', 'ki', 'kik', 'rw', 'kin', 'kv', 'kom',
+    'kg', 'kon', 'ko', 'kor', 'kj', 'kua', 'ku', 'kur', 'ky', 'kir',
+    'lo', 'lao', 'la', 'lat', 'lv', 'lav', 'li', 'lim', 'ln', 'lin',
+    'lt', 'lit', 'lu', 'lub', 'lb', 'ltz', 'mk', 'mkd', 'mg', 'mlg',
+    'ms', 'msa', 'ml', 'mal', 'mt', 'mlt', 'gv', 'glv', 'mi', 'mri',
+    'mr', 'mar', 'mh', 'mah', 'mn', 'mon', 'na', 'nau', 'nv', 'nav',
+    'ng', 'ndo', 'ne', 'nep', 'nd', 'nde', 'se', 'sme', 'no', 'nor',
+    'nb', 'nob', 'nn', 'nno', 'oc', 'oci', 'oj', 'oji', 'or', 'ori',
+    'om', 'orm', 'os', 'oss', 'pi', 'pli', 'ps', 'pus', 'fa', 'fas',
+    'pl', 'pol', 'pt', 'por', 'pa', 'pan', 'qu', 'que', 'ro', 'ron',
+    'rm', 'roh', 'rn', 'run', 'ru', 'rus', 'sm', 'smo', 'sg', 'sag',
+    'sa', 'san', 'sc', 'srd', 'sr', 'srp', 'sn', 'sna', 'ii', 'iii',
+    'sd', 'snd', 'si', 'sin', 'sk', 'slk', 'sl', 'slv', 'so', 'som',
+    'nr', 'nbl', 'st', 'sot', 'es', 'spa', 'su', 'sun', 'sw', 'swa',
+    'ss', 'ssw', 'sv', 'swe', 'tl', 'tgl', 'ty', 'tah', 'tg', 'tgk',
+    'ta', 'tam', 'tt', 'tat', 'te', 'tel', 'th', 'tha', 'bo', 'bod',
+    'ti', 'tir', 'to', 'ton', 'ts', 'tso', 'tn', 'tsn', 'tr', 'tur',
+    'tk', 'tuk', 'tw', 'twi', 'ug', 'uig', 'uk', 'ukr', 'ur', 'urd',
+    'uz', 'uzb', 've', 'ven', 'vi', 'vie', 'vo', 'vol', 'wa', 'wln',
+    'cy', 'cym', 'fy', 'fry', 'wo', 'wol', 'xh', 'xho', 'yi', 'yid',
+    'yo', 'yor', 'za', 'zha', 'zu', 'zul'
+}
+
 
 def load_config():
     """
@@ -63,15 +105,21 @@ def load_config():
     script_dir = Path(__file__).parent
     config_path = script_dir / 'config.ini'
     
-    # Default configuration
+    # Default configuration (Story 3.1 fallbacks)
     config_dict = {
         'mkvmerge_path': None,
         'default_track': True,
-        'language': None
+        'language': 'none',    # Story 3.1: fallback is 'none', not 'ar'
+        'csv_export': False    # Story 3.1: fallback is false, not true
     }
     
     if not config_path.exists():
         print(f"[INFO] config.ini not found at {config_path}")
+        create_default_config(config_path)
+        # Continue to load the newly created config
+    
+    if not config_path.exists():
+        # Fallback if creation failed
         print("[INFO] Using default configuration: mkvmerge.exe in script directory")
         return config_dict
     
@@ -87,18 +135,43 @@ def load_config():
                     config_dict['mkvmerge_path'] = path
             
             if config.has_option('Embedding', 'default_track'):
-                config_dict['default_track'] = config.getboolean('Embedding', 'default_track')
+                try:
+                    config_dict['default_track'] = config.getboolean('Embedding', 'default_track')
+                except ValueError:
+                    config_dict['default_track'] = True  # Fallback to True
+                    print("[WARNING] Invalid default_track value, using fallback: true")
             
             if config.has_option('Embedding', 'language'):
                 lang = config.get('Embedding', 'language').strip()
-                if lang:
-                    config_dict['language'] = lang
+                if lang and lang.lower() != 'none':
+                    # Validate against ISO-639 codes
+                    if lang.lower() in VALID_LANGUAGE_CODES:
+                        config_dict['language'] = lang
+                    else:
+                        print(f"[WARNING] Invalid language code '{lang}' - not a valid ISO-639 code")
+                        print(f"[WARNING] Falling back to 'none' (no language tag will be set)")
+                        config_dict['language'] = 'none'
+                else:
+                    config_dict['language'] = 'none'  # Explicit none or empty
+        
+        # Read [Reporting] section (Story 3.1)
+        if config.has_section('Reporting'):
+            if config.has_option('Reporting', 'csv_export'):
+                try:
+                    config_dict['csv_export'] = config.getboolean('Reporting', 'csv_export')
+                except ValueError:
+                    # Invalid value, use fallback
+                    config_dict['csv_export'] = False
+                    print("[WARNING] Invalid csv_export value, using fallback: false")
         
         print(f"[INFO] Configuration loaded from: {config_path}")
         if config_dict['mkvmerge_path']:
             print(f"  mkvmerge path: {config_dict['mkvmerge_path']}")
         else:
             print(f"  mkvmerge path: (default - script directory)")
+        print(f"  default_track: {'yes' if config_dict['default_track'] else 'no'}")
+        print(f"  language: {config_dict['language']}")
+        print(f"  csv_export: {'enabled' if config_dict['csv_export'] else 'disabled'}")
         
         return config_dict
         
@@ -106,6 +179,41 @@ def load_config():
         print(f"[WARNING] Failed to parse config.ini: {e}")
         print("[INFO] Using default configuration")
         return config_dict
+
+
+def create_default_config(config_path):
+    """
+    Create a default config.ini file with example settings.
+    
+    Story 3.1: Creates config with example values (ar, true) but actual
+    fallback defaults are (none, false) when values are missing/invalid.
+    
+    Args:
+        config_path (Path): Path where config.ini should be created
+    """
+    config = configparser.ConfigParser()
+    
+    # Add [Embedding] section with example values
+    config['Embedding'] = {
+        'mkvmerge_path': '',  # Empty = use script directory
+        'language': 'ar',     # Example: 'ar', Fallback: 'none'
+        'default_track': 'true'
+    }
+    
+    # Add [Reporting] section with example values
+    config['Reporting'] = {
+        'csv_export': 'true'  # Example: 'true', Fallback: 'false'
+    }
+    
+    # Write config with explanatory comments
+    with open(config_path, 'w', encoding='utf-8') as f:
+        f.write('# Subtitle Embedding Configuration\n')
+        f.write('# Language detection order: Filename suffix → Config value → none (no tag)\n')
+        f.write('# CSV export defaults to false if missing/invalid\n\n')
+        config.write(f)
+    
+    print(f"[INFO] Created default config.ini at: {config_path}")
+    print("[INFO] Language detection will follow: filename → config → none")
 
 
 def validate_mkvmerge(mkvmerge_path=None):
@@ -169,9 +277,47 @@ def validate_mkvmerge(mkvmerge_path=None):
         return False, str(mkvmerge_exe), None
 
 
+def detect_subtitle_language(subtitle_filename, config_language):
+    """
+    Detect subtitle language using 3-tier strategy (Story 3.1).
+    
+    Tier 1 (Highest Priority): Filename suffix (e.g., movie.ar.srt)
+    Tier 2: Config file language value
+    Tier 3 (Fallback): 'none' (no language tag)
+    
+    Args:
+        subtitle_filename (str): Name of subtitle file
+        config_language (str): Language from config file (or 'none')
+    
+    Returns:
+        str: Detected language code or 'none'
+    
+    Examples:
+        >>> detect_subtitle_language('movie.ar.srt', 'en')
+        'ar'  # Filename overrides config
+        
+        >>> detect_subtitle_language('movie.srt', 'en')
+        'en'  # No filename suffix, use config
+        
+        >>> detect_subtitle_language('movie.srt', 'none')
+        'none'  # Both missing, use fallback
+    """
+    # Tier 1: Check filename for language suffix
+    filename_lang = detect_language_from_filename(subtitle_filename)
+    if filename_lang:
+        return filename_lang
+    
+    # Tier 2: Use config language if valid (not 'none')
+    if config_language and config_language != 'none' and len(config_language) in [2, 3]:
+        return config_language
+    
+    # Tier 3: Default fallback
+    return 'none'
+
+
 def detect_language_from_filename(subtitle_file):
     """
-    Detect language code from subtitle filename.
+    Detect language code from subtitle filename (Tier 1 helper).
     
     Implements strategy pattern: extract language from filename using common patterns.
     Supports both 2-letter (ISO 639-1) and 3-letter (ISO 639-2) codes.
@@ -542,18 +688,19 @@ def build_mkvmerge_command(video_file, subtitle_file, output_file, config):
         str(video_file)
     ]
     
-    # Detect language: filename first, then config fallback (Strategy Pattern)
-    language = detect_language_from_filename(subtitle_file)
-    if not language:
-        language = config.get('language')
+    # Story 3.1: 3-tier language detection (filename → config → none)
+    config_language = config.get('language', 'none')
+    detected_language = detect_subtitle_language(Path(subtitle_file).name, config_language)
     
-    # Add language option if detected
-    if language:
-        command.extend(['--language', f'0:{language}'])
+    # Only add language option if not 'none'
+    if detected_language and detected_language != 'none':
+        command.extend(['--language', f'0:{detected_language}'])
     
-    # Add default track flag if configured
+    # Add default track flag (explicit yes or no)
     if config.get('default_track', True):
         command.extend(['--default-track', '0:yes'])
+    else:
+        command.extend(['--default-track', '0:no'])
     
     # Add subtitle file
     command.append(str(subtitle_file))
@@ -874,19 +1021,25 @@ def run_command(command):
         return False, "", str(e)
 
 
-def generate_report(processed_files, output_path):
+def generate_report(processed_files, output_path, config):
     """
-    Generate CSV report of embedding operations.
+    Generate CSV report of embedding operations (Story 3.3).
     
-    This function will be fully implemented in Story 3.3.
-    Stub implementation does nothing.
+    Story 3.1: Checks config['csv_export'] flag (fallback: false).
+    Only generates report if csv_export is True.
     
     Args:
         processed_files: List of processed file information
         output_path: Path where CSV report should be saved
+        config: Configuration dictionary with csv_export flag
     """
-    # TODO: Implement in Story 3.3
-    print("[INFO] generate_report() - stub implementation")
+    # Story 3.1: Check csv_export flag
+    csv_export = config.get('csv_export', False)
+    if not csv_export:
+        return  # Skip CSV generation
+    
+    # TODO: Implement CSV generation in Story 3.3
+    print("[INFO] CSV export enabled but not yet implemented (Story 3.3)")
     pass
 
 

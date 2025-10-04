@@ -376,7 +376,12 @@ class TestCommandBuilding(unittest.TestCase):
             self.assertIn('0:ar', command)
     
     def test_build_command_default_track_false(self):
-        """Test command building with default_track=False."""
+        """Test command building with default_track=False.
+        
+        CRITICAL FIX (Story 3.1): When default_track=False, we MUST explicitly
+        set '--default-track 0:no' to prevent mkvmerge from using its default
+        behavior (which would make the subtitle default anyway).
+        """
         config = {'mkvmerge_path': None, 'default_track': False, 'language': None}
         
         with patch.object(embed_script, 'validate_mkvmerge') as mock_validate:
@@ -384,7 +389,11 @@ class TestCommandBuilding(unittest.TestCase):
             
             command = embed_script.build_mkvmerge_command('video.mkv', 'sub.srt', 'output.mkv', config)
             
-            self.assertNotIn('--default-track', command)
+            # Verify --default-track 0:no is explicitly set when false
+            self.assertIn('--default-track', command)
+            self.assertIn('0:no', command)
+            # Ensure it's not set to 'yes'
+            self.assertNotIn('0:yes', command)
     
     def test_build_command_mkvmerge_not_found(self):
         """Test command building when mkvmerge is not available."""
