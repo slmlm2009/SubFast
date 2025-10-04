@@ -764,7 +764,13 @@ def find_matching_files(directory):
     
     if not video_files or not subtitle_files:
         print("[INFO] No video-subtitle pairs to match")
-        return []
+        return {
+            'matches': [],
+            'unmatched_videos': video_files,
+            'unmatched_subtitles': subtitle_files,
+            'total_videos': len(video_files),
+            'total_subtitles': len(subtitle_files)
+        }
     
     # Build episode context for TV shows
     video_episodes = {}
@@ -861,7 +867,14 @@ def find_matching_files(directory):
                 print(f"  - {video.name} + {subtitle.name} (movie)")
         print()
     
-    return matches
+    # Return matches along with unmatched file info for CSV reporting
+    return {
+        'matches': matches,
+        'unmatched_videos': unmatched_videos,
+        'unmatched_subtitles': unmatched_subtitles,
+        'total_videos': len(video_files),
+        'total_subtitles': len(subtitle_files)
+    }
 
 
 def build_mkvmerge_command(video_file, subtitle_file, output_file, config):
@@ -1232,26 +1245,150 @@ def run_command(command):
         return False, "", str(e)
 
 
-def generate_report(processed_files, output_path, config):
+def generate_report(processed_files, output_path, config, elapsed_time=0, unmatched_videos=None, unmatched_subtitles=None):
     """
     Generate CSV report of embedding operations (Story 3.3).
     
     Story 3.1: Checks config['csv_export'] flag (fallback: false).
     Only generates report if csv_export is True.
     
+    Story 3.3 FIX (MNT-001): Now includes actual execution time and detailed statistics.
+    Story 3.3 FIX: Added unmatched pairs and unidentified files sections.
+    
     Args:
         processed_files: List of processed file information
         output_path: Path where CSV report should be saved
         config: Configuration dictionary with csv_export flag
+        elapsed_time: Actual execution time in seconds (Story 3.3 FIX)
+        unmatched_videos: List of video files without matching subtitles
+        unmatched_subtitles: List of subtitle files without matching videos
     """
     # Story 3.1: Check csv_export flag
     csv_export = config.get('csv_export', False)
     if not csv_export:
         return  # Skip CSV generation
     
-    # TODO: Implement CSV generation in Story 3.3
-    print("[INFO] CSV export enabled but not yet implemented (Story 3.3)")
-    pass
+    # Story 3.3: Implement CSV generation
+    from datetime import datetime
+    import csv
+    
+    # Generate filename and path
+    directory = Path(output_path) if output_path else Path.cwd()
+    csv_path = directory / "embedding_report.csv"
+    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+    
+    # Calculate statistics
+    total_operations = len(processed_files)
+    successful = sum(1 for r in processed_files if r.get('success', False))
+    failed = total_operations - successful
+    success_rate = (successful / total_operations * 100) if total_operations > 0 else 0
+    
+    # Story 3.3 FIX (MNT-001): Format actual execution time
+    if elapsed_time < 60:
+        formatted_time = f"{elapsed_time:.2f} seconds"
+    elif elapsed_time < 3600:
+        minutes = int(elapsed_time // 60)
+        seconds = elapsed_time % 60
+        formatted_time = f"{minutes}m {seconds:.2f}s"
+    else:
+        hours = int(elapsed_time // 3600)
+        minutes = int((elapsed_time % 3600) // 60)
+        seconds = elapsed_time % 60
+        formatted_time = f"{hours}h {minutes}m {seconds:.0f}s"
+    
+    # Write CSV report
+    try:
+        with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
+            # SECTION 1: SubFast Banner + Header (Story 3.3)
+            csvfile.write(CSV_BANNER)
+            csvfile.write(f"# SubFast Embedding Report\n")
+            csvfile.write(f"# Generated: {timestamp}\n")
+            csvfile.write(f"# Directory: {directory}\n")
+            csvfile.write("#\n")
+            
+            # SECTION 2: Configuration Summary
+            csvfile.write("# CONFIGURATION SUMMARY:\n")
+            csvfile.write(f"# mkvmerge path: {config.get('mkvmerge_path') or 'None'}\n")
+            csvfile.write(f"# Language code: {config.get('language') or 'none'}\n")
+            csvfile.write(f"# Default flag: {'yes' if config.get('default_track') else 'no'}\n")
+            csvfile.write(f"# CSV export: enabled\n")
+            csvfile.write("#\n")
+            
+            # SECTION 3: Statistics Summary
+            csvfile.write("# STATISTICS:\n")
+            csvfile.write(f"# Total files processed: {total_operations}\n")
+            csvfile.write(f"# Successful: {successful}\n")
+            csvfile.write(f"# Failed: {failed}\n")
+            csvfile.write(f"# Success rate: {success_rate:.1f}%\n")
+            csvfile.write(f"# Execution time: {formatted_time}\n")
+            csvfile.write("#\n")
+            
+            # Story 3.3 FIX (MNT-001): SECTION 4 - Successfully processed pairs
+            csvfile.write("# SUCCESSFULLY PROCESSED PAIRS:\n")
+            successful_files = [r for r in processed_files if r.get('success', False)]
+            if successful_files:
+                for result in successful_files:
+                    video_name = result['video'].name if result.get('video') else 'N/A'
+                    subtitle_name = result['subtitle'].name if result.get('subtitle') else 'N/A'
+                    csvfile.write(f"#   - {video_name} + {subtitle_name}\n")
+            else:
+                csvfile.write("#   (None)\n")
+            csvfile.write("#\n")
+            
+            # Story 3.3 FIX (MNT-001): SECTION 5 - Failed operations
+            csvfile.write("# FAILED OPERATIONS:\n")
+            failed_files = [r for r in processed_files if not r.get('success', False)]
+            if failed_files:
+                for result in failed_files:
+                    video_name = result['video'].name if result.get('video') else 'N/A'
+                    subtitle_name = result['subtitle'].name if result.get('subtitle') else 'N/A'
+                    error_detail = result.get('error', 'Unknown error')
+                    csvfile.write(f"#   - {video_name} + {subtitle_name}\n")
+                    csvfile.write(f"#     Error: {error_detail}\n")
+            else:
+                csvfile.write("#   (None)\n")
+            csvfile.write("#\n")
+            
+            # Story 3.3 FIX: SECTION 6 - Unmatched videos
+            csvfile.write("# UNMATCHED VIDEOS (No matching subtitles):\n")
+            if unmatched_videos:
+                for video in unmatched_videos:
+                    csvfile.write(f"#   - {video.name}\n")
+            else:
+                csvfile.write("#   (None)\n")
+            csvfile.write("#\n")
+            
+            # Story 3.3 FIX: SECTION 7 - Unmatched subtitles
+            csvfile.write("# UNMATCHED SUBTITLES (No matching videos):\n")
+            if unmatched_subtitles:
+                for subtitle in unmatched_subtitles:
+                    csvfile.write(f"#   - {subtitle.name}\n")
+            else:
+                csvfile.write("#   (None)\n")
+            csvfile.write("#\n")
+            
+            csvfile.write("# ══════════════════════════════════════════════════════════════\n")
+            csvfile.write("#\n")
+            
+            # SECTION 8: Operations Table
+            writer = csv.writer(csvfile)
+            writer.writerow(['Original Video', 'Subtitle File', 'Output File', 'Status', 'Error Details', 'Timestamp'])
+            
+            for result in processed_files:
+                video_name = result['video'].name if result.get('video') else 'N/A'
+                subtitle_name = result['subtitle'].name if result.get('subtitle') else 'N/A'
+                output_name = result['output'].name if result.get('output') else 'N/A'
+                status = 'Success' if result.get('success', False) else 'Failed'
+                error_details = result.get('error', '') if not result.get('success', False) else ''
+                operation_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+                
+                writer.writerow([video_name, subtitle_name, output_name, status, error_details, operation_timestamp])
+        
+        print(f"\n[INFO] Exported embedding report to:")
+        print(f"       {csv_path}")
+        print()
+    except Exception as e:
+        print(f"[WARNING] Failed to generate CSV report: {e}")
 
 
 def print_operation_summary(results):
@@ -1502,11 +1639,17 @@ def main():
     
     # Find matching video-subtitle pairs
     print("Searching for matching video and subtitle files...")
-    file_pairs = find_matching_files(target_dir)
+    match_results = find_matching_files(target_dir)
+    file_pairs = match_results['matches']
+    unmatched_videos = match_results['unmatched_videos']
+    unmatched_subtitles = match_results['unmatched_subtitles']
     
     if not file_pairs:
         print("[INFO] No matching video-subtitle pairs found")
-        return EXIT_SUCCESS
+        print("[INFO] Console will remain open - please review the search directory")
+        # Generate CSV report even with no pairs (for tracking)
+        generate_report([], target_dir, config, 0, unmatched_videos, unmatched_subtitles)
+        return EXIT_PARTIAL_FAILURE  # Console should persist when no pairs found
     
     print(f"[INFO] Found {len(file_pairs)} video-subtitle pair(s)")
     print()
@@ -1573,15 +1716,51 @@ def main():
     # Display comprehensive batch summary (Story 2.3)
     display_batch_summary(total_pairs, successful_count, failed_count, total_duration)
     
+    # Story 3.3 FIX (MNT-001): Generate CSV report with actual execution time and unmatched files
+    generate_report(results, target_dir, config, total_duration, unmatched_videos, unmatched_subtitles)
+    
     # Story 2.2: Final tip about backups
     if backups_dir and backups_dir.exists():
         print()
         print("Tip: Verify merged files before manually deleting backups/ directory")
         print(f"     Backups location: {backups_dir}")
     
-    # Return appropriate exit code
+    # Return exit code (console behavior handled by finally block in __main__)
     return determine_exit_code(results)
 
 
 if __name__ == "__main__":
-    sys.exit(main())
+    # Story 3.3 FIX (REL-001): Ensure console logic runs even on fatal errors
+    exit_code = EXIT_SUCCESS
+    config = {}
+    should_pause = False
+    
+    try:
+        exit_code = main()
+    except Exception as e:
+        print(f"\n[FATAL ERROR] Unexpected error: {e}")
+        import traceback
+        traceback.print_exc()
+        exit_code = EXIT_FATAL_ERROR
+        should_pause = True
+    
+    # Story 3.3 FIX: Smart console behavior - check if we should pause
+    # This MUST happen before sys.exit() for context menu execution
+    try:
+        if not config:
+            config = load_config()
+        keep_console_open = config.get('keep_console_open', False)
+    except:
+        keep_console_open = False
+    
+    # Hold console if error OR keep_console_open is true
+    if exit_code != EXIT_SUCCESS or keep_console_open or should_pause:
+        try:
+            input("\nPress Enter to close this window...")
+        except:
+            # If input() fails (no stdin), use time.sleep as fallback
+            import time
+            print("\n[Console will close in 10 seconds...]")
+            time.sleep(10)
+    
+    sys.exit(exit_code)

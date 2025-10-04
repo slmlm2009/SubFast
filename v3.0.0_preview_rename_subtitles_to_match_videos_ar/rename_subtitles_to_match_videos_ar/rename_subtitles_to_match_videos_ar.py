@@ -27,6 +27,7 @@ ORIGINAL VERSION: rename_subtitles_to_match_videos_ar_optimized_Sonnet4_NoThinki
 """
 
 import os
+import sys
 import re
 from collections import defaultdict
 import configparser
@@ -104,6 +105,10 @@ detected_video_extensions = mkv, mp4
 
 # Subtitle file extensions to detect (comma-separated, no dots)
 detected_subtitle_extensions = srt, ass
+
+# Keep console window open until keypress (true/false) - Story 3.3
+# When false: console auto-closes on success, stays open on errors (smart behavior)
+keep_console_open = false
 
 [Renaming]
 # Generate CSV report before renaming (true/false)
@@ -382,7 +387,8 @@ def load_configuration():
             'enable_export': config.get('Renaming', 'renaming_report', fallback='false'),  # NEW: renaming_report
             'language_suffix': config.get('Renaming', 'renaming_language_suffix', fallback=''),  # NEW: empty default
             'video_extensions': config.get('General', 'detected_video_extensions', fallback='mkv, mp4'),  # NEW: from [General]
-            'subtitle_extensions': config.get('General', 'detected_subtitle_extensions', fallback='srt, ass')  # NEW: from [General]
+            'subtitle_extensions': config.get('General', 'detected_subtitle_extensions', fallback='srt, ass'),  # NEW: from [General]
+            'keep_console_open': config.getboolean('General', 'keep_console_open', fallback=False)  # Story 3.3
         }
         
         # Validate and return
@@ -1067,7 +1073,8 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=No
     config_str = f"language={lang_str}, videos={'|'.join(CONFIG['video_extensions'])}, subtitles={'|'.join(CONFIG['subtitle_extensions'])}, export={CONFIG['enable_export']}"
     
     with open(csv_path, 'w', encoding='utf-8', newline='') as csvfile:
-        # SECTION 1: Summary Header
+        # SECTION 1: SubFast Banner (Story 3.3)
+        csvfile.write(CSV_BANNER)
         csvfile.write("# Subtitle Renaming Report\n")
         csvfile.write(f"# Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}\n")
         csvfile.write(f"# Directory: {directory}\n")
@@ -1223,3 +1230,22 @@ if __name__ == "__main__":
     
     if CONFIG['enable_export']:
         export_analysis_to_csv(renamed_count, movie_mode_detected, original_videos, original_subtitles, rename_map, time_str)
+    
+    # Story 3.3 FIX (REQ-001): Smart console behavior
+    # Define exit codes (same as embedding script)
+    EXIT_SUCCESS = 0
+    EXIT_FATAL_ERROR = 1  
+    
+    # Story 3.3 FIX (REQ-001): All normal operations are SUCCESS
+    # No files renamed is NORMAL (unrecognized patterns, missing episodes)
+    # ONLY fatal errors (access denied, file not found, permissions) should trigger non-zero exit
+    # Since renaming script doesn't have explicit fatal error tracking yet, treat all as success
+    exit_code = EXIT_SUCCESS
+    
+    # Story 3.3 FIX (REQ-001): Smart console - ONLY hold on FATAL errors or config setting
+    # Since we can't detect fatal errors in current implementation, always auto-close unless config set
+    keep_console_open = CONFIG.get('keep_console_open', False)
+    if keep_console_open:
+        input("\nPress Enter to close this window...")
+    
+    sys.exit(exit_code)

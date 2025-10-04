@@ -10,6 +10,9 @@ Edit `config.ini` in the same folder as the scripts. Run either script once to a
 [General]
 detected_video_extensions = mkv, mp4          # Which video files to process "embedding only works with mkv"
 detected_subtitle_extensions = srt, ass       # Which subtitle files to process
+keep_console_open = false                     # Keep console open until keypress (true/false) - Story 3.3
+                                               # false = smart behavior (auto-close on success, stay open on errors)
+                                               # true = always wait for keypress
 
 [Renaming]
 renaming_language_suffix =                    # Language tag (ar, en, es) or empty for none
