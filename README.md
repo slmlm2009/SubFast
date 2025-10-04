@@ -31,7 +31,6 @@ The script recognizes various episode naming conventions:
 ### Windows Right-Click Context Menu Integration (v2.0.0+)
 ![Demo_GIF](https://i.imgur.com/7y839Yy.gif)
 - **Right-click context menu** integration
-- **Custom icon** for professional appearance
 - **One-click execution** from Windows Explorer
 - **Registry files** for easy installation/removal
 
