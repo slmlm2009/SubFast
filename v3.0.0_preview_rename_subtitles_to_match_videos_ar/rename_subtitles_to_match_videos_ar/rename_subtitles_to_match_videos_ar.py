@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 """
-Subtitle Renamer Tool [AR] - CONFIGURABLE VERSION
+SubFast - Renaming Module
 
+Fast subtitle renaming and embedding for all languages.
 Automatically renames subtitle files to match corresponding video files based on 
 detected episode patterns. Adds customizable language tag before the file extension.
 
@@ -35,6 +36,36 @@ import time
 
 
 # ============================================================================
+# SUBFAST BRANDED BANNER - Story 3.3
+# ============================================================================
+
+BANNER = r"""==========================================
+   ____        _     _____          _   
+  / ___| _   _| |__ |  ___|_ _  ___| |_ 
+  \___ \| | | | '_ \| |_ / _` |/ __| __|
+   ___) | |_| | |_) |  _| (_| |\__ \ |_ 
+  |____/ \__,_|_.__/|_|  \__,_||___/\__|
+                                        
+   Fast subtitle renaming and embedding
+
+==========================================
+"""
+
+CSV_BANNER = r"""# ==========================================
+#    ____        _     _____          _   
+#   / ___| _   _| |__ |  ___|_ _  ___| |_ 
+#   \___ \| | | | '_ \| |_ / _` |/ __| __|
+#    ___) | |_| | |_) |  _| (_| |\__ \ |_ 
+#   |____/ \__,_|_.__/|_|  \__,_||___/\__|
+#                                         
+#    Fast subtitle renaming and embedding
+# 
+# ==========================================
+#
+"""
+
+
+# ============================================================================
 # CONFIGURATION SYSTEM
 # ============================================================================
 
@@ -61,7 +92,7 @@ def create_default_config_file(config_path):
         config_path: Path object where config file should be created
     """
     config_content = """# ============================================================================
-# Unified Configuration - Subtitle Tools
+# SubFast - Unified Configuration
 # ============================================================================
 # Shared by both renaming and embedding scripts
 # Language values empty by default (populated for language-specific distributions)
@@ -98,8 +129,8 @@ embedding_report = true
 
 # ============================================================================
 # NOTE: For language-specific distributions, pre-populate:
-#   - renaming_language_suffix (e.g., 'ar' for Arabic version)
-#   - embedding_language_code (e.g., 'ar' for Arabic version)
+#   - renaming_language_suffix (e.g., 'ar', 'en', 'es' - leave empty for no language tag)
+#   - embedding_language_code (e.g., 'ar', 'en', 'es' - leave empty to auto-detect)
 # ============================================================================
 """
     
@@ -224,7 +255,7 @@ def migrate_old_config(config, config_path):
     if migrated:
         # Save migrated config
         with open(config_path, 'w', encoding='utf-8') as f:
-            f.write('# Unified Configuration - Subtitle Tools\n')
+            f.write('# SubFast - Unified Configuration\n')
             f.write(f'# Migrated to unified format on {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n')
             f.write('# Language values empty by default (populate for language-specific versions)\n\n')
             config.write(f)
@@ -267,7 +298,7 @@ def ensure_section_exists(config, section_name, defaults, config_path):
     # Save if changes were made
     if changes_made:
         with open(config_path, 'w', encoding='utf-8') as f:
-            f.write('# Unified Configuration - Subtitle Tools\n')
+            f.write('# SubFast - Unified Configuration\n')
             f.write('# Language values empty by default (populate for language-specific versions)\n\n')
             config.write(f)
     
@@ -1145,12 +1176,21 @@ def export_analysis_to_csv(renamed_count=0, movie_mode=False, original_videos=No
     print(f"\nExported file renaming records to:")
     print(f"{csv_path}\n")
 
+
+def print_banner():
+    """Display SubFast branded banner at startup - Story 3.3"""
+    print(BANNER)
+
+
 if __name__ == "__main__":
     """
     Main execution block.
     CSV export is now performed AFTER renaming to accurately report results.
     Export is controlled by config.ini (enable_export setting).
     """
+    # Story 3.3: Display SubFast branded banner
+    print_banner()
+    
     # Track execution time
     start_time = time.time()
     

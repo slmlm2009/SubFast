@@ -1,6 +1,6 @@
-# Architecture Document: Subtitle Renamer Tool [AR] - Subtitle Embedding Feature
+# Architecture Document: SubFast
 
-* **Project Name**: Subtitle Renamer Tool [AR]
+* **Project Name**: SubFast - Fast subtitle renaming and embedding for all languages
 * **Feature**: Subtitle Embedding via `mkvmerge`
 
 
@@ -20,7 +20,7 @@ The system operates in a simple, linear flow initiated by the user via a Windows
 4. **Output**: A new `.mkv` file with the original name is created, and an optional CSV report is generated.
 ```mermaid
 graph TD
-    A[User Right-Clicks Folder] --> B{Windows Shell};
+    A[User Right-Clicks Folder with SubFast] --> B{Windows Shell};
     B -- Executes --> C[embed_subtitles_to_match_videos_ar.py];
     C -- Reads --> D[config.ini];
     C -- Finds & Matches --> E{Video & Subtitle Files};

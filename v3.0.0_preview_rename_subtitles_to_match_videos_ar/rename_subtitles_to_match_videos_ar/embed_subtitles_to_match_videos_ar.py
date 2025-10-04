@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-Subtitle Embedding Tool [AR] - Embed Subtitles into MKV Files
+SubFast - Embedding Module
 
+Fast subtitle renaming and embedding for all languages.
 Automatically embeds subtitle files into corresponding MKV video files using mkvmerge.
 Leverages intelligent pattern matching from the rename_subtitles_to_match_videos_ar.py
 script to find matching pairs of videos and subtitles.
@@ -38,6 +39,32 @@ import time
 from pathlib import Path
 
 __version__ = "1.0.0"
+
+# SubFast Branded Banner - Story 3.3
+BANNER = r"""==========================================
+   ____        _     _____          _   
+  / ___| _   _| |__ |  ___|_ _  ___| |_ 
+  \___ \| | | | '_ \| |_ / _` |/ __| __|
+   ___) | |_| | |_) |  _| (_| |\__ \ |_ 
+  |____/ \__,_|_.__/|_|  \__,_||___/\__|
+                                        
+   Fast subtitle renaming and embedding
+
+==========================================
+"""
+
+CSV_BANNER = r"""# ==========================================
+#    ____        _     _____          _   
+#   / ___| _   _| |__ |  ___|_ _  ___| |_ 
+#   \___ \| | | | '_ \| |_ / _` |/ __| __|
+#    ___) | |_| | |_) |  _| (_| |\__ \ |_ 
+#   |____/ \__,_|_.__/|_|  \__,_||___/\__|
+#                                         
+#    Fast subtitle renaming and embedding
+# 
+# ==========================================
+#
+"""
 
 # Exit codes
 EXIT_SUCCESS = 0           # All operations completed successfully
@@ -147,7 +174,7 @@ def migrate_old_config(config, config_path):
     if migrated:
         # Save migrated config
         with open(config_path, 'w', encoding='utf-8') as f:
-            f.write('# Unified Configuration - Subtitle Tools\n')
+            f.write('# SubFast - Unified Configuration\n')
             f.write(f'# Migrated to unified format on {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n')
             f.write('# Language values empty by default (populate for language-specific versions)\n\n')
             config.write(f)
@@ -190,7 +217,7 @@ def ensure_section_exists(config, section_name, defaults, config_path):
     # Save if changes were made
     if changes_made:
         with open(config_path, 'w', encoding='utf-8') as f:
-            f.write('# Unified Configuration - Subtitle Tools\n')
+            f.write('# SubFast - Unified Configuration\n')
             f.write('# Language values empty by default (populate for language-specific versions)\n\n')
             config.write(f)
     
@@ -1399,6 +1426,11 @@ Examples:
     return parser.parse_args()
 
 
+def print_banner():
+    """Display SubFast branded banner at startup - Story 3.3"""
+    print(BANNER)
+
+
 def main():
     """
     Main entry point for the subtitle embedding script.
@@ -1419,11 +1451,8 @@ def main():
             2 (EXIT_PARTIAL_FAILURE): Some operations failed, some succeeded
             3 (EXIT_COMPLETE_FAILURE): All operations failed
     """
-    print("=" * 60)
-    print("Subtitle Embedding Tool [AR]")
-    print(f"Version {__version__}")
-    print("=" * 60)
-    print()
+    # Story 3.3: Display SubFast branded banner
+    print_banner()
     
     # Parse arguments
     args = parse_arguments()

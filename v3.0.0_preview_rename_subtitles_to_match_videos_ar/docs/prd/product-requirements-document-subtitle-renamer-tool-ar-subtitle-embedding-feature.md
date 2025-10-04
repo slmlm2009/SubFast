@@ -1,12 +1,12 @@
-# Product Requirements Document: Subtitle Renamer Tool [AR] - Subtitle Embedding Feature
+# Product Requirements Document: SubFast
 
-* **Project Name**: Subtitle Renamer Tool [AR]
+* **Project Name**: SubFast - Fast subtitle renaming and embedding for all languages
 * **Feature**: Subtitle Embedding via `mkvmerge`
 
 
 ## 1. Introduction \& Background
 
-The "Subtitle Renamer Tool [AR]" is an existing, functional Python script that automates the process of renaming subtitle files to match their corresponding video files. It leverages intelligent pattern matching for episodes and movies and provides a seamless workflow through Windows context menu integration.
+"SubFast" is a fast, dual-purpose Python toolset that automates both renaming subtitle files to match their corresponding video files AND embedding subtitles directly into video files. It leverages intelligent pattern matching for episodes and movies and provides a seamless workflow through Windows context menu integration.
 
 This document outlines the requirements for a major new feature: **the ability to embed subtitles directly into `.mkv` video files.** This new functionality will exist as a separate but complementary script, `embed_subtitles_to_match_videos_ar.py`, leveraging the power of the `mkvmerge` command-line tool.
 
@@ -25,7 +25,7 @@ The new feature will solve this by **automating the subtitle embedding process**
 
 ## 4. Target Audience
 
-The target users are existing and new users of the "Subtitle Renamer Tool [AR]" who manage local libraries of `.mkv` media files and want a permanent, all-in-one solution for their videos and subtitles.
+The target users are existing and new users of "SubFast" who manage local libraries of `.mkv` media files and want a permanent, all-in-one solution for their videos and subtitles across all languages.
 
 ## 5. Functional Requirements
 

@@ -1,4 +1,6 @@
-# Configuration Guide
+# SubFast - Configuration Guide
+
+**SubFast - Fast subtitle renaming and embedding for all languages**
 
 Edit `config.ini` in the same folder as the scripts. Run either script once to auto-create it.
 
