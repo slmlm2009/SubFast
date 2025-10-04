@@ -52,53 +52,63 @@ def get_script_directory():
 
 def create_default_config_file(config_path):
     """
-    Create config.ini with default values and comprehensive inline documentation.
+    Create unified config.ini with all three sections.
+    
+    Story 3.1 Task 13: Creates unified config with [General], [Renaming], and [Embedding] sections.
+    Language values are EMPTY by default (populated for language-specific distributions).
     
     Args:
         config_path: Path object where config file should be created
     """
     config_content = """# ============================================================================
-# Subtitle Renamer Tool - Configuration File
+# Unified Configuration - Subtitle Tools
 # ============================================================================
-# Edit values below to customize behavior.
-# Invalid/missing values will use defaults.
+# Shared by both renaming and embedding scripts
+# Language values empty by default (populated for language-specific distributions)
 # ============================================================================
 
 [General]
-# Generate CSV report before renaming (true/false) - default: true
+# Video file extensions to detect (comma-separated, no dots)
+detected_video_extensions = mkv, mp4
 
-enable_export = true
+# Subtitle file extensions to detect (comma-separated, no dots)
+detected_subtitle_extensions = srt, ass
 
-# Language suffix added before extension (two-character language suffix) - default: ar
-# Examples: ar, en, fr, es
+[Renaming]
+# Generate CSV report before renaming (true/false)
+renaming_report = true
 
-language_suffix = ar
+# Language suffix added to renamed files (leave empty for no suffix)
+# Examples: ar, en, fr, es, ja
+renaming_language_suffix = 
 
-[FileFormats]
-# Video file extensions to process (comma-separated, no dots) - default: mkv, mp4
-# Examples: mkv, mp4, avi, webm
+[Embedding]
+# Path to mkvmerge.exe (leave empty to use script directory)
+mkvmerge_path = 
 
-video_extensions = mkv, mp4
+# Language code for embedded subtitle track (leave empty for no language tag)
+# Must be valid ISO 639-2 code (2-3 letters)
+embedding_language_code = 
 
-# Subtitle file extensions to process (comma-separated, no dots) - default: srt, ass
-# Examples: srt, ass, sub, ssa
+# Set embedded subtitle as default track (true/false)
+default_flag = true
 
-subtitle_extensions = srt, ass
+# Generate CSV report after embedding (true/false)
+embedding_report = true
 
 # ============================================================================
-# IMPORTANT: Invalid or missing config values will use ALL default values:
-#   - enable_export = false  # Story 3.1: changed from true to false
-#   - language_suffix = ar
-#   - video_extensions = mkv, mp4
-#   - subtitle_extensions = srt, ass
+# NOTE: For language-specific distributions, pre-populate:
+#   - renaming_language_suffix (e.g., 'ar' for Arabic version)
+#   - embedding_language_code (e.g., 'ar' for Arabic version)
 # ============================================================================
 """
     
     with open(config_path, 'w', encoding='utf-8') as f:
         f.write(config_content)
     
-    print(f"Created default config.ini at: {config_path}")
-    print("Edit this file to customize script behavior.")
+    print(f"[INFO] Created default config.ini at: {config_path}")
+    print("[INFO] Unified configuration with [General], [Renaming], and [Embedding] sections")
+    print("[INFO] Language values are empty - populate for language-specific versions")
 
 def validate_configuration(config_dict):
     """
@@ -154,38 +164,194 @@ def validate_configuration(config_dict):
     
     return validated
 
+
+def migrate_old_config(config, config_path):
+    """
+    Migrate old configuration key names to new unified format.
+    
+    Story 3.1 Task 13: Provides backward compatibility by detecting old key names
+    and migrating them to the new naming scheme with improved prefixes.
+    
+    Args:
+        config (ConfigParser): Loaded configuration object
+        config_path (Path): Path to config.ini file for saving
+    
+    Returns:
+        bool: True if migration was performed, False if already new format
+    """
+    import datetime
+    
+    migration_mapping = {
+        # Old section/key → New section/key
+        ('FileFormats', 'video_extensions'): ('General', 'detected_video_extensions'),
+        ('FileFormats', 'subtitle_extensions'): ('General', 'detected_subtitle_extensions'),
+        ('General', 'enable_export'): ('Renaming', 'renaming_report'),
+        ('General', 'language_suffix'): ('Renaming', 'renaming_language_suffix'),
+        ('Embedding', 'language'): ('Embedding', 'embedding_language_code'),
+        ('Embedding', 'default_track'): ('Embedding', 'default_flag'),
+        ('Reporting', 'csv_export'): ('Embedding', 'embedding_report'),
+    }
+    
+    migrated = False
+    
+    for (old_section, old_key), (new_section, new_key) in migration_mapping.items():
+        if config.has_option(old_section, old_key):
+            # Get old value
+            old_value = config.get(old_section, old_key)
+            
+            # Ensure new section exists
+            if not config.has_section(new_section):
+                config.add_section(new_section)
+            
+            # Migrate value
+            config.set(new_section, new_key, old_value)
+            
+            # Remove old key
+            config.remove_option(old_section, old_key)
+            
+            print(f"[INFO] Migrated '{old_key}' -> '{new_key}'")
+            migrated = True
+    
+    # Handle old sections that are now obsolete
+    if config.has_section('FileFormats') and not config.options('FileFormats'):
+        config.remove_section('FileFormats')
+        migrated = True
+    
+    if config.has_section('Reporting') and not config.options('Reporting'):
+        config.remove_section('Reporting')
+        migrated = True
+    
+    if migrated:
+        # Save migrated config
+        with open(config_path, 'w', encoding='utf-8') as f:
+            f.write('# Unified Configuration - Subtitle Tools\n')
+            f.write(f'# Migrated to unified format on {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n')
+            f.write('# Language values empty by default (populate for language-specific versions)\n\n')
+            config.write(f)
+        
+        print("[INFO] Configuration migrated to unified format")
+    
+    return migrated
+
+
+def ensure_section_exists(config, section_name, defaults, config_path):
+    """
+    Ensure a configuration section exists with all required keys.
+    
+    Story 3.1 Task 13: Graceful handling of missing sections by auto-adding
+    them with default values.
+    
+    Args:
+        config (ConfigParser): Configuration object
+        section_name (str): Name of section to check/create
+        defaults (dict): Default key-value pairs for the section
+        config_path (Path): Path to config.ini for saving
+    
+    Returns:
+        bool: True if changes were made, False if section was complete
+    """
+    changes_made = False
+    
+    # Add section if missing
+    if not config.has_section(section_name):
+        config.add_section(section_name)
+        print(f"[INFO] Added missing [{section_name}] section to config.ini")
+        changes_made = True
+    
+    # Add missing keys
+    for key, value in defaults.items():
+        if not config.has_option(section_name, key):
+            config.set(section_name, key, value)
+            changes_made = True
+    
+    # Save if changes were made
+    if changes_made:
+        with open(config_path, 'w', encoding='utf-8') as f:
+            f.write('# Unified Configuration - Subtitle Tools\n')
+            f.write('# Language values empty by default (populate for language-specific versions)\n\n')
+            config.write(f)
+    
+    return changes_made
+
+
 def load_configuration():
     """
-    Load configuration from config.ini file.
+    Load configuration from unified config.ini file.
+    
+    Story 3.1 Task 13: Reads from unified structure with [General], [Renaming], and [Embedding] sections.
+    Automatically migrates old key names and handles missing sections gracefully.
     
     Returns:
         Dictionary with validated configuration values
         
     Behavior:
-        - If config.ini exists: Load and validate settings
-        - If config.ini missing: Create with defaults and return defaults
+        - If config.ini exists: Load, migrate if needed, validate settings
+        - If config.ini missing: Create unified config with defaults
+        - If corrupted: Backup and recreate
         - If parsing fails: Print warning and return defaults
     """
+    import datetime
+    import shutil
+    
     script_dir = get_script_directory()
     config_path = script_dir / 'config.ini'
     
     # If config file doesn't exist, create it with defaults
     if not config_path.exists():
-        print(f"[INFO] config.ini not found - creating default configuration")
+        print(f"[INFO] config.ini not found - creating unified configuration")
         create_default_config_file(config_path)
         return DEFAULT_CONFIG.copy()
     
     # Try to parse config file
     config = configparser.ConfigParser()
     try:
-        config.read(config_path, encoding='utf-8')
+        # Try to read config with corrupted config handling (Story 3.1 Task 13)
+        try:
+            config.read(config_path, encoding='utf-8')
+        except (configparser.MissingSectionHeaderError, configparser.ParsingError) as e:
+            # Corrupted config - backup and recreate
+            backup_filename = f"config.ini.backup.{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            backup_path = config_path.parent / backup_filename
+            shutil.move(str(config_path), str(backup_path))
+            
+            print(f"[WARNING] config.ini is missing section headers or corrupted")
+            print(f"[INFO] Backup saved as: {backup_filename}")
+            
+            create_default_config_file(config_path)
+            
+            print(f"[INFO] Created new config.ini with unified structure")
+            print(f"[INFO] Please review backup and copy your custom values to new config.ini")
+            
+            # Load the newly created config
+            config.read(config_path, encoding='utf-8')
         
-        # Extract values
+        # Migrate old configuration keys if present (Story 3.1 Task 13)
+        migrate_old_config(config, config_path)
+        
+        # Ensure all required sections exist (Story 3.1 Task 13)
+        ensure_section_exists(config, 'General', {
+            'detected_video_extensions': 'mkv, mp4',
+            'detected_subtitle_extensions': 'srt, ass'
+        }, config_path)
+        
+        ensure_section_exists(config, 'Renaming', {
+            'renaming_report': 'true',
+            'renaming_language_suffix': ''
+        }, config_path)
+        
+        ensure_section_exists(config, 'Embedding', {
+            'mkvmerge_path': '',
+            'embedding_language_code': '',
+            'default_flag': 'true',
+            'embedding_report': 'true'
+        }, config_path)
+        
+        # Extract values from NEW unified key names
         config_dict = {
-            'enable_export': config.get('General', 'enable_export', fallback='false'),  # Story 3.1
-            'language_suffix': config.get('General', 'language_suffix', fallback='ar'),
-            'video_extensions': config.get('FileFormats', 'video_extensions', fallback='mkv, mp4'),
-            'subtitle_extensions': config.get('FileFormats', 'subtitle_extensions', fallback='srt, ass')
+            'enable_export': config.get('Renaming', 'renaming_report', fallback='false'),  # NEW: renaming_report
+            'language_suffix': config.get('Renaming', 'renaming_language_suffix', fallback=''),  # NEW: empty default
+            'video_extensions': config.get('General', 'detected_video_extensions', fallback='mkv, mp4'),  # NEW: from [General]
+            'subtitle_extensions': config.get('General', 'detected_subtitle_extensions', fallback='srt, ass')  # NEW: from [General]
         }
         
         # Validate and return

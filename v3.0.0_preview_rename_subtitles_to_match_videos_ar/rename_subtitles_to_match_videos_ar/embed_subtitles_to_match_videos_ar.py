@@ -88,29 +88,143 @@ VALID_LANGUAGE_CODES = {
 }
 
 
+def migrate_old_config(config, config_path):
+    """
+    Migrate old configuration key names to new unified format.
+    
+    Story 3.1 Task 13: Provides backward compatibility by detecting old key names
+    and migrating them to the new naming scheme with improved prefixes.
+    
+    Args:
+        config (ConfigParser): Loaded configuration object
+        config_path (Path): Path to config.ini file for saving
+    
+    Returns:
+        bool: True if migration was performed, False if already new format
+    """
+    import datetime
+    
+    migration_mapping = {
+        # Old section/key → New section/key
+        ('FileFormats', 'video_extensions'): ('General', 'detected_video_extensions'),
+        ('FileFormats', 'subtitle_extensions'): ('General', 'detected_subtitle_extensions'),
+        ('General', 'enable_export'): ('Renaming', 'renaming_report'),
+        ('General', 'language_suffix'): ('Renaming', 'renaming_language_suffix'),
+        ('Embedding', 'language'): ('Embedding', 'embedding_language_code'),
+        ('Embedding', 'default_track'): ('Embedding', 'default_flag'),
+        ('Reporting', 'csv_export'): ('Embedding', 'embedding_report'),
+    }
+    
+    migrated = False
+    
+    for (old_section, old_key), (new_section, new_key) in migration_mapping.items():
+        if config.has_option(old_section, old_key):
+            # Get old value
+            old_value = config.get(old_section, old_key)
+            
+            # Ensure new section exists
+            if not config.has_section(new_section):
+                config.add_section(new_section)
+            
+            # Migrate value
+            config.set(new_section, new_key, old_value)
+            
+            # Remove old key
+            config.remove_option(old_section, old_key)
+            
+            print(f"[INFO] Migrated '{old_key}' -> '{new_key}'")
+            migrated = True
+    
+    # Handle old sections that are now obsolete
+    if config.has_section('FileFormats') and not config.options('FileFormats'):
+        config.remove_section('FileFormats')
+        migrated = True
+    
+    if config.has_section('Reporting') and not config.options('Reporting'):
+        config.remove_section('Reporting')
+        migrated = True
+    
+    if migrated:
+        # Save migrated config
+        with open(config_path, 'w', encoding='utf-8') as f:
+            f.write('# Unified Configuration - Subtitle Tools\n')
+            f.write(f'# Migrated to unified format on {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n')
+            f.write('# Language values empty by default (populate for language-specific versions)\n\n')
+            config.write(f)
+        
+        print("[INFO] Configuration migrated to unified format")
+    
+    return migrated
+
+
+def ensure_section_exists(config, section_name, defaults, config_path):
+    """
+    Ensure a configuration section exists with all required keys.
+    
+    Story 3.1 Task 13: Graceful handling of missing sections by auto-adding
+    them with default values.
+    
+    Args:
+        config (ConfigParser): Configuration object
+        section_name (str): Name of section to check/create
+        defaults (dict): Default key-value pairs for the section
+        config_path (Path): Path to config.ini for saving
+    
+    Returns:
+        bool: True if changes were made, False if section was complete
+    """
+    changes_made = False
+    
+    # Add section if missing
+    if not config.has_section(section_name):
+        config.add_section(section_name)
+        print(f"[INFO] Added missing [{section_name}] section to config.ini")
+        changes_made = True
+    
+    # Add missing keys
+    for key, value in defaults.items():
+        if not config.has_option(section_name, key):
+            config.set(section_name, key, value)
+            changes_made = True
+    
+    # Save if changes were made
+    if changes_made:
+        with open(config_path, 'w', encoding='utf-8') as f:
+            f.write('# Unified Configuration - Subtitle Tools\n')
+            f.write('# Language values empty by default (populate for language-specific versions)\n\n')
+            config.write(f)
+    
+    return changes_made
+
+
 def load_config():
     """
-    Load configuration from config.ini file.
+    Load configuration from unified config.ini file.
     
-    Reads mkvmerge path and other settings from the [Embedding] section
-    of config.ini. If the file doesn't exist or the setting is missing,
-    uses sensible defaults.
+    Story 3.1 Task 13: Reads from unified structure with [General], [Renaming], and [Embedding] sections.
+    Automatically migrates old key names and handles missing sections gracefully.
     
     Returns:
         dict: Configuration dictionary with keys:
             - mkvmerge_path: Path to mkvmerge.exe (or None for default)
             - default_track: Whether subtitle track should be marked as default
-            - language: Default language code for subtitle tracks
+            - language: Default language code for subtitle tracks (NEW: embedding_language_code)
+            - csv_export: Whether to generate CSV report (NEW: embedding_report)
+            - detected_video_extensions: Video file extensions (NEW: from [General])
+            - detected_subtitle_extensions: Subtitle file extensions (NEW: from [General])
     """
+    import datetime
     script_dir = Path(__file__).parent
     config_path = script_dir / 'config.ini'
     
-    # Default configuration (Story 3.1 fallbacks)
+    # Default configuration (Story 3.1 Task 13 unified fallbacks)
     config_dict = {
         'mkvmerge_path': None,
         'default_track': True,
-        'language': 'none',    # Story 3.1: fallback is 'none', not 'ar'
-        'csv_export': False    # Story 3.1: fallback is false, not true
+        'language': 'none',    # NEW: embedding_language_code fallback
+        'csv_export': False,   # NEW: embedding_report fallback
+        'detected_video_extensions': ['mkv', 'mp4'],  # NEW: from [General]
+        'detected_subtitle_extensions': ['srt', 'ass']  # NEW: from [General]
     }
     
     if not config_path.exists():
@@ -125,24 +239,81 @@ def load_config():
     
     try:
         config = configparser.ConfigParser()
-        config.read(config_path, encoding='utf-8')
         
-        # Read [Embedding] section
+        # Try to read config with corrupted config handling (Story 3.1 Task 13)
+        try:
+            config.read(config_path, encoding='utf-8')
+        except (configparser.MissingSectionHeaderError, configparser.ParsingError) as e:
+            # Corrupted config - backup and recreate
+            backup_filename = f"config.ini.backup.{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}"
+            backup_path = config_path.parent / backup_filename
+            shutil.move(str(config_path), str(backup_path))
+            
+            print(f"[WARNING] config.ini is missing section headers or corrupted")
+            print(f"[INFO] Backup saved as: {backup_filename}")
+            
+            create_default_config(config_path)
+            
+            print(f"[INFO] Created new config.ini with unified structure")
+            print(f"[INFO] Please review backup and copy your custom values to new config.ini")
+            
+            # Load the newly created config
+            config.read(config_path, encoding='utf-8')
+        
+        # Migrate old configuration keys if present (Story 3.1 Task 13)
+        migrate_old_config(config, config_path)
+        
+        # Ensure all required sections exist (Story 3.1 Task 13)
+        ensure_section_exists(config, 'General', {
+            'detected_video_extensions': 'mkv, mp4',
+            'detected_subtitle_extensions': 'srt, ass'
+        }, config_path)
+        
+        ensure_section_exists(config, 'Renaming', {
+            'renaming_report': 'true',
+            'renaming_language_suffix': ''
+        }, config_path)
+        
+        ensure_section_exists(config, 'Embedding', {
+            'mkvmerge_path': '',
+            'embedding_language_code': '',
+            'default_flag': 'true',
+            'embedding_report': 'true'
+        }, config_path)
+        
+        # Read [General] section (NEW in Task 13)
+        if config.has_section('General'):
+            if config.has_option('General', 'detected_video_extensions'):
+                exts = config.get('General', 'detected_video_extensions').strip()
+                if exts:
+                    config_dict['detected_video_extensions'] = [e.strip() for e in exts.split(',')]
+            
+            if config.has_option('General', 'detected_subtitle_extensions'):
+                exts = config.get('General', 'detected_subtitle_extensions').strip()
+                if exts:
+                    config_dict['detected_subtitle_extensions'] = [e.strip() for e in exts.split(',')]
+        
+        # Read [Embedding] section with NEW unified key names
         if config.has_section('Embedding'):
             if config.has_option('Embedding', 'mkvmerge_path'):
                 path = config.get('Embedding', 'mkvmerge_path').strip()
                 if path:
                     config_dict['mkvmerge_path'] = path
             
-            if config.has_option('Embedding', 'default_track'):
-                try:
-                    config_dict['default_track'] = config.getboolean('Embedding', 'default_track')
-                except ValueError:
-                    config_dict['default_track'] = True  # Fallback to True
-                    print("[WARNING] Invalid default_track value, using fallback: true")
+            # NEW: default_flag (was: default_track)
+            if config.has_option('Embedding', 'default_flag'):
+                val = config.get('Embedding', 'default_flag').strip().lower()
+                if val in ('yes', 'true', '1'):
+                    config_dict['default_track'] = True
+                elif val in ('no', 'false', '0'):
+                    config_dict['default_track'] = False
+                else:
+                    config_dict['default_track'] = True  # Fallback
+                    print("[WARNING] Invalid default_flag value, using fallback: yes")
             
-            if config.has_option('Embedding', 'language'):
-                lang = config.get('Embedding', 'language').strip()
+            # NEW: embedding_language_code (was: language)
+            if config.has_option('Embedding', 'embedding_language_code'):
+                lang = config.get('Embedding', 'embedding_language_code').strip()
                 if lang and lang.lower() != 'none':
                     # Validate against ISO-639 codes
                     if lang.lower() in VALID_LANGUAGE_CODES:
@@ -153,25 +324,26 @@ def load_config():
                         config_dict['language'] = 'none'
                 else:
                     config_dict['language'] = 'none'  # Explicit none or empty
-        
-        # Read [Reporting] section (Story 3.1)
-        if config.has_section('Reporting'):
-            if config.has_option('Reporting', 'csv_export'):
-                try:
-                    config_dict['csv_export'] = config.getboolean('Reporting', 'csv_export')
-                except ValueError:
-                    # Invalid value, use fallback
+            
+            # NEW: embedding_report (was: csv_export from [Reporting])
+            if config.has_option('Embedding', 'embedding_report'):
+                val = config.get('Embedding', 'embedding_report').strip().lower()
+                if val in ('true', 'yes', '1'):
+                    config_dict['csv_export'] = True
+                elif val in ('false', 'no', '0'):
                     config_dict['csv_export'] = False
-                    print("[WARNING] Invalid csv_export value, using fallback: false")
+                else:
+                    config_dict['csv_export'] = False  # Fallback
+                    print("[WARNING] Invalid embedding_report value, using fallback: false")
         
         print(f"[INFO] Configuration loaded from: {config_path}")
         if config_dict['mkvmerge_path']:
             print(f"  mkvmerge path: {config_dict['mkvmerge_path']}")
         else:
             print(f"  mkvmerge path: (default - script directory)")
-        print(f"  default_track: {'yes' if config_dict['default_track'] else 'no'}")
-        print(f"  language: {config_dict['language']}")
-        print(f"  csv_export: {'enabled' if config_dict['csv_export'] else 'disabled'}")
+        print(f"  default_flag: {'yes' if config_dict['default_track'] else 'no'}")
+        print(f"  embedding_language_code: {config_dict['language']}")
+        print(f"  embedding_report: {'enabled' if config_dict['csv_export'] else 'disabled'}")
         
         return config_dict
         
@@ -183,37 +355,49 @@ def load_config():
 
 def create_default_config(config_path):
     """
-    Create a default config.ini file with example settings.
+    Create a default unified config.ini file with all three sections.
     
-    Story 3.1: Creates config with example values (ar, true) but actual
-    fallback defaults are (none, false) when values are missing/invalid.
+    Story 3.1 Task 13: Creates unified config with [General], [Renaming], and [Embedding] sections.
+    Language values are EMPTY by default (populated for language-specific distributions).
     
     Args:
         config_path (Path): Path where config.ini should be created
     """
     config = configparser.ConfigParser()
     
-    # Add [Embedding] section with example values
+    # Add [General] section (NEW in Task 13 - shared settings)
+    config['General'] = {
+        'detected_video_extensions': 'mkv, mp4',
+        'detected_subtitle_extensions': 'srt, ass'
+    }
+    
+    # Add [Renaming] section (NEW in Task 13 - renaming script settings)
+    config['Renaming'] = {
+        'renaming_report': 'true',
+        'renaming_language_suffix': ''  # EMPTY by default - Task 13 requirement
+    }
+    
+    # Add [Embedding] section with NEW unified key names
     config['Embedding'] = {
         'mkvmerge_path': '',  # Empty = use script directory
-        'language': 'ar',     # Example: 'ar', Fallback: 'none'
-        'default_track': 'true'
+        'embedding_language_code': '',  # EMPTY by default - Task 13 requirement
+        'default_flag': 'true',
+        'embedding_report': 'true'
     }
     
-    # Add [Reporting] section with example values
-    config['Reporting'] = {
-        'csv_export': 'true'  # Example: 'true', Fallback: 'false'
-    }
-    
-    # Write config with explanatory comments
+    # Write config with comprehensive comments
     with open(config_path, 'w', encoding='utf-8') as f:
-        f.write('# Subtitle Embedding Configuration\n')
-        f.write('# Language detection order: Filename suffix → Config value → none (no tag)\n')
-        f.write('# CSV export defaults to false if missing/invalid\n\n')
+        f.write('# ============================================================================\n')
+        f.write('# Unified Configuration - Subtitle Tools\n')
+        f.write('# ============================================================================\n')
+        f.write('# Shared by both renaming and embedding scripts\n')
+        f.write('# Language values empty by default (populated for language-specific distributions)\n')
+        f.write('# ============================================================================\n\n')
         config.write(f)
     
     print(f"[INFO] Created default config.ini at: {config_path}")
-    print("[INFO] Language detection will follow: filename → config → none")
+    print("[INFO] Unified configuration with [General], [Renaming], and [Embedding] sections")
+    print("[INFO] Language values are empty - populate for language-specific versions")
 
 
 def validate_mkvmerge(mkvmerge_path=None):
