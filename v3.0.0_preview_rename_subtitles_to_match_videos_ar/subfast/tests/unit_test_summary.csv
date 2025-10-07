@@ -1,0 +1,32 @@
+# Unit Test Summary - File Discovery and Matching (Story 2.1)
+# Test Date: 2025-10-04 08:45:25
+# Test Module: C:\Users\slmlm2009\Desktop\Github\rename_subtitles_to_match_videos_ar\v3.0.0_preview_rename_subtitles_to_match_videos_ar\rename_subtitles_to_match_videos_ar\test_file_matching.py
+# Tests Run: 21
+# Successes: 21
+# Failures: 0
+# Errors: 0
+# Skipped: 0
+# Overall Result: PASS
+#
+Test Name,Category,Status,Error Message
+TestBaseNameExtraction.test_basic_extraction,Base Name Extraction,PASS,
+TestBaseNameExtraction.test_mixed_separators,Base Name Extraction,PASS,
+TestEpisodePatternDetection.test_dash_format,Episode Pattern Detection,PASS,
+TestEpisodePatternDetection.test_dash_number_only,Episode Pattern Detection,PASS,
+TestEpisodePatternDetection.test_episode_cache,Episode Pattern Detection,PASS,
+TestEpisodePatternDetection.test_episode_only,Episode Pattern Detection,PASS,
+TestEpisodePatternDetection.test_no_pattern,Episode Pattern Detection,PASS,
+TestEpisodePatternDetection.test_ordinal_season,Episode Pattern Detection,PASS,
+TestEpisodePatternDetection.test_season_episode_format,Episode Pattern Detection,PASS,
+TestEpisodePatternDetection.test_standard_s_e_format,Episode Pattern Detection,PASS,
+TestEpisodePatternDetection.test_x_format,Episode Pattern Detection,PASS,
+TestFileDiscovery.test_empty_directory,File Discovery,PASS,
+TestFileDiscovery.test_episode_matching,File Discovery,PASS,
+TestFileDiscovery.test_hidden_files_ignored,File Discovery,PASS,
+TestFileDiscovery.test_mixed_extensions,File Discovery,PASS,
+TestFileDiscovery.test_movie_matching,File Discovery,PASS,
+TestFileDiscovery.test_unmatched_files,File Discovery,PASS,
+TestMovieMatching.test_multiple_files_no_match,Movie Matching,PASS,
+TestMovieMatching.test_no_match_different_titles,Movie Matching,PASS,
+TestMovieMatching.test_word_overlap_match,Movie Matching,PASS,
+TestMovieMatching.test_year_match,Movie Matching,PASS,

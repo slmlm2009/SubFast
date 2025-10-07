@@ -1,7 +1,0 @@
-Windows Registry Editor Version 5.00
-
-[HKEY_CLASSES_ROOT\Directory\Background\shell\SubFast - Embed]
-"Icon"="C:\\rename_subtitles_to_match_videos_ar\\ARAB_STREAMS_LOGO.ico"
-
-[HKEY_CLASSES_ROOT\Directory\Background\shell\SubFast - Embed\command]
-@="\"C:\\Windows\\py.exe\" \"C:\\rename_subtitles_to_match_videos_ar\\embed_subtitles_to_match_videos_ar.py\" \"%V\""
