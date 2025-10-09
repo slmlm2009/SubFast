@@ -1,34 +1,25 @@
-# SubFast
+# ![logo](https://i.imgur.com/pleZZjw.png)    SubFast
 
 **Fast subtitle renaming and embedding for all languages**
 
 SubFast is a powerful Windows utility for managing subtitles with your video files. It provides two main features accessible through a convenient right-click context menu.
 
----
 
 ## 🚀 Features
 
 ### 1. **Rename Subtitles** 
 Automatic renaming of subtitles files to match video files with an added configurable .language_code suffix based on detected matched subtitle/video pairs
 
-- Works with TV shows/Anime and Movies
-- Recognizes 25+ episode naming patterns
-- Context-aware matching handles inconsistent formatting and and padding
+![Rename_GIF](https://i.imgur.com/N4eCblh.gif)
+- Recognizes wide variety of episode naming patterns
+- Context-aware matching handles inconsistent zero-padding between files
 - Language suffix support (ar, en, es, etc...)
 - Configurable CSV export for reporting the results
-
-**Supported Episode Patterns (+25):**
-- `S##E##` (e.g., S01E05, S2E15)
-- `##x##` (e.g., 2x05, 1x10)
-- `S## - ##` / `S## - E##` / `S## - EP##`
-- `Season # Episode #`
-- Ordinal seasons: `1st Season - 05`, `2nd Season E10`
-- `E##` / `Ep##` patterns
-- And many more variations
 
 ### 2. **Embed Subtitles**
 Soft-subtitle embedding of external subtitle files directly into detected MKV video files matches for seamless playback.
 
+![Embed_GIF](https://i.imgur.com/lgMeqG3.gif)
 - Automatic subtitle/video match identification using same renaming logic (No need for renaming)
 - Language code detection and configuration
 - Default subtitle flag control
@@ -41,8 +32,8 @@ Soft-subtitle embedding of external subtitle files directly into detected MKV vi
 ## 📋 Requirements
 
 - **Windows 10/11**
-- **Python 3.7+** (with Python Launcher `py.exe` installed in default location `C:\Windows\py.exe`)
-- **mkvmerge** (bundled in package under bin/ directory, or you can edit config.ini to provide absolute path to mkvmerge.exe if already installed on system)
+- **Python 3.7+:** with Python Launcher `py.exe` installed in default location `C:\Windows\py.exe`
+- **mkvmerge:** The application is bundled with `mkvmerge.exe` in the `subfast/bin/` directory. If you prefer to use your own system-wide installation, you may delete the bundled executable and specify the absolute path to your `mkvmerge.exe` in the `config.ini` file and handle its update yourself
 
 ---
 
@@ -172,26 +163,79 @@ embedding_report = true
 
 ---
 
+## 📝 Tecnical Details
+
+### Core Functionality
+- **Movie mode** for folders with single video/subtitle pair
+- **Multi-format support** for video and subtitle files (fully configurable via config.ini)
+- **Intelligent episode detection** supporting *MANY* naming patterns
+- **Context-aware matching** handles inconsistent zero-padding between files
+- **Collision handling** prevents file overwrites with smart naming and backups
+- **Performance oriented** with caching and regex precombilation optimizations
+- **Auto-generation** of default config.ini if missing
+- **Safe fallbacks** for invalid configurations
+
+### Episode Pattern Recognition
+The script recognizes various episode naming conventions:
+- `S##E##` (e.g., S01E05, S2E15)
+- `##x##` (e.g., 2x05, 1x10) - with smart resolution detection
+- `S## - ##` / `S## - E##` / `S## - EP##` formats
+- `Season # Episode #` (with various separators)
+- `S##Ep##` / `SeasonXEpY` formats
+- Ordinal season patterns: `1st Season`, `2nd Season`, etc.
+  - With dash: `ShowName 1st Season - 05.mkv`
+  - With E: `ShowName 2nd Season E10.srt`
+  - With EP: `ShowName 3rd Season EP8.mp4`
+- `E##` / `Ep##` patterns (assumes Season 1)
+- `- ##` patterns for simple numbering
+- And many more variations with flexible spacing and separators
+
+### Smart Matching Examples
+The script handles various inconsistencies:
+- `S2E8` (video) ↔ `S02E008` (subtitle) → Matched
+- `2x05` (video) ↔ `S02E05` (subtitle) → Matched  
+- `Season 1 Episode 3` ↔ `S01E03` → Matched
+
+### Supported File Formats
+
+**Default Video Files**
+- `.mkv` (Matroska Video)
+- `.mp4` (MPEG-4 Video)
+
+**Default Subtitle Files**
+- `.srt` (SubRip Text)
+- `.ass` (Advanced SubStation Alpha)
+
+**Note #1:** File formats are fully configurable via `config.ini` (v2.5.0+). You can add support for `.avi`, `.webm`, `.mov`, `.sub`, `.ssa`, and more ...
+
+**Note #2:** Subtitle embedding feature will only work with `.mkv` files
+
+### Performance
+
+- Renames 1000+ files in under 1 second
+- Performance optimized via episode number caching and regex compiling optimizations
+- Disable optional CSV export for additional speed (+14% speed improvement on 1000+ files dataset) 
+
+**Note #3:** Subtitle embedding speed depends heveaily on your disk I/O performance, hence embedding on SSDs will be multiple folds faster than on HDDs
+
+---
+
 ## 🛠️ Troubleshooting
 
 ### Context Menu Not Appearing
-
-**Solution:**
-1. Restart Windows Explorer (Task Manager → Explorer.exe → Restart)
+1. Restart explorer.exe process in Task Manager or log out and back in to refresh Explorer
+2. Ensure you have administrator privileges and verify the registry file was applied successfully
 
 ### Python Not Found Error
-
-**Solution:**
 1. Verify Python 3.7+ is installed
 2. Ensure Python Launcher is at: `C:\Windows\py.exe`
 3. Test by opening Command Prompt and typing: `py --version`
 
 ### No Files Renamed
-
-**Possible Causes:**
-1. Installation path is not `C:\subfast`
-2. File naming patterns not recognized
-3. Check the CSV export report for details
+1. Check that video and subtitle files are in the same directory
+2. Ensure installation path is at `C:\subfast`
+3. Verify file naming patterns are supported
+5. Use the CSV export feature to analyze detection results
 
 ### mkvmerge Not Found
 
@@ -199,77 +243,54 @@ embedding_report = true
 1. Verify `mkvmerge.exe` exists at: `C:\subfast\bin\mkvmerge.exe`
 2. Check `config.ini` has and ensure you have correct path for `mkvmerge_path =`  (empty will default to bin\mkvmerge.exe)
 
----
+## Contributing
 
-## 📊 Supported File Formats (Default Config)
+This utility has been extensively tested across multible different scenarios. If you encounter issues or have suggestions for additional episode patterns, please:
 
-### Video Files (Default)
-- `.mkv` (Matroska Video)
-- `.mp4` (MPEG-4 Video)
+1. Test the current version thoroughly
+2. Open an issue and provide specific examples
+3. Include generated CSV report that along with the issue details
+4. Consider contributing regex patterns for new format support
 
-### Subtitle Files (Default)
-- `.srt` (SubRip Text)
-- `.ass` (Advanced SubStation Alpha)
+## Version History
 
-**Note:** File formats are fully configurable via `config.ini`. You can add support for `.avi`, `.webm`, `.sub`, `.ssa`, and more.
-
----
-
-## ⚡ Performance
-
-- Renames 1000+ files in under 1 second
-- Performance optimized via episode number caching and regex compiling optimizations
-- Disable optional CSV export for additional speed (+ 14% on 1000+ files dataset) 
-
----
-
-## 🎯 Version History
-
-### v3.0.0 (Current - January 2025)
-**Major Changes:**
+### v3.0.0 (Current)
+- **SubFast** rebranding replacing previous **Subtitle Renamer Tool [AR]**
 - **Added new MKV soft-sub subtitle embedding feature** through mkvmerge (credits to MKVToolNix devs)
 - **Dual-feature context menu** (Rename + Embed in one menu under SubFast parent menu)
 - **Smart console behavior** (auto-close on success, stay open on errors)
-
-**Technical Improvements:**
 - Unified configuration system to handle config of both features in one config.ini file
 - New Folder structure (scripts/, bin/, resources/)
 - Enhanced error messages
 
-
-### v2.5.0 (October 2024)
-- Configuration system via config.ini
-- 9 new episode patterns (25+ total)
-- 12x performance improvement
-- Enhanced CSV export
-- Configurable language suffix
+### v2.5.0
+- **Configuration system** via config.ini
+- **9 new episode patterns** (25+ total patterns)
+  - `S## - ##` / `S## - E##` / `S## - EP##` formats
+  - Ordinal season patterns (1st/2nd/3rd Season)
+- **12x performance improvement** via episode number caching
+- **Enhanced CSV export** with original filename tracking and execution time
+- **Configurable language suffix** and file formats
+- **Smart resolution detection** (fixes ##x## pattern conflicts)
+- **Performance tracking** with detailed metrics
+- Bug fixes for negative count display and pattern conflicts
+- Memory usage optimization (42% reduction)
 
 ### v2.0.0
 - Windows context menu integration
-- Custom icon support
-- 15+ episode patterns
+- Enhanced pattern recognition (15+ formats)
+- Context-aware episode matching
 - Movie mode detection
+- Comprehensive collision handling
+- Detailed analysis and reporting
+- Basic CSV export functionality
 
 ### v1.0.0
-- Initial release
-- Basic S##E##pattern support
-- Command-line operation
+- Basic episode detection
+- Simple S##E## and - ## patterns
+- Command-line only operation
+- Basic file renaming functionality
 
----
-
-## 📝 License
+## License
 
 This project is released as open source. Feel free to modify and distribute according to your needs.
-
----
-
-## 💬 Support
-
-For issues or suggestions:
-1. Check the troubleshooting section above
-2. Examine the CSV export reports for detailed analysis
-3. Open an issue with specific example and generated CSV report
-
----
-
-**SubFast - Fast subtitle renaming and embedding for all languages** 🚀
