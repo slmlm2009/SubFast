@@ -251,7 +251,8 @@ def load_config():
         'language': 'none',    # NEW: embedding_language_code fallback
         'csv_export': False,   # NEW: embedding_report fallback
         'detected_video_extensions': ['mkv', 'mp4'],  # NEW: from [General]
-        'detected_subtitle_extensions': ['srt', 'ass']  # NEW: from [General]
+        'detected_subtitle_extensions': ['srt', 'ass'],  # NEW: from [General]
+        'merge_timeout_seconds': 1800  # default 30 minutes for large files
     }
     
     if not config_path.exists():
@@ -305,7 +306,8 @@ def load_config():
             'mkvmerge_path': '',
             'embedding_language_code': '',
             'default_flag': 'true',
-            'embedding_report': 'true'
+            'embedding_report': 'true',
+            'merge_timeout_seconds': ''
         }, config_path)
         
         # Read [General] section (NEW in Task 13)
@@ -362,6 +364,17 @@ def load_config():
                 else:
                     config_dict['csv_export'] = False  # Fallback
                     print("[WARNING] Invalid embedding_report value, using fallback: false")
+
+            # Optional timeout override (seconds)
+            if config.has_option('Embedding', 'merge_timeout_seconds'):
+                t_raw = config.get('Embedding', 'merge_timeout_seconds').strip()
+                if t_raw:
+                    try:
+                        t_val = int(t_raw)
+                        if t_val >= 60:
+                            config_dict['merge_timeout_seconds'] = t_val
+                    except Exception:
+                        print("[WARNING] Invalid merge_timeout_seconds; using default 1800s")
         
         print(f"[INFO] Configuration loaded from: {config_path}")
         if config_dict['mkvmerge_path']:
@@ -473,6 +486,8 @@ def validate_mkvmerge(mkvmerge_path=None):
             [str(mkvmerge_exe), '--version'],
             capture_output=True,
             text=True,
+            encoding='utf-8',
+            errors='replace',
             timeout=5
         )
         
@@ -1186,8 +1201,18 @@ def embed_subtitle_pair(video_path, subtitle_path, config, backups_dir=None):
     print(f"  Subtitle: {subtitle_path.name}")
     print(f"  Temporary output: {embedded_file.name}")
     
-    # Execute mkvmerge command
-    success, stdout, stderr = run_command(command)
+    # Execute mkvmerge command with dynamic timeout
+    try:
+        total_bytes = video_path.stat().st_size + subtitle_path.stat().st_size
+    except Exception:
+        total_bytes = 0
+    # Dynamic timeout: base 300s + 120s per GB, capped by config
+    gb = total_bytes / (1024 ** 3)
+    dyn_timeout = 300 + int(max(0, gb) * 120)
+    max_cfg = int(config.get('merge_timeout_seconds', 1800)) if isinstance(config.get('merge_timeout_seconds', 1800), int) else 1800
+    timeout_seconds = max(300, min(max_cfg, dyn_timeout))
+
+    success, stdout, stderr = run_command(command, timeout=timeout_seconds)
     
     if not success:
         # Merge failed - cleanup temp file
@@ -1222,7 +1247,7 @@ def embed_subtitle_pair(video_path, subtitle_path, config, backups_dir=None):
         return False, None, error_msg, backups_dir
 
 
-def run_command(command):
+def run_command(command, timeout=300):
     """
     Execute a command using subprocess and return the result.
     
@@ -1237,14 +1262,16 @@ def run_command(command):
             command,
             capture_output=True,
             text=True,
-            timeout=300  # 5 minute timeout for mkvmerge operations
+            encoding='utf-8',
+            errors='replace',
+            timeout=timeout
         )
         
         success = (result.returncode == 0)
         return success, result.stdout, result.stderr
         
     except subprocess.TimeoutExpired:
-        return False, "", "Command timed out after 5 minutes"
+        return False, "", f"Command timed out after {timeout} seconds"
     except Exception as e:
         return False, "", str(e)
 
