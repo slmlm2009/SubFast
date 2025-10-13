@@ -41,6 +41,31 @@ COMMON_INDICATORS = {
     'sync', 'dub', 'dubbed', 'sdh', 'cc'
 }
 
+# Linguistic filler words (stop words) to exclude from movie title matching
+# These words appear frequently in titles but have little semantic value for distinguishing movies
+# Filtering these prevents false matches like "Movie of Year" matching "Subtitle of 2025"
+# Similar to COMMON_INDICATORS which filters technical terms, this filters linguistic noise
+FILLER_WORDS = {
+    # Articles
+    'a', 'an', 'the',
+    # Prepositions
+    'of', 'in', 'on', 'at', 'to', 'for', 'with', 'from', 'by',
+    'about', 'as', 'into', 'through', 'during', 'before', 'after',
+    'above', 'below', 'between', 'among', 'under', 'over',
+    # Conjunctions
+    'and', 'or', 'but', 'nor', 'yet', 'so',
+    # Common pronouns
+    'it', 'its', 'this', 'that', 'these', 'those',
+    # Common verbs
+    'is', 'are', 'was', 'were', 'be', 'been', 'being',
+    'have', 'has', 'had', 'do', 'does', 'did',
+    # Other common words
+    'not', 'all', 'no', 'some', 'more', 'most', 'very',
+    'can', 'will', 'just', 'should', 'than', 'also', 'only',
+    # Numbers as words
+    'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'
+}
+
 
 def extract_base_name(filename):
     """Extract and clean base filename for comparison."""
@@ -73,9 +98,9 @@ def find_movie_subtitle_match(video_files, subtitle_files):
     video_year = video_year_match.group() if video_year_match else None
     subtitle_year = subtitle_year_match.group() if subtitle_year_match else None
     
-    # Split into words and filter out quality indicators
-    video_words = set(video_name.lower().split()) - COMMON_INDICATORS
-    subtitle_words = set(subtitle_name.lower().split()) - COMMON_INDICATORS
+    # Filter out both technical indicators AND linguistic filler words
+    video_words = set(video_name.lower().split()) - COMMON_INDICATORS - FILLER_WORDS
+    subtitle_words = set(subtitle_name.lower().split()) - COMMON_INDICATORS - FILLER_WORDS
     
     common_words = video_words.intersection(subtitle_words)
     years_match = (video_year and subtitle_year and video_year == subtitle_year)
@@ -370,6 +395,26 @@ def rename_subtitles_to_match_videos(config):
     return renamed_count, movie_mode_detected, original_video_files, original_subtitle_files, rename_mapping, video_episodes, temp_video_dict
 
 
+def is_valid_language_suffix(suffix):
+    """
+    Check if language suffix is valid for use in filenames.
+    
+    Args:
+        suffix: Language suffix from config
+        
+    Returns:
+        bool: True if valid (no spaces or special chars), False otherwise
+    """
+    if not suffix:
+        return True  # Empty is valid (no suffix mode)
+    
+    # Invalid filename characters for Windows/Linux
+    invalid_chars = {'\\', '/', ':', '*', '?', '"', '<', '>', '|', ' ', '\t', '\n'}
+    
+    # Check if any invalid character exists
+    return not any(c in invalid_chars for c in suffix)
+
+
 def main():
     """Main entry point."""
     print("\n" + "=" * 60)
@@ -380,6 +425,15 @@ def main():
     config = config_loader.load_config()
     global CONFIG
     CONFIG = config
+    
+    # Validate language suffix - fall back to empty if invalid
+    language_suffix = config.get('language_suffix', '')
+    if language_suffix and not is_valid_language_suffix(language_suffix):
+        print(f"[ERROR] Invalid language suffix in config.ini: '{language_suffix}'")
+        print(f"        Language suffix cannot contain spaces or special characters")
+        print(f"[INFO] Falling back to no suffix mode")
+        print()
+        config['language_suffix'] = ''
     
     # Track execution time
     start_time = time.time()
@@ -420,13 +474,31 @@ def main():
             movie_mode=movie_mode
         )
     
-    # Smart console behavior
-    keep_console_open = config.get('keep_console_open', False)
-    if keep_console_open:
-        input("\nPress Enter to close this window...")
-    
-    sys.exit(0)
+    return 0  # Success - console handling moved to if __name__ block
 
 
 if __name__ == "__main__":
-    main()
+    exit_code = 0
+    config = None
+    
+    try:
+        exit_code = main()
+    except Exception as e:
+        print(f"\n[FATAL ERROR] Unexpected error: {type(e).__name__}: {e}")
+        print("\nPlease check config.ini settings and try again")
+        exit_code = 1
+    finally:
+        # Console handling - ALWAYS runs even if crash occurred
+        try:
+            if config is None:
+                config = config_loader.load_config()
+        except:
+            config = {'keep_console_open': False}
+        
+        keep_console_open = config.get('keep_console_open', False)
+        
+        # Keep console open on crashes OR when flag is set
+        if exit_code != 0 or keep_console_open:
+            input("\nPress Enter to close this window...")
+    
+    sys.exit(exit_code)

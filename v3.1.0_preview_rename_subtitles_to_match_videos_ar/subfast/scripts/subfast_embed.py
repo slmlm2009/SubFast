@@ -44,6 +44,46 @@ TIMEOUT_BASE = 300  # 5 minutes minimum
 TIMEOUT_PER_GB = 120  # 2 minutes per GB
 TIMEOUT_MAX = 1800  # 30 minutes maximum cap
 
+# Movie mode matching patterns and helpers
+import re
+YEAR_PATTERN = re.compile(r'(?:19|20)\d{2}')
+BASE_NAME_CLEANUP = re.compile(r'[._\-]+')
+
+COMMON_INDICATORS = {
+    '1080p', '720p', '480p', '2160p', '4k', 'bluray', 'web', 'dvd', 'hd', 'x264', 'x265',
+    'h264', 'h265', 'avc', 'hevc', 'aac', 'ac3', 'dts', 'remux', 'proper', 'repack',
+    'extended', 'theatrical', 'unrated', 'directors', 'cut', 'multi', 'sub', 'eng', 'en',
+    'ara', 'ar', 'eng', 'fre', 'fr', 'ger', 'de', 'ita', 'es', 'spa', 'kor', 'jpn', 'ch',
+    'chs', 'cht', 'internal', 'limited', 'xvid', 'divx', 'ntsc', 'pal', 'dc',
+    'sync', 'syncopated', 'cc', 'sdh', 'hc', 'final', 'post', 'pre',
+    'dub', 'dubbed'
+}
+
+# Linguistic filler words (stop words) to exclude from movie title matching
+# These words appear frequently in titles but have little semantic value for distinguishing movies
+# Filtering these prevents false matches like "Movie of Year" matching "Subtitle of 2025"
+# Similar to COMMON_INDICATORS which filters technical terms, this filters linguistic noise
+FILLER_WORDS = {
+    # Articles
+    'a', 'an', 'the',
+    # Prepositions
+    'of', 'in', 'on', 'at', 'to', 'for', 'with', 'from', 'by',
+    'about', 'as', 'into', 'through', 'during', 'before', 'after',
+    'above', 'below', 'between', 'among', 'under', 'over',
+    # Conjunctions
+    'and', 'or', 'but', 'nor', 'yet', 'so',
+    # Common pronouns
+    'it', 'its', 'this', 'that', 'these', 'those',
+    # Common verbs
+    'is', 'are', 'was', 'were', 'be', 'been', 'being',
+    'have', 'has', 'had', 'do', 'does', 'did',
+    # Other common words
+    'not', 'all', 'no', 'some', 'more', 'most', 'very',
+    'can', 'will', 'just', 'should', 'than', 'also', 'only',
+    # Numbers as words
+    'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'
+}
+
 
 def load_language_codes():
     """Load language codes from JSON file."""
@@ -381,6 +421,68 @@ def embed_subtitle(video_path, subtitle_path, mkvmerge_path, language_code, defa
         return False, str(e), backups_dir
 
 
+def extract_base_name(filename):
+    """
+    Extract and clean base filename for movie comparison.
+    Converts separators (., _, -) to spaces.
+    
+    Args:
+        filename: The filename to process
+        
+    Returns:
+        Cleaned base name with spaces
+    """
+    base_name = Path(filename).stem
+    base_name = BASE_NAME_CLEANUP.sub(' ', base_name)
+    return base_name.strip()
+
+
+def match_movie_files(video_files, subtitle_files):
+    """
+    Match single movie file with single subtitle file based on title similarity.
+    
+    Uses two matching strategies:
+    1. Year matching: If both files contain the same 4-digit year
+    2. Word overlap: Compares common words after removing quality indicators
+    
+    Args:
+        video_files: List of video Path objects
+        subtitle_files: List of subtitle Path objects
+        
+    Returns:
+        Tuple of (video_file, subtitle_file) if match found, None otherwise
+    """
+    if len(video_files) != 1 or len(subtitle_files) != 1:
+        return None
+    
+    video_name = extract_base_name(video_files[0].name)
+    subtitle_name = extract_base_name(subtitle_files[0].name)
+    
+    video_year_match = YEAR_PATTERN.search(video_files[0].name)
+    subtitle_year_match = YEAR_PATTERN.search(subtitle_files[0].name)
+    
+    video_year = video_year_match.group() if video_year_match else None
+    subtitle_year = subtitle_year_match.group() if subtitle_year_match else None
+    
+    # Filter out both technical indicators AND linguistic filler words
+    video_words = set(video_name.lower().split()) - COMMON_INDICATORS - FILLER_WORDS
+    subtitle_words = set(subtitle_name.lower().split()) - COMMON_INDICATORS - FILLER_WORDS
+    
+    common_words = video_words.intersection(subtitle_words)
+    years_match = (video_year and subtitle_year and video_year == subtitle_year)
+    
+    if years_match:
+        if len(common_words) > 0:
+            return (video_files[0], subtitle_files[0])
+    else:
+        if len(video_words) > 0 and len(subtitle_words) > 0:
+            match_ratio = len(common_words) / min(len(video_words), len(subtitle_words))
+            if match_ratio >= 0.3 or len(common_words) > 0:
+                return (video_files[0], subtitle_files[0])
+    
+    return None
+
+
 def build_episode_context(video_files):
     """
     Build reference mappings for episode matching.
@@ -519,6 +621,73 @@ def process_embedding(folder_path, config, mkvmerge_path):
                 'language': 'N/A',
                 'status': 'no_match'
             })
+    
+    # Movie mode fallback - try if no embeddings succeeded
+    if embedded_count == 0 and len(mkv_videos) == 1 and len(all_subtitle_files) == 1:
+        print("\n" + "=" * 60)
+        print("MOVIE MODE: Attempting title-based matching...")
+        print("=" * 60)
+        
+        movie_match = match_movie_files(mkv_videos, all_subtitle_files)
+        
+        if movie_match:
+            video_file, subtitle_file = movie_match
+            
+            print(f"\n[MOVIE MODE] Matched: '{video_file.name}' + '{subtitle_file.name}'")
+            
+            # Detect language
+            language_code = detect_language_with_fallback(
+                subtitle_file.name,
+                config.get('embedding_language_code')
+            )
+            
+            print(f"\nEMBEDDING: '{subtitle_file.name}' into '{video_file.name}'")
+            if language_code:
+                lang_name = LANGUAGE_DATA.get('codes', {}).get(language_code, {}).get('name', language_code)
+                print(f"  Language: {lang_name} ({language_code})")
+            else:
+                print(f"  Language: (none detected)")
+            
+            # Embed subtitle
+            success, error, backups_dir = embed_subtitle(
+                video_file,
+                subtitle_file,
+                mkvmerge_path,
+                language_code,
+                config.get('default_flag', True),
+                backups_dir,
+                config
+            )
+            
+            if success:
+                print(f"  ✓ SUCCESS")
+                embedded_count += 1
+                
+                # Update results - replace the 'no_match' entry with success
+                results = [r for r in results if r.get('subtitle') != subtitle_file.name]
+                results.append({
+                    'subtitle': subtitle_file.name,
+                    'video': video_file.name,
+                    'episode': 'Movie',
+                    'language': language_code or 'N/A',
+                    'status': 'success'
+                })
+            else:
+                print(f"  ✗ FAILED: {error}")
+                failed_count += 1
+                
+                # Update results - replace the 'no_match' entry with failed
+                results = [r for r in results if r.get('subtitle') != subtitle_file.name]
+                results.append({
+                    'subtitle': subtitle_file.name,
+                    'video': video_file.name,
+                    'episode': 'Movie',
+                    'language': language_code or 'N/A',
+                    'status': 'failed',
+                    'error': error
+                })
+        else:
+            print("\n[MOVIE MODE] No match found - files are too dissimilar")
     
     print("\n" + "=" * 60)
     print(f"COMPLETED: {embedded_count} embedded | {failed_count} failed | {len(all_subtitle_files) - embedded_count - failed_count} unmatched")
