@@ -367,7 +367,7 @@ def rename_subtitles_to_match_videos(config):
             print(f"- {filename}")
         print()
     
-    return renamed_count, movie_mode_detected, original_video_files, original_subtitle_files, rename_mapping
+    return renamed_count, movie_mode_detected, original_video_files, original_subtitle_files, rename_mapping, video_episodes, temp_video_dict
 
 
 def main():
@@ -385,7 +385,7 @@ def main():
     start_time = time.time()
     
     # Execute renaming
-    renamed_count, movie_mode, original_videos, original_subtitles, rename_map = rename_subtitles_to_match_videos(config)
+    renamed_count, movie_mode, original_videos, original_subtitles, rename_map, video_episodes, temp_video_dict = rename_subtitles_to_match_videos(config)
     
     # Calculate execution time
     elapsed_time = time.time() - start_time
@@ -409,7 +409,16 @@ def main():
     # Export CSV report if enabled
     if config.get('renaming_report', False):
         csv_path = Path.cwd() / 'renaming_report.csv'
-        csv_reporter.generate_csv_report(results, csv_path, 'renaming')
+        csv_reporter.generate_csv_report(
+            results, csv_path, 'renaming',
+            original_videos=original_videos,
+            video_episodes=video_episodes,
+            temp_video_dict=temp_video_dict,
+            config=config,
+            execution_time_str=time_str,
+            renamed_count=renamed_count,
+            movie_mode=movie_mode
+        )
     
     # Smart console behavior
     keep_console_open = config.get('keep_console_open', False)

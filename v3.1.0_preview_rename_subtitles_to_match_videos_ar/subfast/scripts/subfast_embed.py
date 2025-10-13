@@ -39,6 +39,11 @@ EXIT_FATAL_ERROR = 1
 EXIT_PARTIAL_FAILURE = 2
 EXIT_COMPLETE_FAILURE = 3
 
+# Timeout constants for mkvmerge operations
+TIMEOUT_BASE = 300  # 5 minutes minimum
+TIMEOUT_PER_GB = 120  # 2 minutes per GB
+TIMEOUT_MAX = 1800  # 30 minutes maximum cap
+
 
 def load_language_codes():
     """Load language codes from JSON file."""
@@ -141,7 +146,7 @@ def find_mkvmerge(config_path):
     
     Search order:
     1. config['mkvmerge_path'] if specified
-    2. Script directory
+    2. Script directory bin/ subdirectory
     3. System PATH
     """
     config_mkvmerge = config_path.strip() if config_path else ""
@@ -150,9 +155,9 @@ def find_mkvmerge(config_path):
     if config_mkvmerge and Path(config_mkvmerge).is_file():
         return Path(config_mkvmerge)
     
-    # Check script directory
+    # Check bin/ subdirectory (v3.0.0 compatible location)
     script_dir = Path(__file__).parent.parent
-    local_mkvmerge = script_dir / 'mkvmerge.exe'
+    local_mkvmerge = script_dir / 'bin' / 'mkvmerge.exe'
     if local_mkvmerge.is_file():
         return local_mkvmerge
     
@@ -163,39 +168,148 @@ def find_mkvmerge(config_path):
     return None
 
 
-def create_backup(video_path):
-    """Create backup of original video file."""
-    backup_path = video_path.with_suffix('.original' + video_path.suffix)
-    counter = 1
-    original_backup = backup_path
-    
-    while backup_path.exists():
-        backup_path = original_backup.with_stem(f"{original_backup.stem}_{counter}")
-        counter += 1
-    
-    shutil.copy2(video_path, backup_path)
-    return backup_path
-
-
-def embed_subtitle(video_path, subtitle_path, mkvmerge_path, language_code, default_flag):
+def ensure_backups_directory(working_dir):
     """
-    Embed subtitle into MKV video file using mkvmerge.
+    Create backups/ directory if it doesn't exist (v3.0.0 workflow).
+    
+    Args:
+        working_dir (Path): Working directory where backups/ should be created
     
     Returns:
-        tuple: (success: bool, error_message: str or None)
+        Path: Path to the backups directory
+    """
+    backups_dir = working_dir / 'backups'
+    if not backups_dir.exists():
+        backups_dir.mkdir(exist_ok=True)
+        print("[INFO] Creating backups/ directory...")
+    return backups_dir
+
+
+def backup_originals(video_file, subtitle_file, backups_dir):
+    """
+    Intelligently backup original files to backups directory (v3.0.0 workflow).
+    
+    Checks each file independently - only moves files that don't already
+    exist in the backups directory.
+    
+    Args:
+        video_file (Path): Path to original video file
+        subtitle_file (Path): Path to original subtitle file
+        backups_dir (Path): Path to backups directory
+    
+    Returns:
+        tuple[bool, bool]: (video_backed_up, subtitle_backed_up)
+    """
+    video_backup = backups_dir / video_file.name
+    subtitle_backup = backups_dir / subtitle_file.name
+    
+    video_backed_up = False
+    subtitle_backed_up = False
+    
+    # Check and backup video if needed
+    if video_backup.exists():
+        print(f"[INFO] Video backup already exists: {video_file.name}")
+    else:
+        shutil.move(str(video_file), str(video_backup))
+        video_backed_up = True
+        print(f"[BACKUP] Moved {video_file.name} -> backups/")
+    
+    # Check and backup subtitle if needed
+    if subtitle_backup.exists():
+        print(f"[INFO] Subtitle backup already exists: {subtitle_file.name}")
+    else:
+        shutil.move(str(subtitle_file), str(subtitle_backup))
+        subtitle_backed_up = True
+        print(f"[BACKUP] Moved {subtitle_file.name} -> backups/")
+    
+    return video_backed_up, subtitle_backed_up
+
+
+def safe_delete_subtitle(subtitle_file, backups_dir):
+    """
+    Delete subtitle from working directory ONLY if it exists in backups (v3.0.0 workflow).
+    
+    Safety check prevents data loss if backup failed silently.
+    
+    Args:
+        subtitle_file (Path): Path to subtitle file in working directory
+        backups_dir (Path): Path to backups directory
+    """
+    subtitle_backup = backups_dir / subtitle_file.name
+    
+    if subtitle_backup.exists() and subtitle_file.exists():
+        subtitle_file.unlink()
+        print(f"[CLEANUP] Removed subtitle from working dir: {subtitle_file.name}")
+    elif not subtitle_backup.exists():
+        print(f"[WARNING] Subtitle not in backups/ - keeping in working dir: {subtitle_file.name}")
+
+
+def rename_embedded_to_final(embedded_file, final_name):
+    """
+    Rename .embedded.mkv to final .mkv filename (v3.0.0 workflow).
+    
+    Args:
+        embedded_file (Path): Path to temporary .embedded.mkv file
+        final_name (Path): Path to final .mkv filename
+    """
+    embedded_file.replace(final_name)
+
+
+def cleanup_failed_merge(embedded_file):
+    """
+    Delete temporary .embedded.mkv file after merge failure (v3.0.0 workflow).
+    Original files remain untouched.
+    
+    Args:
+        embedded_file (Path): Path to temporary .embedded.mkv file
+    """
+    if embedded_file.exists():
+        embedded_file.unlink()
+        print(f"[CLEANUP] Removed temporary file: {embedded_file.name}")
+
+
+def embed_subtitle(video_path, subtitle_path, mkvmerge_path, language_code, default_flag, backups_dir=None, config=None):
+    """
+    Embed subtitle into MKV video file using v3.0.0 workflow.
+    
+    Workflow:
+    1. Create temporary .embedded.mkv file
+    2. On success: 
+       - Create backups/ directory if needed
+       - Move original video + subtitle to backups/
+       - Rename .embedded.mkv to original video name
+    3. On failure: cleanup temp file, originals untouched
+    
+    Dynamic Timeout:
+    - Base: 300s (5 minutes)
+    - Scales: +120s per GB of combined file size
+    - Maximum: 1800s (30 minutes)
+    
+    Args:
+        video_path: Path to video file
+        subtitle_path: Path to subtitle file
+        mkvmerge_path: Path to mkvmerge executable
+        language_code: Language code for subtitle
+        default_flag: Whether to set as default track
+        backups_dir: Optional existing backups directory (created if None)
+        config: Configuration dictionary (unused, kept for compatibility)
+    
+    Returns:
+        tuple: (success: bool, error_message: str or None, backups_dir: Path or None)
     """
     try:
-        # Build mkvmerge command
-        output_path = video_path.with_suffix('.temp.mkv')
+        # Generate temporary embedded filename (v3.0.0 pattern)
+        embedded_file = video_path.parent / f"{video_path.stem}.embedded.mkv"
+        final_file = video_path  # Final name is the original video name
         
+        # Build mkvmerge command
         cmd = [
             str(mkvmerge_path),
-            '-o', str(output_path),
-            '--no-subtitles',  # Remove existing subtitles
+            '-o', str(embedded_file),
             str(video_path)
         ]
         
-        # Add subtitle track
+        # Add subtitle track with language if specified
         if language_code:
             cmd.extend(['--language', f'0:{language_code}'])
         
@@ -206,28 +320,65 @@ def embed_subtitle(video_path, subtitle_path, mkvmerge_path, language_code, defa
         
         cmd.append(str(subtitle_path))
         
-        # Execute mkvmerge
+        # Calculate dynamic timeout (v3.0.0 system)
+        try:
+            total_bytes = video_path.stat().st_size + subtitle_path.stat().st_size
+        except Exception:
+            total_bytes = 0
+        
+        # Dynamic timeout: base 300s + 120s per GB, capped at 1800s (30 min)
+        gb = total_bytes / (1024 ** 3)
+        dyn_timeout = TIMEOUT_BASE + int(max(0, gb) * TIMEOUT_PER_GB)
+        timeout_seconds = max(TIMEOUT_BASE, min(TIMEOUT_MAX, dyn_timeout))
+        
+        # Execute mkvmerge with dynamic timeout
         result = subprocess.run(
             cmd,
             capture_output=True,
             text=True,
-            creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0
+            creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0,
+            timeout=timeout_seconds
         )
         
         if result.returncode == 0:
-            # Replace original with new file
-            backup_path = create_backup(video_path)
-            video_path.unlink()
-            output_path.rename(video_path)
-            return True, None
+            # Merge succeeded - v3.0.0 backup workflow
+            try:
+                # Create backups directory on first success
+                if backups_dir is None:
+                    backups_dir = ensure_backups_directory(video_path.parent)
+                
+                # Intelligently backup originals (checks each file independently)
+                video_backed_up, subtitle_backed_up = backup_originals(video_path, subtitle_path, backups_dir)
+                
+                # Only delete subtitle if it's safely in backups/
+                safe_delete_subtitle(subtitle_path, backups_dir)
+                
+                # Rename embedded file to original name
+                rename_embedded_to_final(embedded_file, final_file)
+                
+                print(f"[SUCCESS] Created: {final_file.name}")
+                return True, None, backups_dir
+                
+            except Exception as e:
+                # Ensure temp file cleanup on any error
+                cleanup_failed_merge(embedded_file)
+                error_msg = f"Backup workflow failed: {str(e)}"
+                print(f"[ERROR] {error_msg}")
+                return False, error_msg, backups_dir
         else:
-            # Clean up temp file if it exists
-            if output_path.exists():
-                output_path.unlink()
-            return False, result.stderr
+            # Merge failed - cleanup temp file
+            cleanup_failed_merge(embedded_file)
+            error_msg = result.stderr if result.stderr else 'Unknown mkvmerge error'
+            return False, error_msg, backups_dir
             
+    except subprocess.TimeoutExpired:
+        if 'embedded_file' in locals():
+            cleanup_failed_merge(Path(locals()['embedded_file']))
+        return False, "mkvmerge timeout (file too large or system too slow)", backups_dir
     except Exception as e:
-        return False, str(e)
+        if 'embedded_file' in locals():
+            cleanup_failed_merge(Path(locals()['embedded_file']))
+        return False, str(e), backups_dir
 
 
 def build_episode_context(video_files):
@@ -283,10 +434,11 @@ def process_embedding(folder_path, config, mkvmerge_path):
     # Build episode mappings
     video_episodes, temp_video_dict = build_episode_context([v.name for v in mkv_videos])
     
-    # Process embeddings
+    # Process embeddings with v3.0.0 workflow
     results = []
     embedded_count = 0
     failed_count = 0
+    backups_dir = None  # Track backups directory across iterations
     
     print("PROCESSING EMBEDDINGS:")
     print("-" * 40)
@@ -326,13 +478,15 @@ def process_embedding(folder_path, config, mkvmerge_path):
             else:
                 print(f"  Language: (none detected)")
             
-            # Embed subtitle
-            success, error = embed_subtitle(
+            # Embed subtitle with v3.0.0 workflow (tracks backups_dir + dynamic timeout)
+            success, error, backups_dir = embed_subtitle(
                 target_video_path,
                 subtitle_file,
                 mkvmerge_path,
                 language_code,
-                config.get('default_flag', True)
+                config.get('default_flag', True),
+                backups_dir,  # Pass existing backups_dir
+                config  # Pass config for dynamic timeout calculation
             )
             
             if success:
@@ -370,7 +524,12 @@ def process_embedding(folder_path, config, mkvmerge_path):
     print(f"COMPLETED: {embedded_count} embedded | {failed_count} failed | {len(all_subtitle_files) - embedded_count - failed_count} unmatched")
     print("=" * 60)
     
-    return results
+    # Return results plus additional context for comprehensive reporting
+    return {
+        'results': results,
+        'all_videos': [v.name for v in mkv_videos],
+        'all_subtitles': [s.name for s in all_subtitle_files]
+    }
 
 
 def main():
@@ -397,16 +556,33 @@ def main():
     
     if args.test_mkvmerge:
         if mkvmerge_path:
-            print(f"✓ mkvmerge found: {mkvmerge_path}")
-            return EXIT_SUCCESS
+            print(f"[OK] mkvmerge found: {mkvmerge_path}")
+            exit_code = EXIT_SUCCESS
         else:
-            print("✗ mkvmerge not found")
+            print("[ERROR] mkvmerge not found")
             print("  Install mkvmerge or specify path in config.ini")
-            return EXIT_FATAL_ERROR
+            exit_code = EXIT_FATAL_ERROR
+        
+        # Console handling for test mode
+        keep_console_open = config.get('keep_console_open', False)
+        if keep_console_open or exit_code != EXIT_SUCCESS:
+            input("\nPress Enter to close this window...")
+        return exit_code
     
     if not mkvmerge_path:
+        script_dir = Path(__file__).parent.parent
         print("[ERROR] mkvmerge.exe not found!")
-        print("  Please install MKVToolNix or specify mkvmerge_path in config.ini")
+        print(f"  Checked: {script_dir / 'bin' / 'mkvmerge.exe'}")
+        print("  Checked: System PATH")
+        print("\nPlease ensure:")
+        print("  1. MKVToolNix is installed, OR")
+        print("  2. Place mkvmerge.exe in bin/ directory, OR")
+        print("  3. Set mkvmerge_path in config.ini [Embedding] section")
+        
+        # Console handling - ALWAYS execute
+        keep_console_open = config.get('keep_console_open', False)
+        if keep_console_open or True:  # Always stay open on fatal errors
+            input("\nPress Enter to close this window...")
         return EXIT_FATAL_ERROR
     
     print(f"[INFO] Using mkvmerge: {mkvmerge_path}")
@@ -415,6 +591,11 @@ def main():
     folder_path = Path(args.directory).resolve()
     if not folder_path.is_dir():
         print(f"[ERROR] Directory not found: {folder_path}")
+        
+        # Console handling - ALWAYS execute
+        keep_console_open = config.get('keep_console_open', False)
+        if keep_console_open or True:  # Always stay open on fatal errors
+            input("\nPress Enter to close this window...")
         return EXIT_FATAL_ERROR
     
     print(f"[INFO] Processing directory: {folder_path}\n")
@@ -423,24 +604,37 @@ def main():
     start_time = time.time()
     
     # Process embeddings
-    results = process_embedding(folder_path, config, mkvmerge_path)
+    process_data = process_embedding(folder_path, config, mkvmerge_path)
+    results = process_data['results']
+    all_videos = process_data['all_videos']
+    all_subtitles = process_data['all_subtitles']
     
     # Calculate execution time
     elapsed_time = time.time() - start_time
     time_str = csv_reporter.format_execution_time(elapsed_time)
     
-    # Display performance
-    print("\nPERFORMANCE:")
-    print("=" * 60)
-    print(f"Total Execution Time: {time_str}")
-    print(f"Operations: {len(results)} total")
-    print("=" * 60)
-    
     # Export CSV if enabled
     if config.get('embedding_report', False):
         csv_path = folder_path / 'embedding_report.csv'
-        csv_reporter.generate_csv_report(results, csv_path, 'embedding')
-        csv_reporter.print_summary(results, 'Embedding')
+        csv_reporter.generate_csv_report(
+            results=results,
+            output_path=csv_path,
+            operation_type='embedding',
+            config=config,
+            execution_time_str=time_str,
+            all_videos=all_videos,
+            all_subtitles=all_subtitles,
+            elapsed_seconds=elapsed_time
+        )
+    
+    # Always display summary with accurate timing
+    csv_reporter.print_summary(
+        results, 
+        'Embedding',
+        execution_time=time_str,
+        total_files=len(results),
+        elapsed_seconds=elapsed_time
+    )
     
     # Determine exit code
     successful = sum(1 for r in results if r.get('status') == 'success')
@@ -452,6 +646,13 @@ def main():
         exit_code = EXIT_PARTIAL_FAILURE
     else:
         exit_code = EXIT_COMPLETE_FAILURE
+    
+    # v3.0.0: Final tip about backups
+    backups_dir = folder_path / 'backups'
+    if successful > 0 and backups_dir.exists():
+        print()
+        print("Tip: Verify merged files before manually deleting backups directory")
+        print(f"     Backups location: {backups_dir}")
     
     # Smart console behavior
     keep_console_open = config.get('keep_console_open', False)

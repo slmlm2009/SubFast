@@ -1,0 +1,37 @@
+# ==========================================
+#    ____        _     _____          _   
+#   / ___| _   _| |__ |  ___|_ _  ___| |_ 
+#   \___ \| | | | '_ \| |_ / _` |/ __| __|
+#    ___) | |_| | |_) |  _| (_| |\__ \ |_ 
+#   |____/ \__,_|_.__/|_|  \__,_||___/\__|
+#                                         
+#    Fast subtitle renaming and embedding
+# 
+# ==========================================
+#
+# Subtitle Renaming Report
+# Generated: 2025-10-13 18:34:16
+# Directory: D:\Github\slmlm2009\other\bugs and improvements\qc_test
+# Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass, export=True
+#
+# SUMMARY:
+# Total Videos: 2
+# Total Subtitles: 2
+# Renamed: 2/2 subtitles
+# Videos Missing Subtitles: 0
+# Subtitles Missing Videos: 0
+# Videos Without Episode Pattern: 0
+# Subtitles Without Episode Pattern: 0
+# Movie Mode: No
+# Execution Time: 0.00 seconds
+#
+Original Filename,Detected Episode,New Name,Action
+S01E02-Life in the Fast Lane [71D582F2].mkv,S01E02,No Change,--
+before and after optimization - 1.mkv,S01E01,No Change,--
+[Celestial Dragons] Lazarus - 02 [1080p].ass,S01E02,S01E02-Life in the Fast Lane [71D582F2].ar.ass,RENAMED
+before and after optimization - Episode 1.srt,S01E01,before and after optimization - 1.ar.srt,RENAMED
+#
+# MATCHED EPISODES:
+# S01E01 -> Video: before and after optimization - 1.mkv | Subtitle: before and after optimization - Episode 1.srt -> before and after optimization - 1.ar.srt
+# S01E02 -> Video: S01E02-Life in the Fast Lane [71D582F2].mkv | Subtitle: [Celestial Dragons] Lazarus - 02 [1080p].ass -> S01E02-Life in the Fast Lane [71D582F2].ar.ass
+#
