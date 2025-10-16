@@ -224,3 +224,301 @@ def generate_dummy_file(filename: Path, size_kb: int = 1, file_type: str = 'vide
     """
     # TODO: Implement in Story 6.2
     pass
+
+
+# ============================================================================
+# Pattern Extensibility Helpers (Story 6.4)
+# ============================================================================
+
+def validate_pattern_definition(pattern_dict: dict) -> tuple[bool, list[str]]:
+    """
+    Validate a pattern definition matches the required schema.
+    
+    Args:
+        pattern_dict: Dictionary containing pattern definition
+    
+    Returns:
+        Tuple of (is_valid, error_messages)
+        - is_valid: True if pattern is valid, False otherwise
+        - error_messages: List of validation error messages (empty if valid)
+    
+    Validation Rules:
+        - Must have 'id', 'name', 'description', 'variations' fields
+        - ID must be an integer
+        - Variations must be a non-empty list
+        - Each variation must have: var_id, expected, video_template, subtitle_template
+        - Expected format must be S##E## pattern
+        - var_id must be unique within variations
+    
+    Example:
+        >>> pattern = {
+        ...     "id": 26,
+        ...     "name": "Episode.##.Season.##",
+        ...     "description": "Reversed order pattern",
+        ...     "variations": [
+        ...         {
+        ...             "var_id": "VAR1",
+        ...             "expected": "S02E05",
+        ...             "video_template": "Show.Episode.5.Season.2.mkv",
+        ...             "subtitle_template": "Show.Episode.5.Season.2.srt"
+        ...         }
+        ...     ]
+        ... }
+        >>> is_valid, errors = validate_pattern_definition(pattern)
+        >>> print(is_valid)
+        True
+    """
+    import re
+    
+    errors = []
+    
+    # Check required top-level fields
+    required_fields = ['id', 'name', 'description', 'variations']
+    for field in required_fields:
+        if field not in pattern_dict:
+            errors.append(f"Missing required field: '{field}'")
+    
+    if errors:
+        return (False, errors)
+    
+    # Validate ID is integer
+    if not isinstance(pattern_dict['id'], int):
+        errors.append(f"Pattern ID must be an integer, got: {type(pattern_dict['id']).__name__}")
+    
+    # Validate variations is a list
+    if not isinstance(pattern_dict['variations'], list):
+        errors.append(f"'variations' must be a list, got: {type(pattern_dict['variations']).__name__}")
+        return (False, errors)
+    
+    # Check variations not empty
+    if len(pattern_dict['variations']) == 0:
+        errors.append("'variations' list cannot be empty")
+        return (False, errors)
+    
+    # Validate each variation
+    var_ids_seen = set()
+    expected_pattern = re.compile(r'^S\d{1,2}E\d{1,2}$', re.IGNORECASE)
+    
+    for idx, variation in enumerate(pattern_dict['variations']):
+        # Check required variation fields
+        var_required = ['var_id', 'expected', 'video_template', 'subtitle_template']
+        for field in var_required:
+            if field not in variation:
+                errors.append(f"Variation {idx}: Missing required field '{field}'")
+        
+        # Validate var_id uniqueness
+        if 'var_id' in variation:
+            var_id = variation['var_id']
+            if var_id in var_ids_seen:
+                errors.append(f"Variation {idx}: Duplicate var_id '{var_id}'")
+            var_ids_seen.add(var_id)
+        
+        # Validate expected format
+        if 'expected' in variation:
+            expected = variation['expected']
+            if not expected_pattern.match(expected):
+                errors.append(f"Variation {idx}: Expected format must be S##E## (e.g., S01E05), got: '{expected}'")
+        
+        # Validate filenames look reasonable
+        if 'video_template' in variation:
+            video = variation['video_template']
+            if not any(video.endswith(ext) for ext in ['.mkv', '.mp4', '.avi']):
+                errors.append(f"Variation {idx}: video_template should end with .mkv, .mp4, or .avi")
+        
+        if 'subtitle_template' in variation:
+            subtitle = variation['subtitle_template']
+            if not any(subtitle.endswith(ext) for ext in ['.srt', '.ass']):
+                errors.append(f"Variation {idx}: subtitle_template should end with .srt or .ass")
+    
+    is_valid = len(errors) == 0
+    return (is_valid, errors)
+
+
+def add_pattern_to_definitions(pattern_dict: dict, json_path: Optional[Path] = None) -> bool:
+    """
+    Add a new pattern to pattern_definitions.json file.
+    
+    Args:
+        pattern_dict: Dictionary containing pattern definition
+        json_path: Path to pattern_definitions.json (defaults to tests/fixtures/pattern_definitions.json)
+    
+    Returns:
+        True if pattern was added successfully, False otherwise
+    
+    Notes:
+        - Validates pattern before adding
+        - Checks for duplicate IDs
+        - Inserts pattern in correct position (sorted by ID)
+        - Creates backup of original file before modification
+        - Preserves JSON formatting and metadata
+    
+    Example:
+        >>> pattern = {
+        ...     "id": 26,
+        ...     "name": "Episode.##.Season.##",
+        ...     "description": "Reversed order pattern",
+        ...     "variations": [...]
+        ... }
+        >>> success = add_pattern_to_definitions(pattern)
+        >>> if success:
+        ...     print("Pattern added successfully!")
+    """
+    import json
+    import shutil
+    
+    # Default path
+    if json_path is None:
+        json_path = Path(__file__).parent / 'fixtures' / 'pattern_definitions.json'
+    else:
+        json_path = Path(json_path)
+    
+    # Validate pattern first
+    is_valid, errors = validate_pattern_definition(pattern_dict)
+    if not is_valid:
+        print(f"[ERROR] Pattern validation failed:")
+        for error in errors:
+            print(f"  - {error}")
+        return False
+    
+    # Check file exists
+    if not json_path.exists():
+        print(f"[ERROR] Pattern definitions file not found: {json_path}")
+        return False
+    
+    # Read existing patterns
+    try:
+        with open(json_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except json.JSONDecodeError as e:
+        print(f"[ERROR] Invalid JSON in {json_path}: {e}")
+        return False
+    
+    # Check for duplicate ID
+    pattern_id = pattern_dict['id']
+    existing_ids = [p['id'] for p in data.get('patterns', [])]
+    if pattern_id in existing_ids:
+        print(f"[ERROR] Pattern ID {pattern_id} already exists in pattern_definitions.json")
+        return False
+    
+    # Create backup
+    backup_path = json_path.with_suffix('.json.backup')
+    try:
+        shutil.copy2(json_path, backup_path)
+        print(f"[INFO] Created backup: {backup_path.name}")
+    except Exception as e:
+        print(f"[WARNING] Could not create backup: {e}")
+    
+    # Insert pattern in sorted position
+    patterns = data.get('patterns', [])
+    patterns.append(pattern_dict)
+    patterns.sort(key=lambda p: p['id'])
+    data['patterns'] = patterns
+    
+    # Update metadata
+    if 'metadata' in data:
+        data['metadata']['total_patterns'] = len(patterns)
+    
+    # Write back to file
+    try:
+        with open(json_path, 'w', encoding='utf-8') as f:
+            json.dump(data, f, indent=2, ensure_ascii=False)
+        print(f"[SUCCESS] Pattern {pattern_id} added to {json_path.name}")
+        print(f"[INFO] Total patterns: {len(patterns)}")
+        return True
+    except Exception as e:
+        print(f"[ERROR] Failed to write pattern definitions: {e}")
+        # Restore from backup
+        if backup_path.exists():
+            shutil.copy2(backup_path, json_path)
+            print(f"[INFO] Restored from backup")
+        return False
+
+
+def generate_pattern_test_files(pattern_id: int, base_path: Optional[Path] = None) -> Optional[Path]:
+    """
+    Generate test files for a specific pattern from pattern_definitions.json.
+    
+    Args:
+        pattern_id: ID of the pattern to generate files for
+        base_path: Base path for pattern_files directory (defaults to tests/fixtures/pattern_files)
+    
+    Returns:
+        Path to created pattern directory, or None if generation failed
+    
+    Notes:
+        - Reads pattern definition from pattern_definitions.json
+        - Creates pattern_XX_name/ directory
+        - Generates dummy video and subtitle files based on variations
+        - Creates backup/ subdirectory
+        - Uses VAR-based file naming ([VAR1], [VAR2], etc.)
+    
+    Example:
+        >>> pattern_dir = generate_pattern_test_files(26)
+        >>> if pattern_dir:
+        ...     print(f"Files created in: {pattern_dir}")
+        ...     print(f"Files: {list(pattern_dir.glob('*'))}")
+    """
+    import json
+    
+    # Default paths
+    if base_path is None:
+        base_path = Path(__file__).parent / 'fixtures' / 'pattern_files'
+    else:
+        base_path = Path(base_path)
+    
+    json_path = Path(__file__).parent / 'fixtures' / 'pattern_definitions.json'
+    
+    # Read pattern definitions
+    try:
+        with open(json_path, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+    except Exception as e:
+        print(f"[ERROR] Failed to read pattern definitions: {e}")
+        return None
+    
+    # Find pattern by ID
+    pattern = None
+    for p in data.get('patterns', []):
+        if p['id'] == pattern_id:
+            pattern = p
+            break
+    
+    if not pattern:
+        print(f"[ERROR] Pattern ID {pattern_id} not found in pattern_definitions.json")
+        return None
+    
+    # Create pattern directory
+    pattern_name_safe = pattern['name'].replace('#', '').replace('/', '-').replace('\\', '-')
+    pattern_dir = base_path / f"pattern_{pattern_id:02d}_{pattern_name_safe}"
+    pattern_dir.mkdir(parents=True, exist_ok=True)
+    
+    # Create backup subdirectory
+    backup_dir = pattern_dir / 'backup'
+    backup_dir.mkdir(exist_ok=True)
+    
+    # Generate files for each variation
+    files_created = []
+    for variation in pattern['variations']:
+        var_id = variation['var_id']
+        video_template = variation['video_template']
+        subtitle_template = variation['subtitle_template']
+        
+        # Prepend [VAR#] to filenames
+        video_filename = f"[{var_id}]-{video_template}"
+        subtitle_filename = f"[{var_id}]-{subtitle_template}"
+        
+        # Create dummy video file
+        video_path = pattern_dir / video_filename
+        video_path.write_text(f"Dummy video file for {var_id}\n")
+        files_created.append(video_filename)
+        
+        # Create dummy subtitle file
+        subtitle_path = pattern_dir / subtitle_filename
+        subtitle_path.write_text(f"Dummy subtitle file for {var_id}\n")
+        files_created.append(subtitle_filename)
+    
+    print(f"[SUCCESS] Generated {len(files_created)} test files in: {pattern_dir.name}")
+    for filename in files_created:
+        print(f"  - {filename}")
+    
+    return pattern_dir

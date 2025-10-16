@@ -1,12 +1,98 @@
 # Adding New Episode Patterns - Quick Guide
 
-This document provides a simple 5-step workflow for adding new episode naming patterns to SubFast's pattern recognition system.
+This document provides a simple workflow for adding new episode naming patterns to SubFast's pattern recognition system.
 
 **Time to add a new pattern: < 10 minutes** (no test code changes needed!)
 
+**Two Methods Available:**
+1. **Manual Method** - Traditional 5-step workflow (detailed below)
+2. **Helper Method** - Use Python helper functions for automation (see [Using Helper Functions](#using-helper-functions))
+
 ---
 
-## 5-Step Workflow
+## Using Helper Functions (RECOMMENDED - Story 6.4)
+
+**New in v3.2.0:** Use helper functions to automate pattern addition and validation!
+
+### Quick 3-Step Workflow with Helpers
+
+**Step 1: Create Pattern Definition from Template**
+```python
+# Copy tests/templates/new_pattern_template.json and fill in your values
+pattern = {
+    "id": 26,
+    "name": "Episode.##.Season.##",
+    "description": "Reversed order - Episode number before Season",
+    "variations": [
+        {
+            "var_id": "VAR1",
+            "expected": "S02E05",
+            "video_template": "Show.Episode.5.Season.2.mkv",
+            "subtitle_template": "Show.Episode.5.Season.2.srt"
+        },
+        # Add more variations...
+    ]
+}
+```
+
+**Step 2: Validate and Add to JSON**
+```python
+from tests.test_helpers import (
+    validate_pattern_definition,
+    add_pattern_to_definitions,
+    generate_pattern_test_files
+)
+
+# Validate pattern
+is_valid, errors = validate_pattern_definition(pattern)
+if not is_valid:
+    print("Validation errors:")
+    for error in errors:
+        print(f"  - {error}")
+else:
+    print("✓ Pattern is valid!")
+    
+    # Add to pattern_definitions.json
+    success = add_pattern_to_definitions(pattern)
+    if success:
+        print("✓ Pattern added to definitions!")
+```
+
+**Step 3: Generate Test Files and Run Tests**
+```python
+# Generate test files for the pattern
+pattern_dir = generate_pattern_test_files(26)
+print(f"✓ Test files created in: {pattern_dir}")
+
+# Run pattern integration tests
+# python tests/run_pattern_integration_tests.py
+# Pattern 26 will be automatically tested!
+```
+
+**Helper Function Reference:**
+
+- `validate_pattern_definition(pattern_dict)` → Returns `(bool, list[str])`
+  - Validates JSON structure, required fields, var_id uniqueness
+  - Checks expected format is S##E##
+  - Returns (is_valid, error_messages)
+
+- `add_pattern_to_definitions(pattern_dict, json_path=None)` → Returns `bool`
+  - Validates pattern first
+  - Checks for duplicate IDs
+  - Creates backup before modifying
+  - Inserts in sorted position
+
+- `generate_pattern_test_files(pattern_id, base_path=None)` → Returns `Path`
+  - Reads pattern from JSON
+  - Creates pattern_XX_name/ directory
+  - Generates dummy video and subtitle files
+  - Creates backup/ subdirectory
+
+**See:** `tests/templates/new_pattern_template.json` for copy-paste template
+
+---
+
+## Manual 5-Step Workflow
 
 ### Step 1: Add Pattern Regex to Pattern Engine
 

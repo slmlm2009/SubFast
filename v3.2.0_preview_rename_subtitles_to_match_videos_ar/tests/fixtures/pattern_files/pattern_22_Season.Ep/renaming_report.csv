@@ -1,0 +1,43 @@
+# ==========================================
+#    ____        _     _____          _   
+#   / ___| _   _| |__ |  ___|_ _  ___| |_ 
+#   \___ \| | | | '_ \| |_ / _` |/ __| __|
+#    ___) | |_| | |_) |  _| (_| |\__ \ |_ 
+#   |____/ \__,_|_.__/|_|  \__,_||___/\__|
+#                                         
+#    Fast subtitle renaming and embedding
+# 
+# ==========================================
+#
+# Subtitle Renaming Report
+# Generated: 2025-10-16 15:05:42
+# Directory: C:\Users\slmlm2009\Desktop\Github\SubFast\v3.2.0_preview_rename_subtitles_to_match_videos_ar\tests\fixtures\pattern_files\pattern_22_Season.Ep
+# Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass
+#
+# SUMMARY:
+# Total Videos: 3
+# Total Subtitles: 3
+# Renamed: 3/3 subtitles
+# Videos Missing Subtitles: 0
+# Subtitles Missing Videos: 0
+# Videos Without Episode Pattern: 0
+# Subtitles Without Episode Pattern: 0
+# Movie Mode: No
+# Execution Time: 0.00s
+#
++-------------------------------------------+------------------+----------+---------------------------------------------------------------------------------+
+| Original Filename                         | Detected Episode | Action   | New Name                                                                        |
++-------------------------------------------+------------------+----------+---------------------------------------------------------------------------------+
+| [VAR1]-Show.Season1.Ep5.mkv               | S01E05           | MATCHED  | No Change                                                                       |
+| [VAR2]-Series.Season2.Ep10.720p.mkv       | S02E10           | MATCHED  | No Change                                                                       |
+| [VAR3]-Example.Season3.Ep15.BluRay.mkv    | S03E15           | MATCHED  | No Change                                                                       |
+| [VAR1]-Show.Season1.Ep5.ar.srt            | S01E05           | RENAMED  | [VAR1]-Show.Season1.Ep5.ar_[VAR1]-Show.Season1.Ep5.ar.srt                       |
+| [VAR2]-Series.Season2.Ep10.720p.ar.srt    | S02E10           | RENAMED  | [VAR2]-Series.Season2.Ep10.720p.ar_[VAR2]-Series.Season2.Ep10.720p.ar.srt       |
+| [VAR3]-Example.Season3.Ep15.BluRay.ar.srt | S03E15           | RENAMED  | [VAR3]-Example.Season3.Ep15.BluRay.ar_[VAR3]-Example.Season3.Ep15.BluRay.ar.srt |
++-------------------------------------------+------------------+----------+---------------------------------------------------------------------------------+
+#
+# MATCHED EPISODES:
+# S01E05 -> Video: [VAR1]-Show.Season1.Ep5.mkv | Subtitle: [VAR1]-Show.Season1.Ep5.ar.srt -> [VAR1]-Show.Season1.Ep5.ar_[VAR1]-Show.Season1.Ep5.ar.srt
+# S02E10 -> Video: [VAR2]-Series.Season2.Ep10.720p.mkv | Subtitle: [VAR2]-Series.Season2.Ep10.720p.ar.srt -> [VAR2]-Series.Season2.Ep10.720p.ar_[VAR2]-Series.Season2.Ep10.720p.ar.srt
+# S03E15 -> Video: [VAR3]-Example.Season3.Ep15.BluRay.mkv | Subtitle: [VAR3]-Example.Season3.Ep15.BluRay.ar.srt -> [VAR3]-Example.Season3.Ep15.BluRay.ar_[VAR3]-Example.Season3.Ep15.BluRay.ar.srt
+#

@@ -1,0 +1,97 @@
+{
+  "_comment": "Pattern Template for SubFast Episode Matching Tests",
+  "_usage": "1. Copy this template, 2. Fill in values, 3. Use validate_pattern_definition() to check, 4. Use add_pattern_to_definitions() to insert",
+  "_documentation": "See tests/ADDING_NEW_PATTERNS.md for complete workflow",
+  
+  "id": "[PATTERN_ID]",
+  "_id_help": "Next available pattern ID (e.g., 26). Must be unique.",
+  
+  "name": "[PATTERN_NAME]",
+  "_name_help": "Short descriptive name for the pattern (e.g., 'S##E##', 'Episode.##.Season.##')",
+  
+  "description": "[PATTERN_DESCRIPTION]",
+  "_description_help": "Brief description of what this pattern matches (e.g., 'Most common format with S and E separators')",
+  
+  "variations": [
+    {
+      "var_id": "VAR1",
+      "_var_id_help": "Variation identifier - use VAR1, VAR2, VAR3, VAR4 for consistency",
+      
+      "expected": "S01E05",
+      "_expected_help": "Expected normalized episode format (always S##E##)",
+      
+      "video_template": "[VIDEO_FILENAME].mkv",
+      "_video_template_help": "Example video filename using this pattern (e.g., 'Show.Episode.5.Season.1.mkv')",
+      
+      "subtitle_template": "[SUBTITLE_FILENAME].srt",
+      "_subtitle_template_help": "Example subtitle filename using this pattern (e.g., 'Show.Episode.5.Season.1.srt')"
+    },
+    {
+      "var_id": "VAR2",
+      "expected": "S02E10",
+      "video_template": "[VIDEO_FILENAME].mkv",
+      "subtitle_template": "[SUBTITLE_FILENAME].srt"
+    },
+    {
+      "var_id": "VAR3",
+      "expected": "S03E15",
+      "video_template": "[VIDEO_FILENAME].mkv",
+      "subtitle_template": "[SUBTITLE_FILENAME].srt"
+    },
+    {
+      "_comment": "Optional: Add VAR4 if you want a fourth variation",
+      "var_id": "VAR4",
+      "expected": "S01E01",
+      "video_template": "[VIDEO_FILENAME].mkv",
+      "subtitle_template": "[SUBTITLE_FILENAME].srt"
+    }
+  ],
+  
+  "_example": {
+    "comment": "Here's a complete example for Pattern 26: Episode.##.Season.##",
+    "id": 26,
+    "name": "Episode.##.Season.##",
+    "description": "Reversed order - Episode number before Season (e.g., Episode.5.Season.2)",
+    "variations": [
+      {
+        "var_id": "VAR1",
+        "expected": "S02E05",
+        "video_template": "Show.Episode.5.Season.2.mkv",
+        "subtitle_template": "Show.Episode.5.Season.2.srt"
+      },
+      {
+        "var_id": "VAR2",
+        "expected": "S03E10",
+        "video_template": "Series.Episode.10.Season.3.720p.mkv",
+        "subtitle_template": "Series.Episode.10.Season.3.srt"
+      },
+      {
+        "var_id": "VAR3",
+        "expected": "S01E15",
+        "video_template": "Example.Episode.15.Season.1.BluRay.mkv",
+        "subtitle_template": "Example.Episode.15.Season.1.srt"
+      }
+    ]
+  },
+  
+  "_validation_checklist": [
+    "✓ Pattern ID is unique (check pattern_definitions.json)",
+    "✓ Pattern name is descriptive",
+    "✓ All variations have unique var_id",
+    "✓ Expected format is always S##E##",
+    "✓ Filenames are realistic and use the pattern",
+    "✓ Video and subtitle filenames match (same episode)",
+    "✓ File extensions are .mkv, .mp4, or .avi for videos",
+    "✓ File extensions are .srt or .ass for subtitles"
+  ],
+  
+  "_next_steps": [
+    "1. Remove all '_comment', '_help', '_example', '_validation_checklist', '_next_steps' fields",
+    "2. Replace all [PLACEHOLDERS] with actual values",
+    "3. Run: validate_pattern_definition(your_pattern)",
+    "4. If valid, run: add_pattern_to_definitions(your_pattern)",
+    "5. Run: generate_pattern_test_files(pattern_id)",
+    "6. Run tests to verify pattern works",
+    "7. Update episode_patterns_guide.md with pattern description"
+  ]
+}
