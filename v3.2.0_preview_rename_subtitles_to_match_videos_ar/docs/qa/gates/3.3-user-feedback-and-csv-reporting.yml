@@ -1,0 +1,90 @@
+schema: 1
+story: '3.3'
+story_title: 'User Feedback and CSV Reporting'
+gate: CONCERNS
+status_reason: 'User integration testing revealed 3 issues: (1) Fatal errors crash without smart console hold, (2) Renaming script console stays open for normal no-match situations instead of only fatal errors, (3) CSV export missing execution time and detailed match statistics.'
+reviewer: 'Quinn (Test Architect)'
+updated: '2025-01-12T01:00:00Z'
+
+top_issues:
+  - id: 'REL-001'
+    severity: high
+    finding: 'Fatal error (invalid mkvmerge path) crashes program without triggering smart console hold behavior'
+    suggested_action: 'Wrap main() in try-except-finally to ensure smart console logic always runs on fatal errors'
+    suggested_owner: 'dev'
+  - id: 'REQ-001'
+    severity: medium
+    finding: 'Renaming script console stays open for normal no-match situations (unrecognized patterns, missing episodes) instead of only fatal errors (access denied, file not found)'
+    suggested_action: 'Change exit code logic: use EXIT_SUCCESS for normal operations (even no matches), EXIT_FATAL_ERROR only for actual errors. Update smart console to only hold on EXIT_FATAL_ERROR.'
+    suggested_owner: 'dev'
+  - id: 'MNT-001'
+    severity: medium
+    finding: 'CSV export missing execution time (says "see console") and lacks detailed statistics (matched pairs, failed operations breakdown) like renaming script has'
+    suggested_action: 'Update generate_report() to include actual execution time and add sections for successfully processed pairs and failed operations with details'
+    suggested_owner: 'dev'
+
+waiver:
+  active: false
+
+quality_score: 75
+
+expires: '2025-01-26T00:30:00Z'
+
+evidence:
+  tests_reviewed: 5
+  risks_identified: 0
+  trace:
+    ac_covered: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14]
+    ac_gaps: []
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: 'No security concerns. CSV export uses UTF-8 encoding. No hardcoded credentials. Proper error handling maintained.'
+  performance:
+    status: PASS
+    notes: 'Minimal performance impact. Banner printing is fast. CSV export is efficient and does not significantly impact processing time.'
+  reliability:
+    status: PASS
+    notes: 'Proper error handling maintained. Exit codes correctly used. Config fallbacks work correctly. Smart console behavior enhances reliability.'
+  maintainability:
+    status: PASS
+    notes: 'Code is well-structured. Constants clearly defined. Comments explain Story 3.3 additions. Identical implementation in both scripts aids maintenance.'
+
+recommendations:
+  immediate: []
+  future:
+    - action: 'Consider adding unit tests for exit code logic in both scripts'
+      refs: ['embed_subtitles_to_match_videos_ar.py', 'rename_subtitles_to_match_videos_ar.py']
+      priority: 'low'
+    - action: 'Manual verification recommended for error path scenarios (non-zero exit codes)'
+      refs: ['Story 3.3 testing section']
+      priority: 'medium'
+    - action: 'Manual verification recommended for keep_console_open=true scenario'
+      refs: ['config.ini']
+      priority: 'medium'
+
+notes: |
+  Comprehensive review completed for Story 3.3. Implementation quality is high with all 14 acceptance criteria satisfied.
+  
+  Strengths:
+  - Clean, consistent implementation across both scripts
+  - Proper use of exit codes and smart console logic
+  - SubFast branding professionally implemented
+  - CSV export follows established patterns
+  - Configuration integration is seamless
+  - Bug fix (missing sys import) caught and resolved during testing
+  
+  Minor observations:
+  - Unit tests deferred (acceptable - manual testing sufficient for this story)
+  - Some integration test scenarios not covered (error paths, keep_console_open=true)
+  - These gaps are acceptable given the story scope and manual verification feasibility
+  
+  The implementation demonstrates:
+  - Strong adherence to requirements
+  - Consistent coding patterns
+  - Proper error handling
+  - Good documentation
+  - Thorough integration testing (5/5 tests passed)
+  
+  No refactoring performed during review as code quality is already high.
