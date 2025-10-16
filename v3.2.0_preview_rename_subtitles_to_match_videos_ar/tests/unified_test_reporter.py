@@ -236,11 +236,11 @@ class UnifiedTestReporter:
         
         if self.integration_failed_details:
             self.report_lines.append("")
-            self.report_lines.append("⚠️  FAILED VARIATIONS  ⚠️".center(100))
-            self.report_lines.append("-" * 100)
+            self.report_lines.append("FAILED VARIATIONS:")
+            self.report_lines.append("=" * 100)
             for detail in self.integration_failed_details:
-                self.report_lines.append(f"  {detail}")
-            self.report_lines.append("-" * 100)
+                self.report_lines.append(f"  - {detail}")
+            self.report_lines.append("=" * 100)
         
         self.report_lines.append("")
         self.report_lines.append("=" * 100)
@@ -330,8 +330,30 @@ class UnifiedTestReporter:
         self.report_lines.append("=" * 100)
         self.report_lines.append("")
         
-        # Add all integration test output
-        self.report_lines.extend(self.integration_output)
+        # Filter out the summary section from integration output to avoid duplication
+        # The integration output starts with a SUMMARY section, then DETAILED TEST RESULTS
+        # We only want the DETAILED TEST RESULTS portion
+        in_summary_block = False
+        found_detailed_section = False
+        
+        for line in self.integration_output:
+            # Start of SUMMARY section
+            if line.strip() == "SUMMARY" or (line.strip() == "=" * 100 and not found_detailed_section):
+                in_summary_block = True
+                continue
+            
+            # Start of DETAILED TEST RESULTS section
+            if "DETAILED TEST RESULTS" in line:
+                found_detailed_section = True
+                in_summary_block = False
+                continue  # Skip the header itself, we have our own
+            
+            # Skip lines until we're past the summary
+            if not found_detailed_section:
+                continue
+            
+            # Add lines from detailed results section
+            self.report_lines.append(line)
     
     def save_report(self, output_dir: Path):
         """Save unified report to file."""

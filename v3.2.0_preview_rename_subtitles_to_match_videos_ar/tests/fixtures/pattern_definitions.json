@@ -34,6 +34,12 @@
           "expected": "S01E01",
           "video_template": "Test.S01E01.mkv",
           "subtitle_template": "Test.S01E01.eng.srt"
+        },
+		{
+          "var_id": "VAR5",
+          "expected": "S03E02",
+          "video_template": "Hajimeru Isekai Seikatsu s3 e2.mkv",
+          "subtitle_template": "kara Hajimeru Isekai Seikatsu S03 E02.ass"
         }
       ]
     },

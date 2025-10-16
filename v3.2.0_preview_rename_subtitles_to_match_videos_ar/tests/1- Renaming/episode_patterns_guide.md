@@ -5,15 +5,18 @@ This document lists all 25 naming patterns supported by the pattern engine, orde
 ---
 
 ## Pattern 1: S##E## Format
-**Regex:** `[Ss](\d+)[Ee](\d+)`
+**Regex:** `[Ss](\d+)\s?[Ee](\d+)`
 
-**Description:** The most common format with 'S' followed by season number, 'E' followed by episode number.
+**Description:** The most common format with 'S' followed by season number, 'E' followed by episode number. Supports optional space between S## and E##.
 
 **Examples:**
 - `S01E05` → Season 1, Episode 5
 - `S2E10` → Season 2, Episode 10
 - `s03e15` → Season 3, Episode 15
+- `S02 E3` → Season 2, Episode 3 (space-separated)
+- `s3 e2` → Season 3, Episode 2 (space-separated, lowercase)
 - `Show.Name.S01E01.720p.mkv`
+- `ShowName.S02 E3.mkv` (space-separated variation)
 
 ---
 

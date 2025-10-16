@@ -18,10 +18,11 @@ from functools import lru_cache
 EPISODE_PATTERNS = [
     # Format: (pattern_name, compiled_regex, formatter_function)
     
-    # Pattern 1: S##E## format (most common - e.g., S01E05, S2E10)
+    # Pattern 1: S##E## format (most common - e.g., S01E05, S2E10, S02 E3)
+    # Supports optional space between S and E (e.g., "S3 E2" or "S03E02")
     (
         'S##E##',
-        re.compile(r'[Ss](\d+)[Ee](\d+)'),
+        re.compile(r'[Ss](\d+)\s?[Ee](\d+)'),
         lambda m: (int(m.group(1)), int(m.group(2)))
     ),
     

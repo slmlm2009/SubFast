@@ -345,10 +345,15 @@ class IntegrationTestRunner:
                     error_line = f"  [ERROR] Extraction mismatch! Expected '{expected}', got '{entry.extracted_episode}'"
                     print(error_line)
                     self.report_lines.append(error_line)
+                    # Add to failed_details for summary
+                    self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Extraction mismatch (expected {expected}, got {entry.extracted_episode})")
                 if not paired:
                     error_line = f"  [ERROR] Video and subtitle not paired!"
                     print(error_line)
                     self.report_lines.append(error_line)
+                    # Add to failed_details if not already added
+                    if video_match and subtitle_match:
+                        self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Video and subtitle not paired")
                 failed += 1
             else:
                 passed += 1
