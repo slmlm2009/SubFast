@@ -217,6 +217,42 @@ Reports are ALWAYS generated automatically in tests/reports/
         duration=getattr(integration_runner, 'test_duration', 0.0)
     )
     
+    # Extract embedding test data (if embedding test ran and created output)
+    embedding_output_dir = Path(__file__).parent / '2- Embedding' / 'test_output'
+    embedded_files = list(embedding_output_dir.glob('embedded_*.mkv')) if embedding_output_dir.exists() else []
+    
+    if embedded_files:
+        # Read config to get settings
+        from common import config_loader
+        config = config_loader.load_config()
+        lang_code = config.get('embedding_language_code', 'ar')
+        default_flag = config.get('default_flag', True)
+        
+        # Get the first embedded file (there should only be one from the test)
+        output_file = embedded_files[0]
+        
+        # Get track info using mkvmerge
+        mkvmerge_path = Path(__file__).parent.parent / 'subfast' / 'bin' / 'mkvmerge.exe'
+        if mkvmerge_path.exists():
+            import subprocess
+            result = subprocess.run(
+                [str(mkvmerge_path), '-i', str(output_file)],
+                capture_output=True,
+                text=True,
+                timeout=5
+            )
+            tracks_output = result.stdout
+        else:
+            tracks_output = "Track information not available"
+        
+        unified_reporter.set_embedding_test_data(
+            output_file=str(output_file.relative_to(Path(__file__).parent.parent)),
+            file_size=output_file.stat().st_size / (1024**2),
+            lang_code=lang_code,
+            default_flag=default_flag,
+            tracks=tracks_output
+        )
+    
     # Generate and save unified report
     unified_report_lines = unified_reporter.generate_report()
     reports_dir = Path(__file__).parent / 'reports'

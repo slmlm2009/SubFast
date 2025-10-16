@@ -35,10 +35,15 @@ def reset_test_environment():
     # Pattern files directory
     pattern_files_dir = script_dir / 'fixtures' / 'pattern_files'
     
+    # Embedding test output directory
+    embedding_output_dir = script_dir / '2- Embedding' / 'test_output'
+    
     print("=" * 80)
     print("SubFast v3.2.0 - Test Environment Reset")
     print("=" * 80)
-    print(f"\nTarget directory: {pattern_files_dir}\n")
+    print(f"\nTarget directories:")
+    print(f"  - Pattern files: {pattern_files_dir}")
+    print(f"  - Embedding output: {embedding_output_dir}\n")
     
     # Step 1: Delete existing pattern files
     if pattern_files_dir.exists():
@@ -61,6 +66,28 @@ def reset_test_environment():
             return 1
     else:
         print("[STEP 1] Pattern files directory doesn't exist (first run?)")
+    
+    # Step 1.5: Delete embedding test output files
+    if embedding_output_dir.exists():
+        print("\n[STEP 1.5] Deleting embedding test output files...")
+        try:
+            file_count = sum(1 for _ in embedding_output_dir.rglob('*') if _.is_file() and _.suffix in ['.mkv', '.mp4', '.avi'])
+            
+            if file_count > 0:
+                print(f"  Found: {file_count} embedded video file(s)")
+                
+                # Delete video files but keep .gitignore and README.md
+                for file in embedding_output_dir.rglob('*'):
+                    if file.is_file() and file.suffix in ['.mkv', '.mp4', '.avi']:
+                        file.unlink()
+                
+                print("  [OK] Embedding output files deleted")
+            else:
+                print("  No embedding output files to delete")
+        
+        except Exception as e:
+            print(f"  [WARNING] Failed to delete embedding output: {e}")
+            # Don't fail the whole reset, just warn
     
     # Step 2: Regenerate files
     print("\n[STEP 2] Regenerating pattern files...")

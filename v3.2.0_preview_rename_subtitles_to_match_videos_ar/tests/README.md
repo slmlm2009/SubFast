@@ -19,6 +19,8 @@ python tests/run_tests.py
 
 # Using unittest directly
 python -m unittest discover tests/
+
+# Includes: Unit tests + Integration tests (pattern + embedding)
 ```
 
 ### Running Specific Tests
@@ -91,20 +93,22 @@ Open in any text editor to review results.
 
 ```
 tests/
-├── run_tests.py                      # Custom test runner
+├── run_tests.py                      # Custom test runner with unified reporting
 ├── README.md                         # This file
 ├── test_helpers.py                   # Shared test utilities
-├── test_config_loader.py             # Config module tests
-├── test_csv_reporter.py              # CSV reporter tests
-├── test_pattern_matching.py          # Pattern matching tests (Story 6.2)
+├── test_config_loader.py             # Config module tests (14 tests)
+├── test_csv_reporter.py              # CSV reporter tests (10 tests)
+├── run_pattern_integration_tests.py  # Pattern integration tests (Story 6.2)
+├── test_embedding_integration.py     # Embedding workflow tests (Story 6.3) ⭐ NEW
+├── EMBEDDING_INTEGRATION_TESTS.md    # Embedding test documentation ⭐ NEW
 ├── fixtures/                         # Test data
 │   ├── pattern_definitions.json      # Pattern specs (Story 6.2)
-│   └── pattern_files/                # Dummy test files (Story 6.2)
+│   └── pattern_files/                # Dummy test files (77 variations, 25 patterns)
 ├── reports/                          # Generated test reports
 ├── 1- Renaming/
 │   └── episode_patterns_guide.md     # Pattern specification
 └── 2- Embedding/
-    └── integration_testing_files/    # Real video/subtitle samples
+    └── integration_testing_files/    # Real video/subtitle samples (Story 6.3) ⭐
 ```
 
 ### Naming Conventions
@@ -253,13 +257,81 @@ Check:
 - File permissions allow writing
 - Disk space available
 
+## Embedding Integration Tests (Story 6.3)
+
+### Overview
+
+Tests for the complete embedding workflow using real video/subtitle files.
+
+**Location**: `test_embedding_integration.py`  
+**Test Files**: `tests/2- Embedding/integration_testing_files/`  
+**Documentation**: `EMBEDDING_INTEGRATION_TESTS.md`
+
+### Features
+
+✅ **11 Integration Tests**  
+✅ **Works with or without mkvmerge**  
+✅ **Auto-skips tests requiring mkvmerge if not available**  
+✅ **Real video files** (~36 MB and ~28 MB)  
+✅ **Complete workflow validation**
+
+### Running Embedding Tests
+
+```bash
+# Run all embedding integration tests
+python -m unittest test_embedding_integration -v
+
+# Run only tests that don't need mkvmerge (9 tests)
+python -m unittest test_embedding_integration.TestEmbeddingIntegration -v
+
+# Run only mkvmerge-specific tests (2 tests, requires mkvmerge)
+python -m unittest test_embedding_integration.TestEmbeddingWorkflowWithMkvmerge -v
+```
+
+### Test Coverage
+
+**Workflow Steps Tested:**
+1. Scan directory for video/subtitle files
+2. Match video with subtitle files
+3. Detect language codes
+4. Create backup directory
+5. Run mkvmerge (if available)
+6. Move originals to backup
+7. Generate CSV report
+
+**Scenarios:**
+- Basic embedding workflow
+- Movie mode matching
+- Missing mkvmerge handling
+- Backup creation
+- Dynamic timeout calculation
+- Error cleanup and rollback
+
+### mkvmerge Status
+
+Tests automatically detect and report mkvmerge availability:
+
+```
+[INFO] mkvmerge is available - full integration tests will run
+```
+or
+```
+[WARNING] mkvmerge not available - embedding tests will be limited
+```
+
+Tests requiring mkvmerge are automatically SKIPPED if not installed.
+
+### See Also
+
+Full documentation: `tests/EMBEDDING_INTEGRATION_TESTS.md`
+
 ## Additional Resources
 
 - **Coding Standards**: `docs/architecture/coding-standards.md`
 - **Tech Stack**: `docs/architecture/tech-stack.md`
 - **Story 6.1**: Test framework setup (this implementation)
-- **Story 6.2**: Pattern test suite with dummy files
-- **Story 6.3**: Integration tests with real files
+- **Story 6.2**: Pattern test suite with dummy files (COMPLETE)
+- **Story 6.3**: Embedding integration tests (COMPLETE) ⭐
 - **Story 6.4**: Test data management and extensibility
 
 ## Contributing
