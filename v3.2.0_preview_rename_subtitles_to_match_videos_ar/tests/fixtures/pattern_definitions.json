@@ -640,6 +640,12 @@
           "expected": "S01E15",
           "video_template": "Example - 15.BluRay.mkv",
           "subtitle_template": "Example - 15.srt"
+        },
+		{
+          "var_id": "VAR4",
+          "expected": "S01E20",
+          "video_template": "Example-1080p - 20.mkv",
+          "subtitle_template": "Example-2025 - 20.srt"
         }
       ]
     }

@@ -187,10 +187,11 @@ EPISODE_PATTERNS = [
     ),
     
     # Pattern 25: - # format (assumes Season 1, e.g., "Show - 15.mkv")
+    # Hardened: Episodes 1-1899 only, excludes years 1900+, blocks letter suffixes (1080p, x264)
     (
         '- ##',
-        re.compile(r'-\s*(\d+)'),
-        lambda m: (1, int(m.group(1)))
+        re.compile(r'-\s*(?:1[0-8]\d{2}|\d{1,3})(?![a-zA-Z0-9])'),
+        lambda m: (1, int(m.group(0).split('-')[1].strip()))
     ),
 ]
 

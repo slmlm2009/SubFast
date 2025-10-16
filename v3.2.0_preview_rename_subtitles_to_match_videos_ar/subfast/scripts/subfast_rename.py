@@ -345,7 +345,8 @@ def rename_subtitles_to_match_videos(config):
     remaining_subtitle_files = [s for s in subtitle_files if not pattern_engine.get_episode_number_cached(s)]
     movie_mode_detected = False
     
-    if renamed_count == 0 and len(remaining_video_files) == 1 and len(remaining_subtitle_files) == 1:
+    # FIXED: Check TOTAL file count, not remaining count (prevents activation with multiple files)
+    if renamed_count == 0 and len(video_files) == 1 and len(subtitle_files) == 1:
         movie_match = find_movie_subtitle_match(remaining_video_files, remaining_subtitle_files)
         if movie_match:
             video_file, subtitle_file = movie_match
