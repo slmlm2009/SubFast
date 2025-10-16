@@ -12,4 +12,7 @@
 ## Epic 4: Configuration, Documentation & Polish
 **Goal:** Deliver production-ready documentation, configuration flexibility, and comprehensive error handling to ensure SubFast is user-friendly and reliable.
 
+## Epic 5: Code Architecture Refactoring & Quality Improvements
+**Goal:** Refactor the codebase to eliminate code duplication, establish shared module architecture, externalize hardcoded data, and implement robust error handling for long-term maintainability.
+
 ---

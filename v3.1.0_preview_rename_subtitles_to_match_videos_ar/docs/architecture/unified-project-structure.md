@@ -3,13 +3,20 @@
 ```plaintext
 C:\subfast\                                    # Fixed installation path (required for registry)
 ├── scripts\                                   # Python scripts directory
-│   ├── subfast_rename.py                     # Renaming feature script (standalone)
-│   └── subfast_embed.py                      # Embedding feature script (standalone)
+│   ├── common\                               # Shared modules (v3.1.0+)
+│   │   ├── __init__.py                       # Package initialization
+│   │   ├── config_loader.py                  # Configuration management
+│   │   ├── pattern_engine.py                 # Episode pattern recognition
+│   │   └── csv_reporter.py                   # CSV report generation
+│   ├── subfast_rename.py                     # Renaming feature script
+│   └── subfast_embed.py                      # Embedding feature script
 │
 ├── bin\                                       # Binary tools directory
 │   └── mkvmerge.exe                          # Bundled MKVToolNix mkvmerge
 │
 ├── resources\                                 # Resources directory
+│   ├── data\                                 # External data files (v3.1.0+)
+│   │   └── mkvmerge_language_codes.json     # ISO 639-2 language mappings
 │   ├── subfast_logo.ico                      # Context menu icon
 │   └── docs\                                 # Documentation
 │       └── CONFIGURATION_README.md           # Detailed configuration guide
@@ -30,10 +37,19 @@ C:\subfast\                                    # Fixed installation path (requir
 ## Directory Purpose:
 
 **scripts/**
-- Contains both standalone Python script executables
-- Each script is self-contained with all necessary logic
+- Contains main Python script executables and shared modules
+- Main scripts (subfast_rename.py, subfast_embed.py) handle feature-specific logic
 - Directly executed by Python Launcher via Registry
-- Shared logic (config loading, pattern matching, file operations) exists within each script
+- Shared logic extracted to common/ modules (v3.1.0+):
+  - config_loader.py: Configuration management with auto-generation
+  - pattern_engine.py: Episode pattern recognition with caching
+  - csv_reporter.py: CSV report generation and statistics
+
+**scripts/common/**
+- Shared Python modules used by both main scripts (v3.1.0+)
+- Eliminates code duplication (~1,600 lines)
+- Single source of truth for configuration, patterns, and reporting
+- Improves maintainability and testability
 
 **bin/**
 - Houses external binary dependencies (mkvmerge.exe)
@@ -41,9 +57,12 @@ C:\subfast\                                    # Fixed installation path (requir
 - Path configurable in config.ini
 
 **resources/**
-- Static assets: icons, documentation
+- Static assets: icons, documentation, external data
 - Separate from executable code for clarity
 - Documentation accessible without code modification
+- data/ subdirectory contains external data files (v3.1.0+):
+  - mkvmerge_language_codes.json: ISO 639-2 language code mappings
+  - Allows adding languages without code changes
 
 **Root Level:**
 - config.ini: Easy user access for configuration
