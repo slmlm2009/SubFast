@@ -625,7 +625,7 @@
       ]
     },
     {
-      "id": 25,
+      "id": 26,
       "name": "## - ##",
       "description": "Season and episode numbers separated by dash, no S/E prefix (e.g., '3 - 04')",
       "variations": [

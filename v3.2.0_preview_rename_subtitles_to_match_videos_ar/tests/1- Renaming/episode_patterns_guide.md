@@ -1,6 +1,6 @@
 # Episode Pattern Recognition - All Supported Formats
 
-This document lists all 25 naming patterns supported by the pattern engine, ordered by priority (first match wins).
+This document lists all 26 naming patterns supported by the pattern engine, ordered by priority (first match wins).
 
 ---
 
@@ -308,17 +308,44 @@ This document lists all 25 naming patterns supported by the pattern engine, orde
 
 ---
 
-## Pattern 25: - ## Format (Assumes Season 1)
-**Regex:** `-\s*(\d+)`
+## Pattern 25: ## - ## Format
+**Regex:** `(?<![0-9])(\d{1,2})\s*-\s*(\d{1,2})(?![a-zA-Z0-9])`
 
-**Description:** Just a dash followed by episode number. Assumes Season 1.
+**Description:** Season and episode numbers separated by dash, no S/E prefix. Optional spaces around dash. Supports 1-99 for both season and episode.
+
+**Examples:**
+- `Show 3 - 04` → Season 3, Episode 4
+- `Series 2-10` → Season 2, Episode 10
+- `Example 1 - 25.mkv` → Season 1, Episode 25
+- `[Moozzi2] Re Zero 3 - 04 [x265].mkv` → Season 3, Episode 4
+
+**Note:** Uses negative lookahead/lookbehind to avoid matching years or resolution numbers.
+
+---
+
+## Pattern 26: - ## Format (Assumes Season 1)
+**Regex:** `-\s*(?:1[0-8]\d{2}|\d{1,3})(?![a-zA-Z0-9])`
+
+**Description:** Just a dash followed by episode number. Assumes Season 1. **Hardened** to avoid common false positives.
+
+**Hardening Features:**
+- Supports episodes 1-1899 (covers all realistic episode counts)
+- Blocks years 1900+ (avoids matching `Show - 2024.mkv`)
+- Blocks resolution/codec suffixes (avoids matching `Show-1080p.mkv`, `Video-x264.mkv`)
+- Uses negative lookahead to prevent matching letter/number combinations
 
 **Examples:**
 - `Show - 15` → Season 1, Episode 15
 - `Series - 3` → Season 1, Episode 3
 - `Name - 08.mkv` → Season 1, Episode 8
+- `Example - 1234` → Season 1, Episode 1234
 
-**Warning:** This is the most permissive pattern and may cause false positives.
+**Won't Match (Protected):**
+- `Show - 2024.mkv` ❌ (year, blocked)
+- `Video-1080p.mkv` ❌ (resolution, blocked)
+- `Movie-x264.mkv` ❌ (codec, blocked)
+
+**Warning:** This is the most permissive pattern but has been hardened to reduce false positives.
 
 ---
 

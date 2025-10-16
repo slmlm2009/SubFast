@@ -187,7 +187,16 @@ EPISODE_PATTERNS = [
         lambda m: (int(m.group(1)), int(m.group(2)))
     ),
     
-    # Pattern 25: - # format (assumes Season 1, e.g., "Show - 15.mkv")
+    # Pattern 25: ## - ## format (Season-Episode with dash, e.g., "Show 3 - 04.mkv")
+    # Season and episode numbers separated by dash, no S/E prefix
+    # Optional spaces around dash, supports 1-99 for both season and episode
+    (
+        '## - ##',
+        re.compile(r'(?<![0-9])(\d{1,2})\s*-\s*(\d{1,2})(?![a-zA-Z0-9])'),
+        lambda m: (int(m.group(1)), int(m.group(2)))
+    ),
+    
+    # Pattern 26: - # format (assumes Season 1, e.g., "Show - 15.mkv")
     # Hardened: Episodes 1-1899 only, excludes years 1900+, blocks letter suffixes (1080p, x264)
     (
         '- ##',

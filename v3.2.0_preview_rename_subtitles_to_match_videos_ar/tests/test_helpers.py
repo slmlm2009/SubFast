@@ -488,7 +488,7 @@ def generate_pattern_test_files(pattern_id: int, base_path: Optional[Path] = Non
         return None
     
     # Create pattern directory
-    pattern_name_safe = pattern['name'].replace('#', '').replace('/', '-').replace('\\', '-')
+    pattern_name_safe = pattern['name'].replace('#', '').replace('/', '-').replace('\\', '-').replace(' ', '_').strip('_')
     pattern_dir = base_path / f"pattern_{pattern_id:02d}_{pattern_name_safe}"
     pattern_dir.mkdir(parents=True, exist_ok=True)
     
