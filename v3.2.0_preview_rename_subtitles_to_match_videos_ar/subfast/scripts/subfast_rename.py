@@ -206,9 +206,37 @@ def process_subtitles(subtitle_files, video_episodes, temp_video_dict, directory
     for subtitle in sorted(subtitle_files):
         ep = pattern_engine.get_episode_number_cached(subtitle)
         
-        # Standardize episode format to match video files
+        # Pattern 30: FINAL SEASON contextual matching
+        # Check if subtitle has FINAL SEASON keyword and needs season inference
+        target_video = None
         adjusted_episode_string = ep
-        if ep:
+        
+        if pattern_engine.detect_final_season_keyword(subtitle):
+            # Subtitle has FINAL SEASON - try to match with videos using contextual logic
+            for video in sorted(video_files):
+                sub_ep, vid_ep = pattern_engine.match_subtitle_to_video(subtitle, video)
+                if sub_ep and vid_ep:
+                    # Match found via FINAL SEASON inference
+                    adjusted_episode_string = sub_ep
+                    target_video = video
+                    if sub_ep != ep:
+                        print(f"'{subtitle}' -> {ep} adjusted to {sub_ep} (FINAL SEASON inference from '{video}')")
+                    break
+        
+        # Check if any video has FINAL SEASON and might match this subtitle
+        if not target_video:
+            for video in sorted(video_files):
+                if pattern_engine.detect_final_season_keyword(video):
+                    sub_ep, vid_ep = pattern_engine.match_subtitle_to_video(subtitle, video)
+                    if sub_ep and vid_ep:
+                        # Match found via FINAL SEASON inference
+                        adjusted_episode_string = sub_ep
+                        target_video = video
+                        print(f"'{subtitle}' -> {ep} matched with '{video}' (FINAL SEASON inference)")
+                        break
+        
+        # Fallback: Standardize episode format to match video files (existing logic)
+        if not target_video and ep:
             season, episode = pattern_engine.extract_season_episode_numbers(ep)
             if season and episode:
                 key = (int(season), int(episode))
@@ -218,13 +246,13 @@ def process_subtitles(subtitle_files, video_episodes, temp_video_dict, directory
                         print(f"'{subtitle}' -> {ep} adjusted to {video_pattern} (context-aware)")
                     adjusted_episode_string = video_pattern
 
-        # Find corresponding video and rename
-        target_video = None
-        if adjusted_episode_string and adjusted_episode_string in temp_video_dict:
-            target_video = temp_video_dict[adjusted_episode_string]
-        elif ep and ep in temp_video_dict:
-            target_video = temp_video_dict[ep]
-            adjusted_episode_string = ep
+        # Find corresponding video and rename (if not already found via FINAL SEASON)
+        if not target_video:
+            if adjusted_episode_string and adjusted_episode_string in temp_video_dict:
+                target_video = temp_video_dict[adjusted_episode_string]
+            elif ep and ep in temp_video_dict:
+                target_video = temp_video_dict[ep]
+                adjusted_episode_string = ep
 
         if target_video:
             base_name = os.path.splitext(target_video)[0]

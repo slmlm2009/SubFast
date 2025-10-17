@@ -30,7 +30,9 @@ from typing import Dict, List
 from subfast.scripts.common.pattern_engine import (
     get_episode_number_cached,
     clear_episode_cache,
-    get_cache_info
+    get_cache_info,
+    detect_final_season_keyword,
+    match_subtitle_to_video
 )
 
 
@@ -54,8 +56,8 @@ class TestPatternMatching(unittest.TestCase):
         cls.patterns = data.get('patterns', [])
         cls.total_patterns = len(cls.patterns)
         
-        if cls.total_patterns != 25:
-            raise ValueError(f"Expected 25 patterns, found {cls.total_patterns}")
+        if cls.total_patterns != 29:
+            raise ValueError(f"Expected 29 patterns, found {cls.total_patterns}")
     
     def setUp(self):
         """Clear cache before each test for consistent results."""
@@ -614,6 +616,179 @@ class TestEdgeCases(TestPatternMatching):
         # Just season, no episode
         result = get_episode_number_cached("Show.Season.1.mkv")
         self.assertIsNone(result)
+
+
+class TestFinalSeasonDetection(unittest.TestCase):
+    """Test Pattern 29: FINAL SEASON keyword detection (contextual)."""
+    
+    def test_detect_final_season_positive_cases(self):
+        """Test detection of 'FINAL SEASON' keyword in various formats."""
+        # Standard format with space
+        self.assertTrue(detect_final_season_keyword('Boku no Hero Academia FINAL SEASON - 01.ass'))
+        
+        # Dot separators
+        self.assertTrue(detect_final_season_keyword('My.Hero.Academia.FINAL.SEASON.E01.mkv'))
+        
+        # Uppercase
+        self.assertTrue(detect_final_season_keyword('Attack.on.Titan.FINAL SEASON.E01.mkv'))
+        
+        # Lowercase
+        self.assertTrue(detect_final_season_keyword('Attack.on.Titan.final season.E01.mkv'))
+        
+        # Mixed case
+        self.assertTrue(detect_final_season_keyword('Attack.on.Titan.Final Season.E01.mkv'))
+        
+        # Underscore separators
+        self.assertTrue(detect_final_season_keyword('Show_FINAL_SEASON_01.mkv'))
+        
+        # Multiple spaces (should match - allows multiple separators)
+        self.assertTrue(detect_final_season_keyword('Show.FINAL  SEASON.01.mkv'))
+        
+        # Hyphen separator
+        self.assertTrue(detect_final_season_keyword('Show.FINAL-SEASON.E01.mkv'))
+    
+    def test_detect_final_season_negative_cases(self):
+        """Test that partial matches are rejected."""
+        # Just "FINAL" without "SEASON"
+        self.assertFalse(detect_final_season_keyword('Final Episode.mkv'))
+        self.assertFalse(detect_final_season_keyword('The Final.mkv'))
+        
+        # Just "SEASON" without "FINAL"
+        self.assertFalse(detect_final_season_keyword('Season 8 Episode 01.mkv'))
+        self.assertFalse(detect_final_season_keyword('1st Season - 01.mkv'))
+        
+        # Similar but different words
+        self.assertFalse(detect_final_season_keyword('FINALS - 01.mkv'))
+        self.assertFalse(detect_final_season_keyword('SEASONAL - 01.mkv'))
+        
+        # No keyword at all
+        self.assertFalse(detect_final_season_keyword('Attack on Titan S04E01.mkv'))
+        self.assertFalse(detect_final_season_keyword('My Hero Academia S08E01.mkv'))
+    
+    def test_detect_final_season_filename_only(self):
+        """Ensure detection works on filename only (not path)."""
+        # These should be tested with basename in actual usage
+        # The function itself doesn't strip paths, but usage should
+        import os
+        
+        # Full path with FINAL SEASON in filename
+        full_path = '/path/to/Anime.FINAL.SEASON.E01.mkv'
+        filename_only = os.path.basename(full_path)
+        self.assertTrue(detect_final_season_keyword(filename_only))
+        
+        # Full path with FINAL SEASON in path (not filename)
+        full_path = '/FINAL SEASON/Anime.S08E01.mkv'
+        filename_only = os.path.basename(full_path)
+        self.assertFalse(detect_final_season_keyword(filename_only))
+
+
+class TestFinalSeasonMatching(unittest.TestCase):
+    """Test Pattern 29: FINAL SEASON contextual matching logic."""
+    
+    def test_subtitle_final_infer_from_video(self):
+        """Test Case 1: Subtitle has FINAL SEASON, infer season from video."""
+        # My Hero Academia S08 example
+        result = match_subtitle_to_video(
+            '[Heroacainarabic] Boku no Hero Academia FINAL SEASON - 01.ass',
+            'My.Hero.Academia.S08E01.Toshinori.Yagi.Rising-Origin.1080p.mkv'
+        )
+        self.assertEqual(result, ('S08E01', 'S08E01'))
+        
+        # Different season
+        result = match_subtitle_to_video(
+            'Attack on Titan FINAL SEASON - 05.ass',
+            'Attack.on.Titan.S04E05.1080p.mkv'
+        )
+        self.assertEqual(result, ('S04E05', 'S04E05'))
+    
+    def test_video_final_infer_from_subtitle(self):
+        """Test Case 2: Video has FINAL SEASON, infer season from subtitle."""
+        result = match_subtitle_to_video(
+            'Boku no Hero Academia S08E01.ass',
+            'My.Hero.Academia.FINAL.SEASON.E01.mkv'
+        )
+        self.assertEqual(result, ('S08E01', 'S08E01'))
+        
+        # Different episode - using "- 03" pattern
+        result = match_subtitle_to_video(
+            'Attack.on.Titan.S04E03.ass',
+            'Attack.on.Titan.FINAL.SEASON - 03.mkv'
+        )
+        self.assertEqual(result, ('S04E03', 'S04E03'))
+    
+    def test_final_season_episode_mismatch(self):
+        """Test that mismatched episodes return None."""
+        # Subtitle E01 vs Video E02
+        result = match_subtitle_to_video(
+            'FINAL SEASON - 01.ass',
+            'Show.S08E02.mkv'
+        )
+        self.assertEqual(result, (None, None))
+        
+        # Video E01 vs Subtitle E03
+        result = match_subtitle_to_video(
+            'Show.S08E03.ass',
+            'FINAL.SEASON.E01.mkv'
+        )
+        self.assertEqual(result, (None, None))
+    
+    def test_both_have_explicit_seasons(self):
+        """Test edge case: Both files have explicit seasons (no inference)."""
+        # Both S08 - should match normally
+        result = match_subtitle_to_video(
+            'Show.S08E01.ass',
+            'Show.S08E01.mkv'
+        )
+        self.assertEqual(result, ('S08E01', 'S08E01'))
+        
+        # Different seasons - no match
+        result = match_subtitle_to_video(
+            'Show.S07E01.ass',
+            'Show.S08E01.mkv'
+        )
+        self.assertEqual(result, (None, None))
+    
+    def test_both_have_final_season(self):
+        """Test edge case: Both have FINAL SEASON (no inference, both default to S01)."""
+        # Both default to S01, episode matches
+        result = match_subtitle_to_video(
+            'FINAL SEASON - 01.ass',
+            'FINAL.SEASON.E01.mkv'
+        )
+        self.assertEqual(result, ('S01E01', 'S01E01'))
+        
+        # Both S01 but episodes mismatch
+        result = match_subtitle_to_video(
+            'FINAL SEASON - 01.ass',
+            'FINAL.SEASON.E02.mkv'
+        )
+        self.assertEqual(result, (None, None))
+    
+    def test_neither_has_final_season(self):
+        """Test edge case: Neither has FINAL SEASON (normal matching)."""
+        result = match_subtitle_to_video(
+            'Attack.on.Titan.S04E01.ass',
+            'Attack.on.Titan.S04E01.mkv'
+        )
+        self.assertEqual(result, ('S04E01', 'S04E01'))
+    
+    def test_no_pattern_detected(self):
+        """Test that files with no detectable pattern return None."""
+        result = match_subtitle_to_video(
+            'Random.Movie.2023.ass',
+            'Random.Movie.2023.mkv'
+        )
+        self.assertEqual(result, (None, None))
+    
+    def test_subtitle_final_video_also_season_one(self):
+        """Test edge case: Subtitle has FINAL but video is actually S01 (no inference)."""
+        # Subtitle FINAL SEASON defaults to S01, video is also S01
+        result = match_subtitle_to_video(
+            'Show FINAL SEASON - 01.ass',
+            'Show.S01E01.mkv'
+        )
+        # No inference because video season is 1 (same as subtitle default)
+        self.assertEqual(result, ('S01E01', 'S01E01'))
 
 
 if __name__ == '__main__':

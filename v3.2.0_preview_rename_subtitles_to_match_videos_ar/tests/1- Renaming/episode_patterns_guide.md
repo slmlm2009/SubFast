@@ -1,11 +1,12 @@
 # Episode Pattern Recognition - All Supported Formats
 
-This document lists all 29 naming patterns (98 variations) supported by the pattern engine, ordered by priority (first match wins).
+This document lists all 30 naming patterns (98 regex variations + 1 contextual) supported by the pattern engine, ordered by priority (first match wins).
 
 **Recent Updates (2025-01-17):**
 - ✅ Pattern 5a: Fixed to allow space before episode number (`s2 ep 08`)
 - ✅ Pattern 5b: Added for dot separator before EP (`s02.ep13`)
 - ✅ Pattern 22 (19a): Added for `season## e##` format (`season2 e21`)
+- ✅ Pattern 30: Added FINAL SEASON contextual matching (season inference)
 
 ---
 
@@ -436,6 +437,102 @@ This document lists all 29 naming patterns (98 variations) supported by the patt
 - `Show_x264.mkv` ❌ (codec, blocked)
 
 **Warning:** This is the MOST permissive pattern (last in order) but has been hardened to reduce false positives.
+
+---
+
+## Pattern 30: FINAL SEASON (Contextual Matching) - NOT A REGEX PATTERN
+**Type:** Contextual Enhancement (not a traditional regex pattern)
+
+**Description:** Pattern 29 is a **contextual matching enhancement** that enables season inference when the "FINAL SEASON" keyword is detected in filenames. This is NOT a regex pattern that extracts episode numbers - instead, it modifies the matching logic to infer season numbers from paired files.
+
+**How It Works:**
+
+When matching subtitle and video files:
+
+1. **Case 1 - Subtitle has "FINAL SEASON":**
+   - Subtitle filename contains "FINAL SEASON" keyword
+   - Subtitle pattern extraction defaults to Season 1 (no explicit season)
+   - Video filename has explicit season (e.g., S08)
+   - **Result:** Subtitle season is inferred from video season
+
+2. **Case 2 - Video has "FINAL SEASON":**
+   - Video filename contains "FINAL SEASON" keyword
+   - Video pattern extraction defaults to Season 1 (no explicit season)
+   - Subtitle filename has explicit season (e.g., S08)
+   - **Result:** Video season is inferred from subtitle season
+
+**Keyword Detection:**
+- Regex: `r'final[.\s_-]+season'` (case insensitive)
+- Matches "FINAL SEASON", "Final.Season", "final_season", etc.
+- Must be in filename only (not directory path)
+
+**Examples:**
+
+**Example 1 - Subtitle has FINAL SEASON:**
+```
+Files in folder:
+- My.Hero.Academia.S08E01.Toshinori.Yagi.Rising-Origin.1080p.mkv
+- [Heroacainarabic] Boku no Hero Academia FINAL SEASON - 01.ass
+
+Processing:
+1. Video extracts as: S08E01
+2. Subtitle extracts as: S01E01 (defaults to S01)
+3. Subtitle has "FINAL SEASON": True
+4. Inference: Subtitle → S08E01 (infer S08 from video)
+5. Match: S08E01 == S08E01 ✅
+
+Result: Files matched correctly at S08E01
+```
+
+**Example 2 - Video has FINAL SEASON:**
+```
+Files in folder:
+- My.Hero.Academia.FINAL.SEASON.E01.mkv
+- Boku no Hero Academia S08E01.ass
+
+Processing:
+1. Video extracts as: S01E01 (defaults to S01)
+2. Subtitle extracts as: S08E01
+3. Video has "FINAL SEASON": True
+4. Inference: Video → S08E01 (infer S08 from subtitle)
+5. Match: S08E01 == S08E01 ✅
+
+Result: Files matched correctly at S08E01
+```
+
+**Edge Cases:**
+
+**Both have FINAL SEASON:**
+```
+- FINAL SEASON - 01.mkv → S01E01
+- FINAL.SEASON.E01.ass → S01E01
+Result: Both default to S01, matched at S01E01
+(User needs explicit season in one file for correct inference)
+```
+
+**Both have explicit seasons:**
+```
+- Show.S08E01.mkv → S08E01
+- Show.S08E01.ass → S08E01
+Result: Normal matching (no inference needed)
+```
+
+**Neither has FINAL SEASON:**
+```
+- Attack.on.Titan.S04E01.mkv → S04E01
+- Attack.on.Titan.S04E01.ass → S04E01
+Result: Normal matching (no inference applied)
+```
+
+**Important Notes:**
+- Inference only applies when detected season is 1 (the default fallback)
+- Episode numbers must still match for files to pair
+- This is NOT a traditional pattern - it's a matching enhancement
+- Implemented in `match_subtitle_to_video()` function
+- Does not modify the pattern recognition engine itself
+
+**Use Case:**
+This pattern is specifically designed for anime where the final season is released without traditional season numbering in subtitle releases, but the video files have proper season numbers (or vice versa).
 
 ---
 

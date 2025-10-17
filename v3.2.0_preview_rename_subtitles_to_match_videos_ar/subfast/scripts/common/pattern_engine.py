@@ -373,6 +373,94 @@ def extract_season_episode_numbers(episode_string: str) -> Tuple[str, str]:
     return "", ""
 
 
+def detect_final_season_keyword(filename: str) -> bool:
+    """
+    Detect if 'FINAL SEASON' keyword exists in filename (case insensitive).
+    
+    Pattern 29: FINAL SEASON Contextual Matching
+    This is NOT a traditional regex pattern. It's a contextual enhancement that
+    enables season inference when the "FINAL SEASON" keyword is detected in filenames.
+    
+    Args:
+        filename (str): Filename only (not full path). Use os.path.basename() if needed.
+    
+    Returns:
+        bool: True if "FINAL SEASON" keyword found, False otherwise
+        
+    Examples:
+        >>> detect_final_season_keyword('Boku no Hero Academia FINAL SEASON - 01.ass')
+        True
+        >>> detect_final_season_keyword('My.Hero.Academia.FINAL.SEASON.E01.mkv')
+        True
+        >>> detect_final_season_keyword('Attack on Titan S04E01.mkv')
+        False
+        >>> detect_final_season_keyword('Final Episode.mkv')
+        False
+    """
+    # Match "FINAL SEASON" with various separators: space, dot, underscore, hyphen
+    return bool(re.search(r'final[.\s_-]+season', filename, re.IGNORECASE))
+
+
+def match_subtitle_to_video(subtitle_file: str, video_file: str) -> Tuple[Optional[str], Optional[str]]:
+    """
+    Enhanced matching with FINAL SEASON contextual logic.
+    
+    Pattern 29: FINAL SEASON Contextual Matching
+    This function applies season inference when "FINAL SEASON" keyword is detected:
+    - If subtitle has "FINAL SEASON" and defaults to S01, infer season from video
+    - If video has "FINAL SEASON" and defaults to S01, infer season from subtitle
+    - Only applies when detected season is 1 (the default fallback)
+    - Episode numbers must still match for pairing
+    
+    Args:
+        subtitle_file (str): Subtitle filename (not full path)
+        video_file (str): Video filename (not full path)
+    
+    Returns:
+        Tuple of (subtitle_episode, video_episode) as normalized strings (e.g., 'S08E01')
+        Returns (None, None) if no match or episode numbers don't match
+        
+    Examples:
+        >>> match_subtitle_to_video('FINAL SEASON - 01.ass', 'Show.S08E01.mkv')
+        ('S08E01', 'S08E01')
+        >>> match_subtitle_to_video('Show.S08E01.ass', 'FINAL SEASON - 01.mkv')
+        ('S08E01', 'S08E01')
+        >>> match_subtitle_to_video('FINAL SEASON - 01.ass', 'Show.S08E02.mkv')
+        (None, None)
+    """
+    # Extract episode info from both files
+    sub_info = extract_episode_info(subtitle_file)
+    vid_info = extract_episode_info(video_file)
+    
+    # If either extraction failed, no match
+    if not sub_info or not vid_info:
+        return None, None
+    
+    # Check for "FINAL SEASON" keyword
+    sub_has_final = detect_final_season_keyword(subtitle_file)
+    vid_has_final = detect_final_season_keyword(video_file)
+    
+    # Case 1: Subtitle has "FINAL SEASON" but no detected season (defaults to S01)
+    if sub_has_final and sub_info[0] == 1 and vid_info[0] != 1:
+        # Infer subtitle season from video season
+        sub_info = (vid_info[0], sub_info[1])
+    
+    # Case 2: Video has "FINAL SEASON" but no detected season (defaults to S01)
+    elif vid_has_final and vid_info[0] == 1 and sub_info[0] != 1:
+        # Infer video season from subtitle season
+        vid_info = (sub_info[0], vid_info[1])
+    
+    # Now compare normalized episode strings
+    sub_normalized = normalize_episode_number(*sub_info)
+    vid_normalized = normalize_episode_number(*vid_info)
+    
+    # Return matched episode strings if they match, None otherwise
+    if sub_normalized == vid_normalized:
+        return sub_normalized, vid_normalized
+    else:
+        return None, None
+
+
 def clear_episode_cache():
     """Clear the episode number cache."""
     get_episode_number_cached.cache_clear()

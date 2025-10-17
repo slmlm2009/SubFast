@@ -548,21 +548,49 @@ def process_embedding(folder_path, config, mkvmerge_path):
     for subtitle_file in sorted(all_subtitle_files):
         ep = pattern_engine.get_episode_number_cached(subtitle_file.name)
         
-        # Standardize episode format
+        # Pattern 30: FINAL SEASON contextual matching
+        # Check if subtitle has FINAL SEASON keyword and needs season inference
+        target_video_name = None
         adjusted_episode_string = ep
-        if ep:
+        
+        if pattern_engine.detect_final_season_keyword(subtitle_file.name):
+            # Subtitle has FINAL SEASON - try to match with videos using contextual logic
+            for video in sorted(mkv_videos):
+                sub_ep, vid_ep = pattern_engine.match_subtitle_to_video(subtitle_file.name, video.name)
+                if sub_ep and vid_ep:
+                    # Match found via FINAL SEASON inference
+                    adjusted_episode_string = sub_ep
+                    target_video_name = video.name
+                    if sub_ep != ep:
+                        print(f"'{subtitle_file.name}' -> {ep} adjusted to {sub_ep} (FINAL SEASON inference from '{video.name}')")
+                    break
+        
+        # Check if any video has FINAL SEASON and might match this subtitle
+        if not target_video_name:
+            for video in sorted(mkv_videos):
+                if pattern_engine.detect_final_season_keyword(video.name):
+                    sub_ep, vid_ep = pattern_engine.match_subtitle_to_video(subtitle_file.name, video.name)
+                    if sub_ep and vid_ep:
+                        # Match found via FINAL SEASON inference
+                        adjusted_episode_string = sub_ep
+                        target_video_name = video.name
+                        print(f"'{subtitle_file.name}' -> {ep} matched with '{video.name}' (FINAL SEASON inference)")
+                        break
+        
+        # Fallback: Standardize episode format (existing logic)
+        if not target_video_name and ep:
             season, episode = pattern_engine.extract_season_episode_numbers(ep)
             if season and episode:
                 key = (int(season), int(episode))
                 if key in video_episodes:
                     adjusted_episode_string = video_episodes[key]
         
-        # Find matching video
-        target_video_name = None
-        if adjusted_episode_string and adjusted_episode_string in temp_video_dict:
-            target_video_name = temp_video_dict[adjusted_episode_string]
-        elif ep and ep in temp_video_dict:
-            target_video_name = temp_video_dict[ep]
+        # Find matching video (if not already found via FINAL SEASON)
+        if not target_video_name:
+            if adjusted_episode_string and adjusted_episode_string in temp_video_dict:
+                target_video_name = temp_video_dict[adjusted_episode_string]
+            elif ep and ep in temp_video_dict:
+                target_video_name = temp_video_dict[ep]
         
         if target_video_name:
             target_video_path = folder_path / target_video_name

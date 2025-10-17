@@ -1,0 +1,828 @@
+====================================================================================================
+SUBFAST PATTERN INTEGRATION TESTS
+====================================================================================================
+Test Run: 2025-10-17 16:18:31
+
+====================================================================================================
+SUMMARY
+====================================================================================================
+Total Patterns Tested:  28
+Total Variations:       93
+Passed:                 93 (100.0%)
+Failed:                 0 (0.0%)
+====================================================================================================
+
+
+====================================================================================================
+DETAILED TEST RESULTS
+====================================================================================================
+
+====================================================================================================
+Pattern 01: S##E##
+====================================================================================================
+
+  Found 5 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Name.S01E05.720p.mkv                   -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Name.S01E05.720p.ar.srt                -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.S2E10.BluRay.mkv                     -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.S2E10.BluRay.ar.srt                  -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.s03e15.WEB-DL.mkv                   -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.s03e15.WEB-DL.ar.srt                -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR4] Expected: S01E01
+  Video:    [VAR4]-Test.S01E01.mkv                             -> Extracted: S01E01   | [MATCH]
+  Subtitle: [VAR4]-Test.S01E01.ar.srt                          -> Extracted: S01E01   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR5] Expected: S03E02
+  Video:    [VAR5]-Hajimeru Isekai Seikatsu s3 e2.mkv          -> Extracted: S03E02   | [MATCH]
+  Subtitle: [VAR5]-Hajimeru Isekai Seikatsu s3 e2.ar.ass       -> Extracted: S03E02   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR6] Expected: S02E08
+  Video:    [VAR6]-Show.S02 Episode 08.mkv                     -> Extracted: S02E08   | [MATCH]
+  Subtitle: [VAR6]-Show.S02 Episode 08.ar.srt                  -> Extracted: S02E08   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 01 Summary: 6/6 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 02: ##x##
+====================================================================================================
+
+  Found 4 renamed subtitle files
+
+[VAR1] Expected: S02E05
+  Video:    [VAR1]-Show.2x05.mkv                               -> Extracted: S02E05   | [MATCH]
+  Subtitle: [VAR1]-Show.2x05.ar.srt                            -> Extracted: S02E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S01E10
+  Video:    [VAR2]-Series.1x10.720p.mkv                        -> Extracted: S01E10   | [MATCH]
+  Subtitle: [VAR2]-Series.1x10.720p.ar.srt                     -> Extracted: S01E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.3X15.BluRay.mkv                     -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.3X15.BluRay.ar.srt                  -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR4] Expected: S04E01
+  Video:    [VAR4]-Test.Name.4x01.mkv                          -> Extracted: S04E01   | [MATCH]
+  Subtitle: [VAR4]-Test.Name.4x01.ar.srt                       -> Extracted: S04E01   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 02 Summary: 4/4 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 03: S## - ##
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.S01 - 05.mkv                           -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.S01 - 05.ar.srt                        -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.S2 - 10.720p.mkv                     -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.S2 - 10.720p.ar.srt                  -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.s03-15.BluRay.mkv                   -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.s03-15.BluRay.ar.srt                -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 03 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 04: S## - E##
+====================================================================================================
+
+  Found 5 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.S01 - E05.mkv                          -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.S01 - E05.ar.srt                       -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.S2-E10.720p.mkv                      -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.S2-E10.720p.ar.srt                   -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.s03 - e15.BluRay.mkv                -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.s03 - e15.BluRay.ar.srt             -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR4] Expected: S02E12
+  Video:    [VAR4]-Show.S02.E12.mkv                            -> Extracted: S02E12   | [MATCH]
+  Subtitle: [VAR4]-Show.S02.E12.ar.srt                         -> Extracted: S02E12   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR5] Expected: S03E07
+  Video:    [VAR5]-Show.S03_E07.mkv                            -> Extracted: S03E07   | [MATCH]
+  Subtitle: [VAR5]-Show.S03_E07.ar.srt                         -> Extracted: S03E07   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 04 Summary: 5/5 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 05: S## - EP##
+====================================================================================================
+
+  Found 4 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.S01 - EP05.mkv                         -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.S01 - EP05.ar.srt                      -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.S2-EP10.720p.mkv                     -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.S2-EP10.720p.ar.srt                  -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.s03 - ep15.BluRay.mkv               -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.s03 - ep15.BluRay.ar.srt            -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR4] Expected: S01E15
+  Video:    [VAR4]-Show.S01 EP15.mkv                           -> Extracted: S01E15   | [MATCH]
+  Subtitle: [VAR4]-Show.S01 EP15.ar.srt                        -> Extracted: S01E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 05 Summary: 4/4 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 06: 1st Season - ##
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.1st Season - 05.mkv                    -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.1st Season - 05.ar.srt                 -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.2nd Season - 10.720p.mkv             -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.2nd Season - 10.720p.ar.srt          -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.3rd Season - 15.BluRay.mkv          -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.3rd Season - 15.BluRay.ar.srt       -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 06 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 07: 1st Season Episode ##
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.1st Season Episode 05.mkv              -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.1st Season Episode 05.ar.srt           -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.2nd Season Episode 10.720p.mkv       -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.2nd Season Episode 10.720p.ar.srt    -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.3rd Season Episode 15.BluRay.mkv    -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.3rd Season Episode 15.BluRay.ar.srt -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 07 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 08: 1st Season E##
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.1st Season E05.mkv                     -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.1st Season E05.ar.srt                  -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.2nd Season E10.720p.mkv              -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.2nd Season E10.720p.ar.srt           -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.3rd Season E15.BluRay.mkv           -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.3rd Season E15.BluRay.ar.srt        -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 08 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 09: 1st Season EP##
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.1st Season EP05.mkv                    -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.1st Season EP05.ar.srt                 -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.2nd Season EP10.720p.mkv             -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.2nd Season EP10.720p.ar.srt          -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.3rd Season EP15.BluRay.mkv          -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.3rd Season EP15.BluRay.ar.srt       -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 09 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 10: Season ## - ##
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Season 1 - 05.mkv                      -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Season 1 - 05.ar.srt                   -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.Season 2 - 10.720p.mkv               -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.Season 2 - 10.720p.ar.srt            -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.Season 3 - 15.BluRay.mkv            -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.Season 3 - 15.BluRay.ar.srt         -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 10 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 11: Season## - ##
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Season1 - 05.mkv                       -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Season1 - 05.ar.srt                    -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.Season2-10.720p.mkv                  -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.Season2-10.720p.ar.srt               -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.Season3 - 15.BluRay.mkv             -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.Season3 - 15.BluRay.ar.srt          -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 11 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 12: Season.#.Episode.#
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Season.1.Episode.5.mkv                 -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Season.1.Episode.5.ar.srt              -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.Season.2.Episode.10.720p.mkv         -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.Season.2.Episode.10.720p.ar.srt      -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.Season.3.Episode.15.BluRay.mkv      -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.Season.3.Episode.15.BluRay.ar.srt   -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 12 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 13: S#.Ep.#
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.S1.Ep.5.mkv                            -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.S1.Ep.5.ar.srt                         -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.S2.Ep.10.720p.mkv                    -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.S2.Ep.10.720p.ar.srt                 -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.S3.Ep.15.BluRay.mkv                 -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.S3.Ep.15.BluRay.ar.srt              -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 13 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 14: S#Ep#
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.S1Ep5.mkv                              -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.S1Ep5.ar.srt                           -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.S2Ep10.720p.mkv                      -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.S2Ep10.720p.ar.srt                   -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.S3Ep15.BluRay.mkv                   -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.S3Ep15.BluRay.ar.srt                -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 14 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 15: Season # Episode #
+====================================================================================================
+
+  Found 4 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Season 1 Episode 5.mkv                 -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Season 1 Episode 5.ar.srt              -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.Season 2 Episode 10.720p.mkv         -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.Season 2 Episode 10.720p.ar.srt      -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.Season 3 Episode 15.BluRay.mkv      -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.Season 3 Episode 15.BluRay.ar.srt   -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR4] Expected: S02E20
+  Video:    [VAR4]-Show.Season02 Episode 20.mkv                -> Extracted: S02E20   | [MATCH]
+  Subtitle: [VAR4]-Show.Season02 Episode 20.ar.srt             -> Extracted: S02E20   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 15 Summary: 4/4 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 16: Season#Episode#
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Season1Episode5.mkv                    -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Season1Episode5.ar.srt                 -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.Season2Episode10.720p.mkv            -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.Season2Episode10.720p.ar.srt         -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.Season3Episode15.BluRay.mkv         -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.Season3Episode15.BluRay.ar.srt      -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 16 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 17: Season# Episode#
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Season1 Episode5.mkv                   -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Season1 Episode5.ar.srt                -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.Season2 Episode10.720p.mkv           -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.Season2 Episode10.720p.ar.srt        -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.Season3 Episode15.BluRay.mkv        -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.Season3 Episode15.BluRay.ar.srt     -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 17 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 18: Season# Ep#
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Season1 Ep5.mkv                        -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Season1 Ep5.ar.srt                     -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.Season2 Ep10.720p.mkv                -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.Season2 Ep10.720p.ar.srt             -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.Season3 Ep15.BluRay.mkv             -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.Season3 Ep15.BluRay.ar.srt          -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 18 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 19: Season#Ep#
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Season1Ep5.mkv                         -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Season1Ep5.ar.srt                      -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.Season2Ep10.720p.mkv                 -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.Season2Ep10.720p.ar.srt              -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.Season3Ep15.BluRay.mkv              -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.Season3Ep15.BluRay.ar.srt           -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 19 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 20: Season #.Ep #
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Season 1.Ep 5.mkv                      -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Season 1.Ep 5.ar.srt                   -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.Season 2.Ep 10.720p.mkv              -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.Season 2.Ep 10.720p.ar.srt           -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.Season 3.Ep 15.BluRay.mkv           -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.Season 3.Ep 15.BluRay.ar.srt        -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 20 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 21: Season#.Ep#
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Season1.Ep5.mkv                        -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Season1.Ep5.ar.srt                     -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.Season2.Ep10.720p.mkv                -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.Season2.Ep10.720p.ar.srt             -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.Season3.Ep15.BluRay.mkv             -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.Season3.Ep15.BluRay.ar.srt          -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 21 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 23: Season # Ep #
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Season 1 Ep 5.mkv                      -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Season 1 Ep 5.ar.srt                   -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.Season 2 Ep 10.720p.mkv              -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.Season 2 Ep 10.720p.ar.srt           -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.Season 3 Ep 15.BluRay.mkv           -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.Season 3 Ep 15.BluRay.ar.srt        -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 23 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 24: Ep##
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Ep05.mkv                               -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Ep05.ar.srt                            -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S01E10
+  Video:    [VAR2]-Series.Ep10.720p.mkv                        -> Extracted: S01E10   | [MATCH]
+  Subtitle: [VAR2]-Series.Ep10.720p.ar.srt                     -> Extracted: S01E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S01E15
+  Video:    [VAR3]-Example.Ep15.BluRay.mkv                     -> Extracted: S01E15   | [MATCH]
+  Subtitle: [VAR3]-Example.Ep15.BluRay.ar.srt                  -> Extracted: S01E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 24 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 25: E##
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.E05.mkv                                -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.E05.ar.srt                             -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S01E10
+  Video:    [VAR2]-Series.E10.720p.mkv                         -> Extracted: S01E10   | [MATCH]
+  Subtitle: [VAR2]-Series.E10.720p.ar.srt                      -> Extracted: S01E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S01E15
+  Video:    [VAR3]-Example.E15.BluRay.mkv                      -> Extracted: S01E15   | [MATCH]
+  Subtitle: [VAR3]-Example.E15.BluRay.ar.srt                   -> Extracted: S01E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 25 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 26: ## - ##
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S03E04
+  Video:    [VAR1]-[VAR1]-Show 3 - 04.mkv                      -> Extracted: S03E04   | [MATCH]
+  Subtitle: [VAR1]-[VAR1]-Show 3 - 04.ar.srt                   -> Extracted: S03E04   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-[VAR2]-Series 2-10.720p.mkv                 -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-[VAR2]-Series 2-10.720p.ar.srt              -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S01E25
+  Video:    [VAR3]-[VAR3]-Example 1 - 25.BluRay.mkv            -> Extracted: S01E25   | [MATCH]
+  Subtitle: [VAR3]-[VAR3]-Example 1 - 25.BluRay.ar.srt         -> Extracted: S01E25   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 26 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 27: - ##
+====================================================================================================
+
+  Found 4 renamed subtitle files
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show - 05.mkv                               -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show - 05.ar.srt                            -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S01E10
+  Video:    [VAR2]-Series - 10.720p.mkv                        -> Extracted: S01E10   | [MATCH]
+  Subtitle: [VAR2]-Series - 10.720p.ar.srt                     -> Extracted: S01E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S01E15
+  Video:    [VAR3]-Example - 15.BluRay.mkv                     -> Extracted: S01E15   | [MATCH]
+  Subtitle: [VAR3]-Example - 15.BluRay.ar.srt                  -> Extracted: S01E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR4] Expected: S01E20
+  Video:    [VAR4]-Example-1080p - 20.mkv                      -> Extracted: S01E20   | [MATCH]
+  Subtitle: [VAR4]-Example-1080p - 20.ar.srt                   -> Extracted: S01E20   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 27 Summary: 4/4 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 28: [##]
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E07
+  Video:    [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].mkv -> Extracted: S01E07   | [MATCH]
+  Subtitle: [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].ar.srt -> Extracted: S01E07   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S01E12
+  Video:    [VAR2]-Show.Name.[12].720p.mkv                     -> Extracted: S01E12   | [MATCH]
+  Subtitle: [VAR2]-Show.Name.[12].720p.ar.srt                  -> Extracted: S01E12   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S01E05
+  Video:    [VAR3]-Series [5] Episode.mkv                      -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR3]-Series [5] Episode.ar.srt                   -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 28 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
+
+====================================================================================================
+Pattern 29: _##
+====================================================================================================
+
+  Found 3 renamed subtitle files
+
+[VAR1] Expected: S01E09
+  Video:    [VAR1]-[DB]Maoyuu Maou Yuusha_-_09_(10bit_BD1080p_x265).mkv -> Extracted: S01E09   | [MATCH]
+  Subtitle: [VAR1]-[DB]Maoyuu Maou Yuusha_-_09_(10bit_BD1080p_x265).ar.srt -> Extracted: S01E09   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S01E15
+  Video:    [VAR2]-Show_15.mkv                                 -> Extracted: S01E15   | [MATCH]
+  Subtitle: [VAR2]-Show_15.ar.srt                              -> Extracted: S01E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S01E03
+  Video:    [VAR3]-Example_3.720p.mkv                          -> Extracted: S01E03   | [MATCH]
+  Subtitle: [VAR3]-Example_3.720p.ar.srt                       -> Extracted: S01E03   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 29 Summary: 3/3 PASSED (100.0%)
+====================================================================================================
