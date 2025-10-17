@@ -1,0 +1,52 @@
+# ==========================================
+#    ____        _     _____          _   
+#   / ___| _   _| |__ |  ___|_ _  ___| |_ 
+#   \___ \| | | | '_ \| |_ / _` |/ __| __|
+#    ___) | |_| | |_) |  _| (_| |\__ \ |_ 
+#   |____/ \__,_|_.__/|_|  \__,_||___/\__|
+#                                         
+#    Fast subtitle renaming and embedding
+# 
+# ==========================================
+#
+# Subtitle Renaming Report
+# Generated: 2025-10-13 23:58:14
+# Directory: C:\Users\slmlm2009\Desktop\Github\SubFast\v3.1.0_preview_rename_subtitles_to_match_videos_ar\tests\1 - Renaming\5 - Resolution_Test
+# Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass
+#
+# SUMMARY:
+# Total Videos: 5
+# Total Subtitles: 5
+# Renamed: 4/5 subtitles
+# Videos Missing Subtitles: 0
+# Subtitles Missing Videos: 0
+# Videos Without Episode Pattern: 1
+# Subtitles Without Episode Pattern: 1
+# Movie Mode: No
+# Execution Time: 0.01s
+#
++------------------------------------+------------------+----------+------------------------------------+
+| Original Filename                  | Detected Episode | Action   | New Name                           |
++------------------------------------+------------------+----------+------------------------------------+
+| Anime 5x1050.mkv                   | S05E1050         | MATCHED  | No Change                          |
+| Movie.3x12_720x480.mp4             | S03E12           | MATCHED  | No Change                          |
+| PureResolution.1920x1080.mkv       | (UNIDENTIFIED)   | --       | No Change                          |
+| Series_12x103_1280x720_HEVC.mkv    | S12E103          | MATCHED  | No Change                          |
+| ShowName-2x05_1920x1080.mkv        | S02E05           | MATCHED  | No Change                          |
+| OG-Anime 5x1050.srt                | S05E1050         | RENAMED  | Anime 5x1050.ar.srt                |
+| OG-Movie.3x12_720x480.srt          | S03E12           | RENAMED  | Movie.3x12_720x480.ar.srt          |
+| OG-Series_12x103_1280x720_HEVC.ass | S12E103          | RENAMED  | Series_12x103_1280x720_HEVC.ar.ass |
+| OG-ShowName-2x05_1920x1080.srt     | S02E05           | RENAMED  | ShowName-2x05_1920x1080.ar.srt     |
+| PureResolution.srt                 | (UNIDENTIFIED)   | --       | No Change                          |
++------------------------------------+------------------+----------+------------------------------------+
+#
+# MATCHED EPISODES:
+# S02E05 -> Video: ShowName-2x05_1920x1080.mkv | Subtitle: OG-ShowName-2x05_1920x1080.srt -> ShowName-2x05_1920x1080.ar.srt
+# S03E12 -> Video: Movie.3x12_720x480.mp4 | Subtitle: OG-Movie.3x12_720x480.srt -> Movie.3x12_720x480.ar.srt
+# S05E1050 -> Video: Anime 5x1050.mkv | Subtitle: OG-Anime 5x1050.srt -> Anime 5x1050.ar.srt
+# S12E103 -> Video: Series_12x103_1280x720_HEVC.mkv | Subtitle: OG-Series_12x103_1280x720_HEVC.ass -> Series_12x103_1280x720_HEVC.ar.ass
+#
+# FILES WITHOUT EPISODE PATTERN:
+# PureResolution.1920x1080.mkv (no episode pattern detected)
+# PureResolution.srt (no episode pattern detected)
+#

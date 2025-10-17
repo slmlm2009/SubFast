@@ -1,0 +1,43 @@
+# ==========================================
+#    ____        _     _____          _   
+#   / ___| _   _| |__ |  ___|_ _  ___| |_ 
+#   \___ \| | | | '_ \| |_ / _` |/ __| __|
+#    ___) | |_| | |_) |  _| (_| |\__ \ |_ 
+#   |____/ \__,_|_.__/|_|  \__,_||___/\__|
+#                                         
+#    Fast subtitle renaming and embedding
+# 
+# ==========================================
+#
+# Subtitle Renaming Report
+# Generated: 2025-10-13 23:37:34
+# Directory: C:\Users\slmlm2009\Desktop\Github\SubFast\v3.1.0_preview_rename_subtitles_to_match_videos_ar\tests\1 - Renaming\1 - Config_Tests\4 - Test_All_Custom
+# Configuration: language=es, videos=mkv|mp4|avi|webm, subtitles=srt|ass|sub
+#
+# SUMMARY:
+# Total Videos: 3
+# Total Subtitles: 3
+# Renamed: 3/3 subtitles
+# Videos Missing Subtitles: 0
+# Subtitles Missing Videos: 0
+# Videos Without Episode Pattern: 0
+# Subtitles Without Episode Pattern: 0
+# Movie Mode: No
+# Execution Time: 0.00s
+#
++-------------------+------------------+----------+--------------------+
+| Original Filename | Detected Episode | Action   | New Name           |
++-------------------+------------------+----------+--------------------+
+| Show.S01E01.mkv   | S01E01           | MATCHED  | No Change          |
+| Show.S01E02.avi   | S01E02           | MATCHED  | No Change          |
+| Show.S01E03.webm  | S01E03           | MATCHED  | No Change          |
+| Sub-01.srt        | S01E01           | RENAMED  | Show.S01E01.es.srt |
+| Sub-02.sub        | S01E02           | RENAMED  | Show.S01E02.es.sub |
+| Sub-03.ass        | S01E03           | RENAMED  | Show.S01E03.es.ass |
++-------------------+------------------+----------+--------------------+
+#
+# MATCHED EPISODES:
+# S01E01 -> Video: Show.S01E01.mkv | Subtitle: Sub-01.srt -> Show.S01E01.es.srt
+# S01E02 -> Video: Show.S01E02.avi | Subtitle: Sub-02.sub -> Show.S01E02.es.sub
+# S01E03 -> Video: Show.S01E03.webm | Subtitle: Sub-03.ass -> Show.S01E03.es.ass
+#

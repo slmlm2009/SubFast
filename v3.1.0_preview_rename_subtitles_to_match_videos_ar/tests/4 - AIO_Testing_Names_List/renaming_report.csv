@@ -1,0 +1,807 @@
+# ==========================================
+#    ____        _     _____          _   
+#   / ___| _   _| |__ |  ___|_ _  ___| |_ 
+#   \___ \| | | | '_ \| |_ / _` |/ __| __|
+#    ___) | |_| | |_) |  _| (_| |\__ \ |_ 
+#   |____/ \__,_|_.__/|_|  \__,_||___/\__|
+#                                         
+#    Fast subtitle renaming and embedding
+# 
+# ==========================================
+#
+# Subtitle Renaming Report
+# Generated: 2025-10-16 20:59:29
+# Directory: C:\Users\slmlm2009\Desktop\Github\SubFast\v3.1.0_preview_rename_subtitles_to_match_videos_ar\tests\4 - AIO_Testing_Names_List
+# Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass
+#
+# SUMMARY:
+# Total Videos: 247
+# Total Subtitles: 247
+# Renamed: 113/247 subtitles
+# Videos Missing Subtitles: 115
+# Subtitles Missing Videos: 49
+# Videos Without Episode Pattern: 0
+# Subtitles Without Episode Pattern: 0
+# Movie Mode: No
+# Execution Time: 0.11s
+#
++----------------------------------------------------------------------------------+------------------+----------+---------------------------------------------------------------------------+
+| Original Filename                                                                | Detected Episode | Action   | New Name                                                                  |
++----------------------------------------------------------------------------------+------------------+----------+---------------------------------------------------------------------------+
+| AnoHana.S02.E29.[Group].mkv                                                      | S01E29           | NO MATCH | No Change                                                                 |
+| AnoHana.S03.E29.[Group].mkv                                                      | S01E29           | NO MATCH | No Change                                                                 |
+| AnoHana.S04.E29.[Group].mkv                                                      | S01E29           | NO MATCH | No Change                                                                 |
+| AnoHana.S05.E29.[Group].mkv                                                      | S01E29           | NO MATCH | No Change                                                                 |
+| AnoHana.S06.E29.[Group].mkv                                                      | S01E29           | NO MATCH | No Change                                                                 |
+| Attack_on_Titan_s02-04_[BD][2160p][HEVC].mkv                                     | S02E04           | MATCHED  | No Change                                                                 |
+| Attack_on_Titan_s03-04_[BD][1080p].mkv                                           | S03E04           | MATCHED  | No Change                                                                 |
+| Attack_on_Titan_s04-04_[BD][1080p].mkv                                           | S04E04           | MATCHED  | No Change                                                                 |
+| Attack_on_Titan_s05-04_[BD][1080p].mkv                                           | S05E04           | MATCHED  | No Change                                                                 |
+| Attack_on_Titan_s06-04_[BD][1080p].mkv                                           | S06E04           | MATCHED  | No Change                                                                 |
+| Black.Clover.s03e15.1080p.mkv                                                    | S03E15           | NO MATCH | No Change                                                                 |
+| Black.Clover.s04e15.1080p.mkv                                                    | S04E15           | NO MATCH | No Change                                                                 |
+| Black.Clover.s05e15.1080p.mkv                                                    | S05E15           | NO MATCH | No Change                                                                 |
+| Black.Clover.s06e15.1080p.mkv                                                    | S06E15           | NO MATCH | No Change                                                                 |
+| Clannad_S02 - 26 [1080p].mkv                                                     | S02E26           | NO MATCH | No Change                                                                 |
+| Clannad_S03 - 26 [1080p].mkv                                                     | S03E26           | NO MATCH | No Change                                                                 |
+| Clannad_S04 - 26 [1080p].mkv                                                     | S04E26           | NO MATCH | No Change                                                                 |
+| Clannad_S05 - 26 [1080p].mkv                                                     | S05E26           | NO MATCH | No Change                                                                 |
+| Clannad_S06 - 26 [1080p].mkv                                                     | S06E26           | NO MATCH | No Change                                                                 |
+| Cowboy.Bebop.S02-E06.720p.BluRay.x264-GROUP.mkv                                  | S02E06           | NO MATCH | No Change                                                                 |
+| Cowboy.Bebop.S03-E06.1080p-GROUP.mkv                                             | S03E06           | NO MATCH | No Change                                                                 |
+| Cowboy.Bebop.S04-E06.1080p.mkv                                                   | S04E06           | NO MATCH | No Change                                                                 |
+| Cowboy.Bebop.S05-E06.1080p.mkv                                                   | S05E06           | NO MATCH | No Change                                                                 |
+| Cowboy.Bebop.S06-E06.1080p.mkv                                                   | S06E06           | NO MATCH | No Change                                                                 |
+| Detective.Conan.s02E19.HEVC.mkv                                                  | S02E19           | NO MATCH | No Change                                                                 |
+| Detective.Conan.s03E19.1080p.mkv                                                 | S03E19           | NO MATCH | No Change                                                                 |
+| Detective.Conan.s04E19.1080p.mkv                                                 | S04E19           | NO MATCH | No Change                                                                 |
+| Detective.Conan.s05E19.1080p.mkv                                                 | S05E19           | NO MATCH | No Change                                                                 |
+| Detective.Conan.s06E19.1080p.mkv                                                 | S06E19           | NO MATCH | No Change                                                                 |
+| Dragon.Ball.S02 - ep18 - (1080p).mkv                                             | S02E18           | NO MATCH | No Change                                                                 |
+| Dragon.Ball.S03 - ep18 (BDRip).mkv                                               | S03E18           | NO MATCH | No Change                                                                 |
+| Dragon.Ball.S04 - ep18 (BDRip).mkv                                               | S04E18           | NO MATCH | No Change                                                                 |
+| Dragon.Ball.S05 - ep18 (BDRip).mkv                                               | S05E18           | NO MATCH | No Change                                                                 |
+| Dragon.Ball.S06 - ep18 (BDRip).mkv                                               | S06E18           | NO MATCH | No Change                                                                 |
+| Erased.S02.E34.1080p.BluRay.mkv                                                  | S01E34           | MATCHED  | No Change                                                                 |
+| Erased.S03.E34.1080p.BluRay.mkv                                                  | S01E34           | MATCHED  | No Change                                                                 |
+| Erased.S04.E34.1080p.BluRay.mkv                                                  | S01E34           | MATCHED  | No Change                                                                 |
+| Erased.S05.E34.1080p.BluRay.mkv                                                  | S01E34           | MATCHED  | No Change                                                                 |
+| Erased.S06.E34.1080p.BluRay.mkv                                                  | S01E34           | MATCHED  | No Change                                                                 |
+| Fullmetal.Alchemist.S02 - 05 - Brotherhood (BDRip 1080p).mkv                     | S02E05           | MATCHED  | No Change                                                                 |
+| Fullmetal.Alchemist.S03 - 05 (BDRip).mkv                                         | S03E05           | MATCHED  | No Change                                                                 |
+| Fullmetal.Alchemist.S04 - 05 (BDRip).mkv                                         | S04E05           | MATCHED  | No Change                                                                 |
+| Fullmetal.Alchemist.S05 - 05 (BDRip).mkv                                         | S05E05           | MATCHED  | No Change                                                                 |
+| Fullmetal.Alchemist.S06 - 05 (BDRip).mkv                                         | S06E05           | MATCHED  | No Change                                                                 |
+| Gintama.S02. - 21 - [BD 1080p].mkv                                               | S01E21           | MATCHED  | No Change                                                                 |
+| Gintama.S03-21.[BD].mkv                                                          | S03E21           | NO MATCH | No Change                                                                 |
+| Gintama.S04-21.[BD].mkv                                                          | S04E21           | NO MATCH | No Change                                                                 |
+| Gintama.S05-21.[BD].mkv                                                          | S05E21           | NO MATCH | No Change                                                                 |
+| Gintama.S06-21.[BD].mkv                                                          | S06E21           | NO MATCH | No Change                                                                 |
+| Haikyuu!! S02- E10 [1080p][FLAC].mkv                                             | S02E10           | NO MATCH | No Change                                                                 |
+| Haikyuu!!.S03-10.[BD].mkv                                                        | S03E10           | NO MATCH | No Change                                                                 |
+| Haikyuu!!.S04-10.[BD].mkv                                                        | S04E10           | NO MATCH | No Change                                                                 |
+| Haikyuu!!.S05-10.[BD].mkv                                                        | S05E10           | NO MATCH | No Change                                                                 |
+| Haikyuu!!.S06-10.[BD].mkv                                                        | S06E10           | NO MATCH | No Change                                                                 |
+| K-On! S02 - 28 (BluRay).mkv                                                      | S02E28           | NO MATCH | No Change                                                                 |
+| K-On! S03 - 28 (BluRay).mkv                                                      | S03E28           | NO MATCH | No Change                                                                 |
+| K-On! S04 - 28 (BluRay).mkv                                                      | S04E28           | NO MATCH | No Change                                                                 |
+| K-On! S05 - 28 (BluRay).mkv                                                      | S05E28           | NO MATCH | No Change                                                                 |
+| K-On! S06 - 28 (BluRay).mkv                                                      | S06E28           | NO MATCH | No Change                                                                 |
+| Kaguya-sama.S02 - 35 (BD).mkv                                                    | S02E35           | MATCHED  | No Change                                                                 |
+| Kaguya-sama.S03 - 35 (BD).mkv                                                    | S03E35           | MATCHED  | No Change                                                                 |
+| Kaguya-sama.S04 - 35 (BD).mkv                                                    | S04E35           | MATCHED  | No Change                                                                 |
+| Kaguya-sama.S05 - 35 (BD).mkv                                                    | S05E35           | MATCHED  | No Change                                                                 |
+| Kaguya-sama.S06 - 35 (BD).mkv                                                    | S06E35           | MATCHED  | No Change                                                                 |
+| Made_in_Abyss.S02 - 41 (BD 2160p).mkv                                            | S02E41           | MATCHED  | No Change                                                                 |
+| Made_in_Abyss.S03 - 41 (BD 2160p).mkv                                            | S03E41           | MATCHED  | No Change                                                                 |
+| Made_in_Abyss.S04 - 41 (BD 2160p).mkv                                            | S04E41           | MATCHED  | No Change                                                                 |
+| Made_in_Abyss.S05 - 41 (BD 2160p).mkv                                            | S05E41           | MATCHED  | No Change                                                                 |
+| Made_in_Abyss.S06 - 41 (BD 2160p).mkv                                            | S06E41           | MATCHED  | No Change                                                                 |
+| Mob.Psycho.100.S02.E11.2160p.BluRay.mkv                                          | S01E11           | MATCHED  | No Change                                                                 |
+| Mob.Psycho.100.S03.E11.1080p.mkv                                                 | S01E11           | MATCHED  | No Change                                                                 |
+| Mob.Psycho.100.S04.E11.1080p.mkv                                                 | S01E11           | MATCHED  | No Change                                                                 |
+| Mob.Psycho.100.S05.E11.1080p.mkv                                                 | S01E11           | MATCHED  | No Change                                                                 |
+| Mob.Psycho.100.S06.E11.1080p.mkv                                                 | S01E11           | MATCHED  | No Change                                                                 |
+| Monogatari.Series.S02.E47.1080p.mkv                                              | S01E47           | MATCHED  | No Change                                                                 |
+| Monogatari.Series.S03.E47.1080p.mkv                                              | S01E47           | MATCHED  | No Change                                                                 |
+| Monogatari.Series.S04.E47.1080p.mkv                                              | S01E47           | MATCHED  | No Change                                                                 |
+| Monogatari.Series.S05.E47.1080p.mkv                                              | S01E47           | MATCHED  | No Change                                                                 |
+| Monogatari.Series.S06.E47.1080p.mkv                                              | S01E47           | MATCHED  | No Change                                                                 |
+| NARUTO.S02-E16.[480p].mkv                                                        | S02E16           | NO MATCH | No Change                                                                 |
+| NARUTO.S03-E16.[720p].mkv                                                        | S03E16           | MATCHED  | No Change                                                                 |
+| NARUTO.S04-E16.[720p].mkv                                                        | S04E16           | MATCHED  | No Change                                                                 |
+| NARUTO.S05-E16.[720p].mkv                                                        | S05E16           | MATCHED  | No Change                                                                 |
+| NARUTO.S06-E16.[720p].mkv                                                        | S06E16           | MATCHED  | No Change                                                                 |
+| Neon.Genesis.Evangelion.S02_E08_1080p_GROUP.mkv                                  | S01E08           | MATCHED  | No Change                                                                 |
+| Neon.Genesis.S03_E08_720p_GROUP.mkv                                              | S01E08           | MATCHED  | No Change                                                                 |
+| Neon.Genesis.S04_E08_GROUP.mkv                                                   | S01E08           | MATCHED  | No Change                                                                 |
+| Neon.Genesis.S05_E08_GROUP.mkv                                                   | S01E08           | MATCHED  | No Change                                                                 |
+| Neon.Genesis.S06_E08_GROUP.mkv                                                   | S01E08           | MATCHED  | No Change                                                                 |
+| Nichijou.S02 - 43 (1080p).mkv                                                    | S02E43           | NO MATCH | No Change                                                                 |
+| Nichijou.S03 - 43 (1080p).mkv                                                    | S03E43           | NO MATCH | No Change                                                                 |
+| Nichijou.S04 - 43 (1080p).mkv                                                    | S04E43           | NO MATCH | No Change                                                                 |
+| Nichijou.S05 - 43 (1080p).mkv                                                    | S05E43           | NO MATCH | No Change                                                                 |
+| Nichijou.S06 - 43 (1080p).mkv                                                    | S06E43           | NO MATCH | No Change                                                                 |
+| OnePiece.S02E02.1080p.BluRay.x264-Group.mkv                                      | S02E02           | MATCHED  | No Change                                                                 |
+| OnePiece.S03E02.2160p.BluRay-GROUP.mkv                                           | S03E02           | MATCHED  | No Change                                                                 |
+| OnePiece.S04E02.1080p.BluRay-GROUP.mkv                                           | S04E02           | MATCHED  | No Change                                                                 |
+| OnePiece.S05E02.1080p.BluRay-GROUP.mkv                                           | S05E02           | MATCHED  | No Change                                                                 |
+| OnePiece.S06E02.1080p.BluRay-GROUP.mkv                                           | S06E02           | MATCHED  | No Change                                                                 |
+| Parasyte.S02 - 45 (BDRip).mkv                                                    | S02E45           | NO MATCH | No Change                                                                 |
+| Parasyte.S03 - 45 (BDRip).mkv                                                    | S03E45           | NO MATCH | No Change                                                                 |
+| Parasyte.S04 - 45 (BDRip).mkv                                                    | S04E45           | NO MATCH | No Change                                                                 |
+| Parasyte.S05 - 45 (BDRip).mkv                                                    | S05E45           | NO MATCH | No Change                                                                 |
+| Parasyte.S06 - 45 (BDRip).mkv                                                    | S06E45           | NO MATCH | No Change                                                                 |
+| Ping Pong S04 - 23 (WEBRip).mkv                                                  | S04E23           | MATCHED  | No Change                                                                 |
+| Ping Pong S05 - 23 (WEBRip).mkv                                                  | S05E23           | MATCHED  | No Change                                                                 |
+| Ping Pong S06 - 23 (WEBRip).mkv                                                  | S06E23           | MATCHED  | No Change                                                                 |
+| Ping Pong The Animation S02 - 23 (WEBRip).mkv                                    | S02E23           | MATCHED  | No Change                                                                 |
+| Ping Pong The Animation S03 - 23 (WEBRip).mkv                                    | S03E23           | MATCHED  | No Change                                                                 |
+| ReLIFE.S02.E49.[BD].mkv                                                          | S01E49           | MATCHED  | No Change                                                                 |
+| ReLIFE.S03.E49.[BD].mkv                                                          | S01E49           | MATCHED  | No Change                                                                 |
+| Shingeki no Kyojin S02-31 (BDRip).mkv                                            | S02E31           | NO MATCH | No Change                                                                 |
+| Shingeki_no_Kyojin_S03-31 (BDRip).mkv                                            | S03E31           | NO MATCH | No Change                                                                 |
+| Shingeki_no_Kyojin_S04-31 (BDRip).mkv                                            | S04E31           | NO MATCH | No Change                                                                 |
+| Shingeki_no_Kyojin_S05-31 (BDRip).mkv                                            | S05E31           | NO MATCH | No Change                                                                 |
+| Shingeki_no_Kyojin_S06-31 (BDRip).mkv                                            | S06E31           | NO MATCH | No Change                                                                 |
+| Spirited_Away.S02-39.[WEB].mkv                                                   | S02E39           | NO MATCH | No Change                                                                 |
+| Spirited_Away.S03-39.[WEB].mkv                                                   | S03E39           | NO MATCH | No Change                                                                 |
+| Spirited_Away.S04-39.[WEB].mkv                                                   | S04E39           | NO MATCH | No Change                                                                 |
+| Spirited_Away.S05-39.[WEB].mkv                                                   | S05E39           | NO MATCH | No Change                                                                 |
+| Spirited_Away.S06-39.[WEB].mkv                                                   | S06E39           | NO MATCH | No Change                                                                 |
+| Steins;Gate.S02E25.[BDRip].mkv                                                   | S02E25           | NO MATCH | No Change                                                                 |
+| Steins;Gate.S03E25.[BDRip].mkv                                                   | S03E25           | NO MATCH | No Change                                                                 |
+| Steins;Gate.S04E25.[BDRip].mkv                                                   | S04E25           | NO MATCH | No Change                                                                 |
+| Steins;Gate.S05E25.[BDRip].mkv                                                   | S05E25           | NO MATCH | No Change                                                                 |
+| Steins;Gate.S06E25.[BDRip].mkv                                                   | S06E25           | NO MATCH | No Change                                                                 |
+| Sword.Art.Online.S03.E13.1080p.mkv                                               | S01E13           | MATCHED  | No Change                                                                 |
+| Sword.Art.Online.S04.E13.1080p.mkv                                               | S01E13           | MATCHED  | No Change                                                                 |
+| Sword.Art.Online.S05.E13.1080p.mkv                                               | S01E13           | MATCHED  | No Change                                                                 |
+| Sword.Art.Online.S06.E13.1080p.mkv                                               | S01E13           | MATCHED  | No Change                                                                 |
+| Sword_Art_Online_S02.E13.1080p.mkv                                               | S01E13           | MATCHED  | No Change                                                                 |
+| Your Lie in April s02 - 37 (1080p).mkv                                           | S02E37           | MATCHED  | No Change                                                                 |
+| Your.Lie.in.April.S03 - 37 (1080p).mkv                                           | S03E37           | NO MATCH | No Change                                                                 |
+| Your.Lie.in.April.S04 - 37 (1080p).mkv                                           | S04E37           | NO MATCH | No Change                                                                 |
+| Your.Lie.in.April.S05 - 37 (1080p).mkv                                           | S05E37           | NO MATCH | No Change                                                                 |
+| Your.Lie.in.April.S06 - 37 (1080p).mkv                                           | S06E37           | NO MATCH | No Change                                                                 |
+| [AMZN] The.Expanse.S02 - 14 (WEB-DL).mkv                                         | S02E14           | MATCHED  | No Change                                                                 |
+| [AMZN] The.Expanse.S03 - 14 (WEB-DL).mkv                                         | S03E14           | MATCHED  | No Change                                                                 |
+| [AMZN] The.Expanse.S04 - 14 (WEB-DL).mkv                                         | S04E14           | MATCHED  | No Change                                                                 |
+| [AMZN] The.Expanse.S05 - 14 (WEB-DL).mkv                                         | S05E14           | MATCHED  | No Change                                                                 |
+| [AMZN] The.Expanse.S06 - 14 (WEB-DL).mkv                                         | S06E14           | MATCHED  | No Change                                                                 |
+| [BLANK] Black.Clover.s02e15.720p.mkv                                             | S02E15           | NO MATCH | No Change                                                                 |
+| [Erai-raws] Demon.Slayer.S02-07.1080p.mkv                                        | S02E07           | MATCHED  | No Change                                                                 |
+| [Erai-raws] Demon.Slayer.S03-07.1080p.mkv                                        | S03E07           | MATCHED  | No Change                                                                 |
+| [Erai-raws] Demon.Slayer.S04-07.1080p.mkv                                        | S04E07           | MATCHED  | No Change                                                                 |
+| [Erai-raws] Demon.Slayer.S05-07.1080p.mkv                                        | S05E07           | MATCHED  | No Change                                                                 |
+| [Erai-raws] Demon.Slayer.S06-07.1080p.mkv                                        | S06E07           | MATCHED  | No Change                                                                 |
+| [FansubGroup] Fairy.Tail.S02 - EP17 [BD].mkv                                     | S02E17           | MATCHED  | No Change                                                                 |
+| [FansubGroup] Fairy.Tail.S03 - EP17 (BD).mkv                                     | S03E17           | NO MATCH | No Change                                                                 |
+| [FansubGroup] Fairy.Tail.S04 - EP17 (BD).mkv                                     | S04E17           | NO MATCH | No Change                                                                 |
+| [FansubGroup] Fairy.Tail.S05 - EP17 (BD).mkv                                     | S05E17           | NO MATCH | No Change                                                                 |
+| [FansubGroup] Fairy.Tail.S06 - EP17 (BD).mkv                                     | S06E17           | NO MATCH | No Change                                                                 |
+| [FansubTeam] Gurren.Lagann.S02E42.mkv                                            | S02E42           | NO MATCH | No Change                                                                 |
+| [FansubTeam] Gurren.Lagann.S03E42.mkv                                            | S03E42           | NO MATCH | No Change                                                                 |
+| [FansubTeam] Gurren.Lagann.S04E42.mkv                                            | S04E42           | NO MATCH | No Change                                                                 |
+| [FansubTeam] Gurren.Lagann.S05E42.mkv                                            | S05E42           | NO MATCH | No Change                                                                 |
+| [FansubTeam] Gurren.Lagann.S06E42.mkv                                            | S06E42           | NO MATCH | No Change                                                                 |
+| [Fansub] FLCL 2x46 [1080p].mkv                                                   | S02E46           | MATCHED  | No Change                                                                 |
+| [Fansub] FLCL 3x46 [1080p].mkv                                                   | S03E46           | MATCHED  | No Change                                                                 |
+| [Fansub] FLCL 4x46 [1080p].mkv                                                   | S04E46           | MATCHED  | No Change                                                                 |
+| [Fansub] FLCL 5x46 [1080p].mkv                                                   | S05E46           | MATCHED  | No Change                                                                 |
+| [Fansub] FLCL 6x46 [1080p].mkv                                                   | S06E46           | MATCHED  | No Change                                                                 |
+| [Fansub] Psycho-Pass S02.E27 (BD).mkv                                            | S01E27           | MATCHED  | No Change                                                                 |
+| [Fansub] Psycho-Pass S03.E27 (BD).mkv                                            | S01E27           | MATCHED  | No Change                                                                 |
+| [Fansub] Psycho-Pass S04.E27 (BD).mkv                                            | S01E27           | MATCHED  | No Change                                                                 |
+| [Fansub] Psycho-Pass S05.E27 (BD).mkv                                            | S01E27           | MATCHED  | No Change                                                                 |
+| [Fansub] Psycho-Pass S06.E27 (BD).mkv                                            | S01E27           | MATCHED  | No Change                                                                 |
+| [Fansub] Re.Zero.S03E01.1080p.mkv                                                | S03E01           | MATCHED  | No Change                                                                 |
+| [GroupTag] Kimi.no.Na.wa S02.E12 (BD 1080p).mkv                                  | S01E12           | NO MATCH | No Change                                                                 |
+| [GroupTag] Kimi.no.Na.wa S03.E12 (BD).mkv                                        | S01E12           | NO MATCH | No Change                                                                 |
+| [GroupTag] Kimi.no.Na.wa S04.E12 (BD).mkv                                        | S01E12           | NO MATCH | No Change                                                                 |
+| [GroupTag] Kimi.no.Na.wa S05.E12 (BD).mkv                                        | S01E12           | NO MATCH | No Change                                                                 |
+| [GroupTag] Kimi.no.Na.wa S06.E12 (BD).mkv                                        | S01E12           | NO MATCH | No Change                                                                 |
+| [GroupX] Barakamon.S02E38.BDRip.mkv                                              | S02E38           | NO MATCH | No Change                                                                 |
+| [GroupX] Barakamon.S03E38.BDRip.mkv                                              | S03E38           | NO MATCH | No Change                                                                 |
+| [GroupX] Barakamon.S04E38.BDRip.mkv                                              | S04E38           | NO MATCH | No Change                                                                 |
+| [GroupX] Barakamon.S05E38.BDRip.mkv                                              | S05E38           | NO MATCH | No Change                                                                 |
+| [GroupX] Barakamon.S06E38.BDRip.mkv                                              | S06E38           | NO MATCH | No Change                                                                 |
+| [Group] Soul.Eater.S02.E44.720p.mkv                                              | S01E44           | MATCHED  | No Change                                                                 |
+| [Group] Soul.Eater.S03.E44.720p.mkv                                              | S01E44           | MATCHED  | No Change                                                                 |
+| [Group] Soul.Eater.S04.E44.720p.mkv                                              | S01E44           | MATCHED  | No Change                                                                 |
+| [Group] Soul.Eater.S05.E44.720p.mkv                                              | S01E44           | MATCHED  | No Change                                                                 |
+| [Group] Soul.Eater.S06.E44.720p.mkv                                              | S01E44           | MATCHED  | No Change                                                                 |
+| [Group] Violet.Evergarden.S02 - 33 (720p).mkv                                    | S02E33           | NO MATCH | No Change                                                                 |
+| [Group] Violet.Evergarden.S03 - 33 (720p).mkv                                    | S03E33           | NO MATCH | No Change                                                                 |
+| [Group] Violet.Evergarden.S04 - 33 (720p).mkv                                    | S04E33           | NO MATCH | No Change                                                                 |
+| [Group] Violet.Evergarden.S05 - 33 (720p).mkv                                    | S05E33           | NO MATCH | No Change                                                                 |
+| [Group] Violet.Evergarden.S06 - 33 (720p).mkv                                    | S06E33           | NO MATCH | No Change                                                                 |
+| [HorribleSubs] My Hero Academia 2x03 [1080p].mkv                                 | S02E03           | MATCHED  | No Change                                                                 |
+| [HorribleSubs] My.Hero.Academia 3x03 [1080p].mkv                                 | S03E03           | MATCHED  | No Change                                                                 |
+| [HorribleSubs] My.Hero.Academia 4x03 [1080p].mkv                                 | S04E03           | MATCHED  | No Change                                                                 |
+| [HorribleSubs] My.Hero.Academia 5x03 [1080p].mkv                                 | S05E03           | MATCHED  | No Change                                                                 |
+| [HorribleSubs] My.Hero.Academia 6x03 [1080p].mkv                                 | S06E03           | MATCHED  | No Change                                                                 |
+| [Moozzi2] Re.Zero.Kara.Hajimeru.Isekai.Seikatsu.S02E01.[BD-1080p][x265][10bit].m | S02E01           | NO MATCH | No Change                                                                 |
+| [Moozzi2] Re.Zero.S04E01.[BD-1080p][x265].mkv                                    | S04E01           | NO MATCH | No Change                                                                 |
+| [Moozzi2] Re.Zero.S05E01.[BD-1080p][x265].mkv                                    | S05E01           | NO MATCH | No Change                                                                 |
+| [Moozzi2] Re.Zero.S06E01.[BD-1080p][x265].mkv                                    | S06E01           | NO MATCH | No Change                                                                 |
+| [Otaku] Bakemonogatari.S02E22.1080p.mkv                                          | S02E22           | NO MATCH | No Change                                                                 |
+| [Otaku] Bakemonogatari.S03E22.[Group].mkv                                        | S03E22           | MATCHED  | No Change                                                                 |
+| [Otaku] Bakemonogatari.S04E22.[Group].mkv                                        | S04E22           | MATCHED  | No Change                                                                 |
+| [Otaku] Bakemonogatari.S05E22.[Group].mkv                                        | S05E22           | MATCHED  | No Change                                                                 |
+| [Otaku] Bakemonogatari.S06E22.[Group].mkv                                        | S06E22           | MATCHED  | No Change                                                                 |
+| [RawSite] Golden.Kamuy.S02.E50.1080p.mkv                                         | S01E50           | MATCHED  | No Change                                                                 |
+| [RawSite] Golden.Kamuy.S03.E50.1080p.mkv                                         | S01E50           | MATCHED  | No Change                                                                 |
+| [RawSite] Golden.Kamuy.S04.E49.1080p.mkv                                         | S01E49           | MATCHED  | No Change                                                                 |
+| [RawSite] Golden.Kamuy.S05.E49.1080p.mkv                                         | S01E49           | MATCHED  | No Change                                                                 |
+| [RawSite] Golden.Kamuy.S06.E49.1080p.mkv                                         | S01E49           | MATCHED  | No Change                                                                 |
+| [Raw] Kaguya.Sama.S02.E40.1080p.mkv                                              | S01E40           | MATCHED  | No Change                                                                 |
+| [Raw] Kaguya.Sama.S03.E40.1080p.mkv                                              | S01E40           | MATCHED  | No Change                                                                 |
+| [Raw] Kaguya.Sama.S04.E40.1080p.mkv                                              | S01E40           | MATCHED  | No Change                                                                 |
+| [Raw] Kaguya.Sama.S05.E40.1080p.mkv                                              | S01E40           | MATCHED  | No Change                                                                 |
+| [Raw] Kaguya.Sama.S06.E40.1080p.mkv                                              | S01E40           | MATCHED  | No Change                                                                 |
+| [Raws] Made in Abyss S02.E32 1080p.mkv                                           | S01E32           | MATCHED  | No Change                                                                 |
+| [Raws] Made in Abyss S03.E32 [1080p].mkv                                         | S01E32           | MATCHED  | No Change                                                                 |
+| [Raws] Made in Abyss S04.E32 [1080p].mkv                                         | S01E32           | MATCHED  | No Change                                                                 |
+| [Raws] Made in Abyss S05.E32 [1080p].mkv                                         | S01E32           | MATCHED  | No Change                                                                 |
+| [Raws] Made in Abyss S06.E32 [1080p].mkv                                         | S01E32           | MATCHED  | No Change                                                                 |
+| [ReleaseGroup] Durarara!! S02-48.mkv                                             | S02E48           | NO MATCH | No Change                                                                 |
+| [ReleaseGroup] Durarara!! S03-48.mkv                                             | S03E48           | NO MATCH | No Change                                                                 |
+| [ReleaseGroup] Durarara!! S04-48.mkv                                             | S04E48           | NO MATCH | No Change                                                                 |
+| [ReleaseGroup] Durarara!! S05-48.mkv                                             | S05E48           | NO MATCH | No Change                                                                 |
+| [ReleaseGroup] Durarara!! S06-48.mkv                                             | S06E48           | NO MATCH | No Change                                                                 |
+| [Release] Ghost_in_the_Shell S02 - 20 (2160p).mkv                                | S02E20           | MATCHED  | No Change                                                                 |
+| [Release] Ghost_in_the_Shell S03 - 20 (2160p).mkv                                | S03E20           | MATCHED  | No Change                                                                 |
+| [Release] Ghost_in_the_Shell S04 - 20 (2160p).mkv                                | S04E20           | MATCHED  | No Change                                                                 |
+| [Release] Ghost_in_the_Shell S05 - 20 (2160p).mkv                                | S05E20           | MATCHED  | No Change                                                                 |
+| [Release] Ghost_in_the_Shell S06 - 20 (2160p).mkv                                | S06E20           | MATCHED  | No Change                                                                 |
+| [SubGroup] Toradora! S02 - 24 720p.mkv                                           | S02E24           | NO MATCH | No Change                                                                 |
+| [SubGroup] Toradora! S03 - 24 720p.mkv                                           | S03E24           | NO MATCH | No Change                                                                 |
+| [SubGroup] Toradora! S04 - 24 720p.mkv                                           | S04E24           | NO MATCH | No Change                                                                 |
+| [SubGroup] Toradora! S05 - 24 720p.mkv                                           | S05E24           | NO MATCH | No Change                                                                 |
+| [SubGroup] Toradora! S06 - 24 720p.mkv                                           | S06E24           | NO MATCH | No Change                                                                 |
+| [Subbers] Higurashi.S02 - 30 [1080p].mkv                                         | S02E30           | NO MATCH | No Change                                                                 |
+| [Subbers] Higurashi.S03 - 30 [1080p].mkv                                         | S03E30           | NO MATCH | No Change                                                                 |
+| [Subbers] Higurashi.S04 - 30 [1080p].mkv                                         | S04E30           | NO MATCH | No Change                                                                 |
+| [Subbers] Higurashi.S05 - 30 [1080p].mkv                                         | S05E30           | NO MATCH | No Change                                                                 |
+| [Subbers] Higurashi.S06 - 30 [1080p].mkv                                         | S06E30           | NO MATCH | No Change                                                                 |
+| [SubsPlease] Jujutsu Kaisen S02 - 09 (720p).mkv                                  | S02E09           | MATCHED  | No Change                                                                 |
+| [SubsPlease] Jujutsu.Kaisen S04 - 09 (720p).mkv                                  | S04E09           | MATCHED  | No Change                                                                 |
+| [SubsPlease] Jujutsu.Kaisen S05 - 09 (720p).mkv                                  | S05E09           | MATCHED  | No Change                                                                 |
+| [SubsPlease] Jujutsu.Kaisen S06 - 09 (720p).mkv                                  | S06E09           | MATCHED  | No Change                                                                 |
+| [SubsPlease] Jujutsu.Kaisen.S03 - 09 (720p).mkv                                  | S03E09           | MATCHED  | No Change                                                                 |
+| [Subs] March.Comes.in.Like.a.Lion.S02E36.mkv                                     | S02E36           | NO MATCH | No Change                                                                 |
+| [Subs] March.Comes.in.Like.a.Lion.S03E36.mkv                                     | S03E36           | NO MATCH | No Change                                                                 |
+| [Subs] March.Comes.in.Like.a.Lion.S04E36.mkv                                     | S04E36           | NO MATCH | No Change                                                                 |
+| [Subs] March.Comes.in.Like.a.Lion.S05E36.mkv                                     | S05E36           | NO MATCH | No Change                                                                 |
+| [Subs] March.Comes.in.Like.a.Lion.S06E36.mkv                                     | S06E36           | NO MATCH | No Change                                                                 |
+| Anohana S03Ep29.srt                                                              | S03E29           | NO MATCH | No Change                                                                 |
+| Anohana S04Ep29.srt                                                              | S04E29           | NO MATCH | No Change                                                                 |
+| Anohana S05Ep29.srt                                                              | S05E29           | NO MATCH | No Change                                                                 |
+| Anohana S06Ep29.srt                                                              | S06E29           | NO MATCH | No Change                                                                 |
+| Anohana season02 ep29.srt                                                        | S02E29           | NO MATCH | No Change                                                                 |
+| Attack on Titan S02 - 04 (eng).srt                                               | S02E04           | RENAMED  | Attack_on_Titan_s02-04_[BD][2160p][HEVC].ar.srt                           |
+| Attack on Titan S03 - 04.srt                                                     | S03E04           | RENAMED  | Attack_on_Titan_s03-04_[BD][1080p].ar.srt                                 |
+| Attack on Titan S04 - 04.srt                                                     | S04E04           | RENAMED  | Attack_on_Titan_s04-04_[BD][1080p].ar.srt                                 |
+| Attack on Titan S05 - 04.srt                                                     | S05E04           | RENAMED  | Attack_on_Titan_s05-04_[BD][1080p].ar.srt                                 |
+| Attack on Titan S06 - 04.srt                                                     | S06E04           | RENAMED  | Attack_on_Titan_s06-04_[BD][1080p].ar.srt                                 |
+| Bakemonogatari s02 e22 (eng).srt                                                 | S01E22           | NO MATCH | No Change                                                                 |
+| Bakemonogatari season 3 episode 22.srt                                           | S03E22           | RENAMED  | [Otaku] Bakemonogatari.S03E22.[Group].ar.srt                              |
+| Bakemonogatari season 4 episode 22.srt                                           | S04E22           | RENAMED  | [Otaku] Bakemonogatari.S04E22.[Group].ar.srt                              |
+| Bakemonogatari season 5 episode 22.srt                                           | S05E22           | RENAMED  | [Otaku] Bakemonogatari.S05E22.[Group].ar.srt                              |
+| Bakemonogatari season 6 episode 22.srt                                           | S06E22           | RENAMED  | [Otaku] Bakemonogatari.S06E22.[Group].ar.srt                              |
+| Barakamon s02.ep38.srt                                                           | S01E38           | NO MATCH | No Change                                                                 |
+| Barakamon s03 ep38.srt                                                           | S01E38           | NO MATCH | No Change                                                                 |
+| Barakamon s04 ep38.srt                                                           | S01E38           | NO MATCH | No Change                                                                 |
+| Barakamon s05 ep38.srt                                                           | S01E38           | NO MATCH | No Change                                                                 |
+| Barakamon s06 ep38.srt                                                           | S01E38           | NO MATCH | No Change                                                                 |
+| Black Clover S02 E15 (subs).srt                                                  | S01E15           | NO MATCH | No Change                                                                 |
+| Black Clover S03 Ep15.srt                                                        | S01E15           | NO MATCH | No Change                                                                 |
+| Black Clover S04 Ep15.srt                                                        | S01E15           | NO MATCH | No Change                                                                 |
+| Black Clover S05 Ep15.srt                                                        | S01E15           | NO MATCH | No Change                                                                 |
+| Black Clover S06 Ep15.srt                                                        | S01E15           | NO MATCH | No Change                                                                 |
+| Clannad s02 episode 26.srt                                                       | S01E26           | NO MATCH | No Change                                                                 |
+| Clannad season3 episode 26.srt                                                   | S01E26           | NO MATCH | No Change                                                                 |
+| Clannad season4 episode 26.srt                                                   | S01E26           | NO MATCH | No Change                                                                 |
+| Clannad season5 episode 26.srt                                                   | S01E26           | NO MATCH | No Change                                                                 |
+| Clannad season6 episode 26.srt                                                   | S01E26           | NO MATCH | No Change                                                                 |
+| Cowboy Bebop s02 ep 06 subs.srt                                                  | S01E06           | NO MATCH | No Change                                                                 |
+| Cowboy Bebop s03 e06.srt                                                         | S01E06           | NO MATCH | No Change                                                                 |
+| Cowboy Bebop s04 e06.srt                                                         | S01E06           | NO MATCH | No Change                                                                 |
+| Cowboy Bebop s05 e06.srt                                                         | S01E06           | NO MATCH | No Change                                                                 |
+| Cowboy Bebop s06 e06.srt                                                         | S01E06           | NO MATCH | No Change                                                                 |
+| Demon.Slayer - S02EP07 [softsubs].srt                                            | S02E07           | RENAMED  | [Erai-raws] Demon.Slayer.S02-07.1080p.ar.srt                              |
+| Demon.Slayer.S03Ep07.srt                                                         | S03E07           | RENAMED  | [Erai-raws] Demon.Slayer.S03-07.1080p.ar.srt                              |
+| Demon.Slayer.S04Ep07.srt                                                         | S04E07           | RENAMED  | [Erai-raws] Demon.Slayer.S04-07.1080p.ar.srt                              |
+| Demon.Slayer.S05Ep07.srt                                                         | S05E07           | RENAMED  | [Erai-raws] Demon.Slayer.S05-07.1080p.ar.srt                              |
+| Demon.Slayer.S06Ep07.srt                                                         | S06E07           | RENAMED  | [Erai-raws] Demon.Slayer.S06-07.1080p.ar.srt                              |
+| Detective Conan s2 e19 subtitle.srt                                              | S01E19           | NO MATCH | No Change                                                                 |
+| Detective Conan s3 e19.srt                                                       | S01E19           | NO MATCH | No Change                                                                 |
+| Detective Conan s4 e19.srt                                                       | S01E19           | NO MATCH | No Change                                                                 |
+| Detective Conan s5 e19.srt                                                       | S01E19           | NO MATCH | No Change                                                                 |
+| Detective Conan s6 e19.srt                                                       | S01E19           | NO MATCH | No Change                                                                 |
+| Dragon Ball S03 E18.srt                                                          | S01E18           | NO MATCH | No Change                                                                 |
+| Dragon Ball S04 E18.srt                                                          | S01E18           | NO MATCH | No Change                                                                 |
+| Dragon Ball S05 E18.srt                                                          | S01E18           | NO MATCH | No Change                                                                 |
+| Dragon Ball S06 E18.srt                                                          | S01E18           | NO MATCH | No Change                                                                 |
+| Dragon Ball s02 e18.srt                                                          | S01E18           | NO MATCH | No Change                                                                 |
+| Durarara!! S02 Ep48.srt                                                          | S01E48           | NO MATCH | No Change                                                                 |
+| Durarara!! S03 Ep48.srt                                                          | S01E48           | NO MATCH | No Change                                                                 |
+| Durarara!! S04 Ep48.srt                                                          | S01E48           | NO MATCH | No Change                                                                 |
+| Durarara!! S05 Ep48.srt                                                          | S01E48           | NO MATCH | No Change                                                                 |
+| Durarara!! S06 Ep48.srt                                                          | S01E48           | NO MATCH | No Change                                                                 |
+| Erased S02 Ep34 subtitle.srt                                                     | S01E34           | RENAMED  | Erased.S02.E34.1080p.BluRay.ar.srt                                        |
+| Erased season3 ep34.srt                                                          | S03E34           | NO MATCH | No Change                                                                 |
+| Erased season4 ep34.srt                                                          | S04E34           | NO MATCH | No Change                                                                 |
+| Erased season5 ep34.srt                                                          | S05E34           | NO MATCH | No Change                                                                 |
+| Erased season6 ep34.srt                                                          | S06E34           | NO MATCH | No Change                                                                 |
+| FLCL 2x46 (subs).srt                                                             | S02E46           | RENAMED  | [Fansub] FLCL 2x46 [1080p].ar.srt                                         |
+| FLCL 3x46 (subs).srt                                                             | S03E46           | RENAMED  | [Fansub] FLCL 3x46 [1080p].ar.srt                                         |
+| FLCL 4x46 (subs).srt                                                             | S04E46           | RENAMED  | [Fansub] FLCL 4x46 [1080p].ar.srt                                         |
+| FLCL 5x46 (subs).srt                                                             | S05E46           | RENAMED  | [Fansub] FLCL 5x46 [1080p].ar.srt                                         |
+| FLCL 6x46 (subs).srt                                                             | S06E46           | RENAMED  | [Fansub] FLCL 6x46 [1080p].ar.srt                                         |
+| Fairy.Tail season 2 episode 17.srt                                               | S02E17           | RENAMED  | [FansubGroup] Fairy.Tail.S02 - EP17 [BD].ar.srt                           |
+| Fairy.Tail.s03.ep17.srt                                                          | S01E17           | NO MATCH | No Change                                                                 |
+| Fairy.Tail.s04.ep17.srt                                                          | S01E17           | NO MATCH | No Change                                                                 |
+| Fairy.Tail.s05.ep17.srt                                                          | S01E17           | NO MATCH | No Change                                                                 |
+| Fairy.Tail.s06.ep17.srt                                                          | S01E17           | NO MATCH | No Change                                                                 |
+| Fullmetal.Alchemist.S02-E05.eng.srt                                              | S02E05           | RENAMED  | Fullmetal.Alchemist.S02 - 05 - Brotherhood (BDRip 1080p).ar.srt           |
+| Fullmetal.Alchemist.S03E05.srt                                                   | S03E05           | RENAMED  | Fullmetal.Alchemist.S03 - 05 (BDRip).ar.srt                               |
+| Fullmetal.Alchemist.S04E05.srt                                                   | S04E05           | RENAMED  | Fullmetal.Alchemist.S04 - 05 (BDRip).ar.srt                               |
+| Fullmetal.Alchemist.S05E05.srt                                                   | S05E05           | RENAMED  | Fullmetal.Alchemist.S05 - 05 (BDRip).ar.srt                               |
+| Fullmetal.Alchemist.S06E05.srt                                                   | S06E05           | RENAMED  | Fullmetal.Alchemist.S06 - 05 (BDRip).ar.srt                               |
+| Ghost in the Shell S02Ep20.srt                                                   | S02E20           | RENAMED  | [Release] Ghost_in_the_Shell S02 - 20 (2160p).ar.srt                      |
+| Ghost in the Shell S03Ep20.srt                                                   | S03E20           | RENAMED  | [Release] Ghost_in_the_Shell S03 - 20 (2160p).ar.srt                      |
+| Ghost in the Shell S04Ep20.srt                                                   | S04E20           | RENAMED  | [Release] Ghost_in_the_Shell S04 - 20 (2160p).ar.srt                      |
+| Ghost in the Shell S05Ep20.srt                                                   | S05E20           | RENAMED  | [Release] Ghost_in_the_Shell S05 - 20 (2160p).ar.srt                      |
+| Ghost in the Shell S06Ep20.srt                                                   | S06E20           | RENAMED  | [Release] Ghost_in_the_Shell S06 - 20 (2160p).ar.srt                      |
+| Gintama s03 e21.srt                                                              | S01E21           | RENAMED  | Gintama.S02. - 21 - [BD 1080p].ar.srt                                     |
+| Gintama s04 e21.srt                                                              | S01E21           | RENAMED  | Gintama.S02. - 21 - [BD 1080p].ar_Gintama s04 e21.srt                     |
+| Gintama s05 e21.srt                                                              | S01E21           | RENAMED  | Gintama.S02. - 21 - [BD 1080p].ar_Gintama s05 e21.srt                     |
+| Gintama s06 e21.srt                                                              | S01E21           | RENAMED  | Gintama.S02. - 21 - [BD 1080p].ar_Gintama s06 e21.srt                     |
+| Gintama season2 e21.srt                                                          | S01E21           | RENAMED  | Gintama.S02. - 21 - [BD 1080p].ar_Gintama season2 e21.srt                 |
+| Golden Kamuy - s03 episode 50.srt                                                | S01E50           | RENAMED  | [RawSite] Golden.Kamuy.S02.E50.1080p.ar.srt                               |
+| Golden Kamuy - s04 episode 49.srt                                                | S01E49           | RENAMED  | ReLIFE.S02.E49.[BD].ar.srt                                                |
+| Golden Kamuy - s05 episode 49.srt                                                | S01E49           | RENAMED  | ReLIFE.S02.E49.[BD].ar_Golden Kamuy - s05 episode 49.srt                  |
+| Golden Kamuy - s06 episode 49.srt                                                | S01E49           | RENAMED  | ReLIFE.S02.E49.[BD].ar_Golden Kamuy - s06 episode 49.srt                  |
+| Golden.Kamuy - s02 episode 50.srt                                                | S01E50           | RENAMED  | [RawSite] Golden.Kamuy.S02.E50.1080p.ar_Golden.Kamuy - s02 episode 50.srt |
+| Gurren Lagann S03 Ep42.srt                                                       | S01E42           | NO MATCH | No Change                                                                 |
+| Gurren Lagann S04 Ep42.srt                                                       | S01E42           | NO MATCH | No Change                                                                 |
+| Gurren Lagann S05 Ep42.srt                                                       | S01E42           | NO MATCH | No Change                                                                 |
+| Gurren Lagann S06 Ep42.srt                                                       | S01E42           | NO MATCH | No Change                                                                 |
+| Gurren Lagann s02 e42 subs.srt                                                   | S01E42           | NO MATCH | No Change                                                                 |
+| Haikyuu!! s02 e10 - fansub.srt                                                   | S01E10           | NO MATCH | No Change                                                                 |
+| Haikyuu!! s03 e10 subtitle.srt                                                   | S01E10           | NO MATCH | No Change                                                                 |
+| Haikyuu!! s04 e10 subtitle.srt                                                   | S01E10           | NO MATCH | No Change                                                                 |
+| Haikyuu!! s05 e10 subtitle.srt                                                   | S01E10           | NO MATCH | No Change                                                                 |
+| Haikyuu!! s06 e10 subtitle.srt                                                   | S01E10           | NO MATCH | No Change                                                                 |
+| Higurashi s03 e30.srt                                                            | S01E30           | NO MATCH | No Change                                                                 |
+| Higurashi s04 e30.srt                                                            | S01E30           | NO MATCH | No Change                                                                 |
+| Higurashi s05 e30.srt                                                            | S01E30           | NO MATCH | No Change                                                                 |
+| Higurashi s06 e30.srt                                                            | S01E30           | NO MATCH | No Change                                                                 |
+| Higurashi.s02.ep30.srt                                                           | S01E30           | NO MATCH | No Change                                                                 |
+| Jujutsu_Kaisen_S02Ep09_[sub].srt                                                 | S02E09           | RENAMED  | [SubsPlease] Jujutsu Kaisen S02 - 09 (720p).ar.srt                        |
+| Jujutsu_Kaisen_S03Ep09_[sub].srt                                                 | S03E09           | RENAMED  | [SubsPlease] Jujutsu.Kaisen.S03 - 09 (720p).ar.srt                        |
+| Jujutsu_Kaisen_S04Ep09_[sub].srt                                                 | S04E09           | RENAMED  | [SubsPlease] Jujutsu.Kaisen S04 - 09 (720p).ar.srt                        |
+| Jujutsu_Kaisen_S05Ep09_[sub].srt                                                 | S05E09           | RENAMED  | [SubsPlease] Jujutsu.Kaisen S05 - 09 (720p).ar.srt                        |
+| Jujutsu_Kaisen_S06Ep09_[sub].srt                                                 | S06E09           | RENAMED  | [SubsPlease] Jujutsu.Kaisen S06 - 09 (720p).ar.srt                        |
+| K-On! s02 e28 subtitle.srt                                                       | S01E28           | NO MATCH | No Change                                                                 |
+| K-On! s03 e28 subtitle.srt                                                       | S01E28           | NO MATCH | No Change                                                                 |
+| K-On! s04 e28 subtitle.srt                                                       | S01E28           | NO MATCH | No Change                                                                 |
+| K-On! s05 e28 subtitle.srt                                                       | S01E28           | NO MATCH | No Change                                                                 |
+| K-On! s06 e28 subtitle.srt                                                       | S01E28           | NO MATCH | No Change                                                                 |
+| Kaguya-sama s02ep35.srt                                                          | S02E35           | RENAMED  | Kaguya-sama.S02 - 35 (BD).ar.srt                                          |
+| Kaguya-sama s03ep35.srt                                                          | S03E35           | RENAMED  | Kaguya-sama.S03 - 35 (BD).ar.srt                                          |
+| Kaguya-sama s04ep35.srt                                                          | S04E35           | RENAMED  | Kaguya-sama.S04 - 35 (BD).ar.srt                                          |
+| Kaguya-sama s05ep35.srt                                                          | S05E35           | RENAMED  | Kaguya-sama.S05 - 35 (BD).ar.srt                                          |
+| Kaguya-sama s06ep35.srt                                                          | S06E35           | RENAMED  | Kaguya-sama.S06 - 35 (BD).ar.srt                                          |
+| Kaguya.Sama s03 ep40 sub.srt                                                     | S01E40           | RENAMED  | [Raw] Kaguya.Sama.S02.E40.1080p.ar.srt                                    |
+| Kaguya.Sama s04 ep40 sub.srt                                                     | S01E40           | RENAMED  | [Raw] Kaguya.Sama.S02.E40.1080p.ar_Kaguya.Sama s04 ep40.srt               |
+| Kaguya.Sama s05 ep40 sub.srt                                                     | S01E40           | RENAMED  | [Raw] Kaguya.Sama.S02.E40.1080p.ar_Kaguya.Sama s05 ep40.srt               |
+| Kaguya.Sama s06 ep40 sub.srt                                                     | S01E40           | RENAMED  | [Raw] Kaguya.Sama.S02.E40.1080p.ar_Kaguya.Sama s06 ep40.srt               |
+| Kaguya.Sama.s2.ep40.sub.srt                                                      | S01E40           | RENAMED  | [Raw] Kaguya.Sama.S02.E40.1080p.ar_Kaguya.Sama.s2.ep40.srt                |
+| Kimi no Na wa - s02-ep12.srt                                                     | S02E12           | NO MATCH | No Change                                                                 |
+| Kimi no na wa s04-ep12.srt                                                       | S04E12           | NO MATCH | No Change                                                                 |
+| Kimi no na wa s05-ep12.srt                                                       | S05E12           | NO MATCH | No Change                                                                 |
+| Kimi no na wa s06-ep12.srt                                                       | S06E12           | NO MATCH | No Change                                                                 |
+| Kimi.no.na.wa s03-ep12.srt                                                       | S03E12           | NO MATCH | No Change                                                                 |
+| Made in Abyss season 2 episode 41.srt                                            | S02E41           | RENAMED  | Made_in_Abyss.S02 - 41 (BD 2160p).ar.srt                                  |
+| Made in Abyss season 3 episode 41.srt                                            | S03E41           | RENAMED  | Made_in_Abyss.S03 - 41 (BD 2160p).ar.srt                                  |
+| Made in Abyss season 4 episode 41.srt                                            | S04E41           | RENAMED  | Made_in_Abyss.S04 - 41 (BD 2160p).ar.srt                                  |
+| Made in Abyss season 5 episode 41.srt                                            | S05E41           | RENAMED  | Made_in_Abyss.S05 - 41 (BD 2160p).ar.srt                                  |
+| Made in Abyss season 6 episode 41.srt                                            | S06E41           | RENAMED  | Made_in_Abyss.S06 - 41 (BD 2160p).ar.srt                                  |
+| Made.In.Abyss s02 ep 32.srt                                                      | S01E32           | RENAMED  | [Raws] Made in Abyss S02.E32 1080p.ar.srt                                 |
+| Made.In.Abyss_S03_E32.srt                                                        | S01E32           | RENAMED  | [Raws] Made in Abyss S02.E32 1080p.ar_Made.In.Abyss_S03_E32.srt           |
+| Made.In.Abyss_S04_E32.srt                                                        | S01E32           | RENAMED  | [Raws] Made in Abyss S02.E32 1080p.ar_Made.In.Abyss_S04_E32.srt           |
+| Made.In.Abyss_S05_E32.srt                                                        | S01E32           | RENAMED  | [Raws] Made in Abyss S02.E32 1080p.ar_Made.In.Abyss_S05_E32.srt           |
+| Made.In.Abyss_S06_E32.srt                                                        | S01E32           | RENAMED  | [Raws] Made in Abyss S02.E32 1080p.ar_Made.In.Abyss_S06_E32.srt           |
+| March Comes in Like a Lion S03 E36.srt                                           | S01E36           | NO MATCH | No Change                                                                 |
+| March Comes in Like a Lion S04 E36.srt                                           | S01E36           | NO MATCH | No Change                                                                 |
+| March Comes in Like a Lion S05 E36.srt                                           | S01E36           | NO MATCH | No Change                                                                 |
+| March Comes in Like a Lion S06 E36.srt                                           | S01E36           | NO MATCH | No Change                                                                 |
+| March Comes in Like a Lion S2 E36.srt                                            | S01E36           | NO MATCH | No Change                                                                 |
+| Mob Psycho 100 S02 Ep11.srt                                                      | S01E11           | RENAMED  | Mob.Psycho.100.S02.E11.2160p.BluRay.ar.srt                                |
+| Mob Psycho 100 Season 3 Episode 11.srt                                           | S03E11           | NO MATCH | No Change                                                                 |
+| Mob Psycho 100 Season 4 Episode 11.srt                                           | S04E11           | NO MATCH | No Change                                                                 |
+| Mob Psycho 100 Season 5 Episode 11.srt                                           | S05E11           | NO MATCH | No Change                                                                 |
+| Mob Psycho 100 Season 6 Episode 11.srt                                           | S06E11           | NO MATCH | No Change                                                                 |
+| Monogatari series s02 ep47.srt                                                   | S01E47           | RENAMED  | Monogatari.Series.S02.E47.1080p.ar.srt                                    |
+| Monogatari series s03 ep47.srt                                                   | S01E47           | RENAMED  | Monogatari.Series.S02.E47.1080p.ar_Monogatari series s03 ep47.srt         |
+| Monogatari series s04 ep47.srt                                                   | S01E47           | RENAMED  | Monogatari.Series.S02.E47.1080p.ar_Monogatari series s04 ep47.srt         |
+| Monogatari series s05 ep47.srt                                                   | S01E47           | RENAMED  | Monogatari.Series.S02.E47.1080p.ar_Monogatari series s05 ep47.srt         |
+| Monogatari series s06 ep47.srt                                                   | S01E47           | RENAMED  | Monogatari.Series.S02.E47.1080p.ar_Monogatari series s06 ep47.srt         |
+| My.Hero.Academia.2X03.[Group].srt                                                | S02E03           | RENAMED  | [HorribleSubs] My Hero Academia 2x03 [1080p].ar.srt                       |
+| My.Hero.Academia.3X03.[sub].srt                                                  | S03E03           | RENAMED  | [HorribleSubs] My.Hero.Academia 3x03 [1080p].ar.srt                       |
+| My.Hero.Academia.4X03.[sub].srt                                                  | S04E03           | RENAMED  | [HorribleSubs] My.Hero.Academia 4x03 [1080p].ar.srt                       |
+| My.Hero.Academia.5X03.[sub].srt                                                  | S05E03           | RENAMED  | [HorribleSubs] My.Hero.Academia 5x03 [1080p].ar.srt                       |
+| My.Hero.Academia.6X03.[sub].srt                                                  | S06E03           | RENAMED  | [HorribleSubs] My.Hero.Academia 6x03 [1080p].ar.srt                       |
+| Naruto s02 ep 16 subs.srt                                                        | S01E16           | NO MATCH | No Change                                                                 |
+| Naruto s03 - e16.srt                                                             | S03E16           | RENAMED  | NARUTO.S03-E16.[720p].ar.srt                                              |
+| Naruto s04 - e16.srt                                                             | S04E16           | RENAMED  | NARUTO.S04-E16.[720p].ar.srt                                              |
+| Naruto s05 - e16.srt                                                             | S05E16           | RENAMED  | NARUTO.S05-E16.[720p].ar.srt                                              |
+| Naruto s06 - e16.srt                                                             | S06E16           | RENAMED  | NARUTO.S06-E16.[720p].ar.srt                                              |
+| Neon.Genesis.Evangelion s2 ep 08 ENG.srt                                         | S01E08           | RENAMED  | Neon.Genesis.Evangelion.S02_E08_1080p_GROUP.ar.srt                        |
+| Neon.Genesis.Evangelion.S3Ep08.srt                                               | S03E08           | NO MATCH | No Change                                                                 |
+| Neon.Genesis.Evangelion.S4Ep08.srt                                               | S04E08           | NO MATCH | No Change                                                                 |
+| Neon.Genesis.Evangelion.S5Ep08.srt                                               | S05E08           | NO MATCH | No Change                                                                 |
+| Neon.Genesis.Evangelion.S6Ep08.srt                                               | S06E08           | NO MATCH | No Change                                                                 |
+| Nichijou s03 e43.srt                                                             | S01E43           | NO MATCH | No Change                                                                 |
+| Nichijou s04 e43.srt                                                             | S01E43           | NO MATCH | No Change                                                                 |
+| Nichijou s05 e43.srt                                                             | S01E43           | NO MATCH | No Change                                                                 |
+| Nichijou s06 e43.srt                                                             | S01E43           | NO MATCH | No Change                                                                 |
+| Nichijou s2 e43.srt                                                              | S01E43           | NO MATCH | No Change                                                                 |
+| One Piece s3 - ep02.srt                                                          | S03E02           | RENAMED  | OnePiece.S03E02.2160p.BluRay-GROUP.ar.srt                                 |
+| One Piece s4 - ep02.srt                                                          | S04E02           | RENAMED  | OnePiece.S04E02.1080p.BluRay-GROUP.ar.srt                                 |
+| One Piece s5 - ep02.srt                                                          | S05E02           | RENAMED  | OnePiece.S05E02.1080p.BluRay-GROUP.ar.srt                                 |
+| One Piece s6 - ep02.srt                                                          | S06E02           | RENAMED  | OnePiece.S06E02.1080p.BluRay-GROUP.ar.srt                                 |
+| Parasyte s02.e45.srt                                                             | S01E45           | NO MATCH | No Change                                                                 |
+| Parasyte s03.e45.srt                                                             | S01E45           | NO MATCH | No Change                                                                 |
+| Parasyte s04.e45.srt                                                             | S01E45           | NO MATCH | No Change                                                                 |
+| Parasyte s05.e45.srt                                                             | S01E45           | NO MATCH | No Change                                                                 |
+| Parasyte s06.e45.srt                                                             | S01E45           | NO MATCH | No Change                                                                 |
+| Ping.Pong.S02Ep23.sub.srt                                                        | S02E23           | RENAMED  | Ping Pong The Animation S02 - 23 (WEBRip).ar.srt                          |
+| Ping.Pong.S03Ep23.srt                                                            | S03E23           | RENAMED  | Ping Pong The Animation S03 - 23 (WEBRip).ar.srt                          |
+| Ping.Pong.S04Ep23.srt                                                            | S04E23           | RENAMED  | Ping Pong S04 - 23 (WEBRip).ar.srt                                        |
+| Ping.Pong.S05Ep23.srt                                                            | S05E23           | RENAMED  | Ping Pong S05 - 23 (WEBRip).ar.srt                                        |
+| Ping.Pong.S06Ep23.srt                                                            | S06E23           | RENAMED  | Ping Pong S06 - 23 (WEBRip).ar.srt                                        |
+| Psycho-Pass Season 2 Episode 27.srt                                              | S02E27           | NO MATCH | No Change                                                                 |
+| Psycho-Pass s03 ep27.srt                                                         | S01E27           | RENAMED  | [Fansub] Psycho-Pass S02.E27 (BD).ar.srt                                  |
+| Psycho-Pass s04 ep27.srt                                                         | S01E27           | RENAMED  | [Fansub] Psycho-Pass S02.E27 (BD).ar_Psycho-Pass s04 ep27.srt             |
+| Psycho-Pass s05 ep27.srt                                                         | S01E27           | RENAMED  | [Fansub] Psycho-Pass S02.E27 (BD).ar_Psycho-Pass s05 ep27.srt             |
+| Psycho-Pass s06 ep27.srt                                                         | S01E27           | RENAMED  | [Fansub] Psycho-Pass S02.E27 (BD).ar_Psycho-Pass s06 ep27.srt             |
+| Re.Zero - Season 3 - 01 - [subs].srt                                             | S03E01           | RENAMED  | [Fansub] Re.Zero.S03E01.1080p.ar.srt                                      |
+| Re.Zero - s02.e01 - [FansubGroup] (1080p).srt                                    | S01E01           | NO MATCH | No Change                                                                 |
+| Re.Zero - s04.e01 - [Fansub] (1080p).srt                                         | S01E01           | NO MATCH | No Change                                                                 |
+| Re.Zero - s05.e01 - [Fansub] (1080p).srt                                         | S01E01           | NO MATCH | No Change                                                                 |
+| Re.Zero - s06.e01 - [Fansub] (1080p).srt                                         | S01E01           | NO MATCH | No Change                                                                 |
+| ReLIFE s02-49 subtitle.srt                                                       | S02E49           | NO MATCH | No Change                                                                 |
+| ReLIFE s03-49 subtitle.srt                                                       | S03E49           | NO MATCH | No Change                                                                 |
+| Shingeki_no_Kyojin s03 ep31.srt                                                  | S01E31           | NO MATCH | No Change                                                                 |
+| Shingeki_no_Kyojin s04 ep31.srt                                                  | S01E31           | NO MATCH | No Change                                                                 |
+| Shingeki_no_Kyojin s05 ep31.srt                                                  | S01E31           | NO MATCH | No Change                                                                 |
+| Shingeki_no_Kyojin s06 ep31.srt                                                  | S01E31           | NO MATCH | No Change                                                                 |
+| Shingeki_no_Kyojin_s02_ep31.srt                                                  | S01E31           | NO MATCH | No Change                                                                 |
+| Soul.Eater S02 Ep44.srt                                                          | S01E44           | RENAMED  | [Group] Soul.Eater.S02.E44.720p.ar.srt                                    |
+| Soul.Eater S03 Ep44.srt                                                          | S01E44           | RENAMED  | [Group] Soul.Eater.S02.E44.720p.ar_Soul.Eater S03 Ep44.srt                |
+| Soul.Eater S04 Ep44.srt                                                          | S01E44           | RENAMED  | [Group] Soul.Eater.S02.E44.720p.ar_Soul.Eater S04 Ep44.srt                |
+| Soul.Eater S05 Ep44.srt                                                          | S01E44           | RENAMED  | [Group] Soul.Eater.S02.E44.720p.ar_Soul.Eater S05 Ep44.srt                |
+| Soul.Eater S06 Ep44.srt                                                          | S01E44           | RENAMED  | [Group] Soul.Eater.S02.E44.720p.ar_Soul.Eater S06 Ep44.srt                |
+| Spirited Away S02 E39.srt                                                        | S01E39           | NO MATCH | No Change                                                                 |
+| Spirited Away S03 E39.srt                                                        | S01E39           | NO MATCH | No Change                                                                 |
+| Spirited Away S04 E39.srt                                                        | S01E39           | NO MATCH | No Change                                                                 |
+| Spirited Away S05 E39.srt                                                        | S01E39           | NO MATCH | No Change                                                                 |
+| Spirited Away S06 E39.srt                                                        | S01E39           | NO MATCH | No Change                                                                 |
+| Steins Gate S2 Ep25.srt                                                          | S01E25           | NO MATCH | No Change                                                                 |
+| Steins Gate s03 ep25.srt                                                         | S01E25           | NO MATCH | No Change                                                                 |
+| Steins Gate s04 ep25.srt                                                         | S01E25           | NO MATCH | No Change                                                                 |
+| Steins Gate s05 ep25.srt                                                         | S01E25           | NO MATCH | No Change                                                                 |
+| Steins Gate s06 ep25.srt                                                         | S01E25           | NO MATCH | No Change                                                                 |
+| Sword.Art.Online.s02.ep13.sub.srt                                                | S01E13           | RENAMED  | Sword.Art.Online.S03.E13.1080p.ar.srt                                     |
+| Sword.Art.Online.s03 ep13.srt                                                    | S01E13           | RENAMED  | Sword.Art.Online.S03.E13.1080p.ar_Sword.Art.Online.s03 ep13.srt           |
+| Sword.Art.Online.s04 ep13.srt                                                    | S01E13           | RENAMED  | Sword.Art.Online.S03.E13.1080p.ar_Sword.Art.Online.s04 ep13.srt           |
+| Sword.Art.Online.s05 ep13.srt                                                    | S01E13           | RENAMED  | Sword.Art.Online.S03.E13.1080p.ar_Sword.Art.Online.s05 ep13.srt           |
+| Sword.Art.Online.s06 ep13.srt                                                    | S01E13           | RENAMED  | Sword.Art.Online.S03.E13.1080p.ar_Sword.Art.Online.s06 ep13.srt           |
+| The.Expanse Season 3 Episode 14.srt                                              | S03E14           | RENAMED  | [AMZN] The.Expanse.S03 - 14 (WEB-DL).ar.srt                               |
+| The.Expanse Season 4 Episode 14.srt                                              | S04E14           | RENAMED  | [AMZN] The.Expanse.S04 - 14 (WEB-DL).ar.srt                               |
+| The.Expanse Season 5 Episode 14.srt                                              | S05E14           | RENAMED  | [AMZN] The.Expanse.S05 - 14 (WEB-DL).ar.srt                               |
+| The.Expanse Season 6 Episode 14.srt                                              | S06E14           | RENAMED  | [AMZN] The.Expanse.S06 - 14 (WEB-DL).ar.srt                               |
+| The.Expanse.s02 - E14.en.srt                                                     | S02E14           | RENAMED  | [AMZN] The.Expanse.S02 - 14 (WEB-DL).ar.srt                               |
+| Toradora! s02 ep24 subs.srt                                                      | S01E24           | NO MATCH | No Change                                                                 |
+| Toradora! s03 e24.srt                                                            | S01E24           | NO MATCH | No Change                                                                 |
+| Toradora! s04 e24.srt                                                            | S01E24           | NO MATCH | No Change                                                                 |
+| Toradora! s05 e24.srt                                                            | S01E24           | NO MATCH | No Change                                                                 |
+| Toradora! s06 e24.srt                                                            | S01E24           | NO MATCH | No Change                                                                 |
+| Violet.Evergarden s02.E33.srt                                                    | S01E33           | NO MATCH | No Change                                                                 |
+| Violet.Evergarden s03 E33.srt                                                    | S01E33           | NO MATCH | No Change                                                                 |
+| Violet.Evergarden s04 E33.srt                                                    | S01E33           | NO MATCH | No Change                                                                 |
+| Violet.Evergarden s05 E33.srt                                                    | S01E33           | NO MATCH | No Change                                                                 |
+| Violet.Evergarden s06 E33.srt                                                    | S01E33           | NO MATCH | No Change                                                                 |
+| Your Lie In April s03 ep37.srt                                                   | S01E37           | NO MATCH | No Change                                                                 |
+| Your Lie In April s04 ep37.srt                                                   | S01E37           | NO MATCH | No Change                                                                 |
+| Your Lie In April s05 ep37.srt                                                   | S01E37           | NO MATCH | No Change                                                                 |
+| Your Lie In April s06 ep37.srt                                                   | S01E37           | NO MATCH | No Change                                                                 |
+| Your.Lie.in.April.S02Ep37.srt                                                    | S02E37           | RENAMED  | Your Lie in April s02 - 37 (1080p).ar.srt                                 |
+| [Fansub] One Piece s2 - E02 (720p).srt                                           | S02E02           | RENAMED  | OnePiece.S02E02.1080p.BluRay.x264-Group.ar.srt                            |
++----------------------------------------------------------------------------------+------------------+----------+---------------------------------------------------------------------------+
+#
+# MATCHED EPISODES:
+# S01E08 -> Video: Neon.Genesis.Evangelion.S02_E08_1080p_GROUP.mkv | Subtitle: Neon.Genesis.Evangelion s2 ep 08 ENG.srt -> Neon.Genesis.Evangelion.S02_E08_1080p_GROUP.ar.srt
+# S01E11 -> Video: Mob.Psycho.100.S02.E11.2160p.BluRay.mkv | Subtitle: Mob Psycho 100 S02 Ep11.srt -> Mob.Psycho.100.S02.E11.2160p.BluRay.ar.srt
+# S01E13 -> Video: Sword.Art.Online.S03.E13.1080p.mkv | Subtitle: Sword.Art.Online.s02.ep13.sub.srt -> Sword.Art.Online.S03.E13.1080p.ar.srt
+# S01E13 -> Video: Sword.Art.Online.S03.E13.1080p.mkv | Subtitle: Sword.Art.Online.s03 ep13.srt -> Sword.Art.Online.S03.E13.1080p.ar_Sword.Art.Online.s03 ep13.srt
+# S01E13 -> Video: Sword.Art.Online.S03.E13.1080p.mkv | Subtitle: Sword.Art.Online.s04 ep13.srt -> Sword.Art.Online.S03.E13.1080p.ar_Sword.Art.Online.s04 ep13.srt
+# S01E13 -> Video: Sword.Art.Online.S03.E13.1080p.mkv | Subtitle: Sword.Art.Online.s05 ep13.srt -> Sword.Art.Online.S03.E13.1080p.ar_Sword.Art.Online.s05 ep13.srt
+# S01E13 -> Video: Sword.Art.Online.S03.E13.1080p.mkv | Subtitle: Sword.Art.Online.s06 ep13.srt -> Sword.Art.Online.S03.E13.1080p.ar_Sword.Art.Online.s06 ep13.srt
+# S01E21 -> Video: Gintama.S02. - 21 - [BD 1080p].mkv | Subtitle: Gintama s03 e21.srt -> Gintama.S02. - 21 - [BD 1080p].ar.srt
+# S01E21 -> Video: Gintama.S02. - 21 - [BD 1080p].mkv | Subtitle: Gintama s04 e21.srt -> Gintama.S02. - 21 - [BD 1080p].ar_Gintama s04 e21.srt
+# S01E21 -> Video: Gintama.S02. - 21 - [BD 1080p].mkv | Subtitle: Gintama s05 e21.srt -> Gintama.S02. - 21 - [BD 1080p].ar_Gintama s05 e21.srt
+# S01E21 -> Video: Gintama.S02. - 21 - [BD 1080p].mkv | Subtitle: Gintama s06 e21.srt -> Gintama.S02. - 21 - [BD 1080p].ar_Gintama s06 e21.srt
+# S01E21 -> Video: Gintama.S02. - 21 - [BD 1080p].mkv | Subtitle: Gintama season2 e21.srt -> Gintama.S02. - 21 - [BD 1080p].ar_Gintama season2 e21.srt
+# S01E27 -> Video: [Fansub] Psycho-Pass S02.E27 (BD).mkv | Subtitle: Psycho-Pass s03 ep27.srt -> [Fansub] Psycho-Pass S02.E27 (BD).ar.srt
+# S01E27 -> Video: [Fansub] Psycho-Pass S02.E27 (BD).mkv | Subtitle: Psycho-Pass s04 ep27.srt -> [Fansub] Psycho-Pass S02.E27 (BD).ar_Psycho-Pass s04 ep27.srt
+# S01E27 -> Video: [Fansub] Psycho-Pass S02.E27 (BD).mkv | Subtitle: Psycho-Pass s05 ep27.srt -> [Fansub] Psycho-Pass S02.E27 (BD).ar_Psycho-Pass s05 ep27.srt
+# S01E27 -> Video: [Fansub] Psycho-Pass S02.E27 (BD).mkv | Subtitle: Psycho-Pass s06 ep27.srt -> [Fansub] Psycho-Pass S02.E27 (BD).ar_Psycho-Pass s06 ep27.srt
+# S01E32 -> Video: [Raws] Made in Abyss S02.E32 1080p.mkv | Subtitle: Made.In.Abyss s02 ep 32.srt -> [Raws] Made in Abyss S02.E32 1080p.ar.srt
+# S01E32 -> Video: [Raws] Made in Abyss S02.E32 1080p.mkv | Subtitle: Made.In.Abyss_S03_E32.srt -> [Raws] Made in Abyss S02.E32 1080p.ar_Made.In.Abyss_S03_E32.srt
+# S01E32 -> Video: [Raws] Made in Abyss S02.E32 1080p.mkv | Subtitle: Made.In.Abyss_S04_E32.srt -> [Raws] Made in Abyss S02.E32 1080p.ar_Made.In.Abyss_S04_E32.srt
+# S01E32 -> Video: [Raws] Made in Abyss S02.E32 1080p.mkv | Subtitle: Made.In.Abyss_S05_E32.srt -> [Raws] Made in Abyss S02.E32 1080p.ar_Made.In.Abyss_S05_E32.srt
+# S01E32 -> Video: [Raws] Made in Abyss S02.E32 1080p.mkv | Subtitle: Made.In.Abyss_S06_E32.srt -> [Raws] Made in Abyss S02.E32 1080p.ar_Made.In.Abyss_S06_E32.srt
+# S01E34 -> Video: Erased.S02.E34.1080p.BluRay.mkv | Subtitle: Erased S02 Ep34 subtitle.srt -> Erased.S02.E34.1080p.BluRay.ar.srt
+# S01E40 -> Video: [Raw] Kaguya.Sama.S02.E40.1080p.mkv | Subtitle: Kaguya.Sama s03 ep40 sub.srt -> [Raw] Kaguya.Sama.S02.E40.1080p.ar.srt
+# S01E40 -> Video: [Raw] Kaguya.Sama.S02.E40.1080p.mkv | Subtitle: Kaguya.Sama s04 ep40 sub.srt -> [Raw] Kaguya.Sama.S02.E40.1080p.ar_Kaguya.Sama s04 ep40.srt
+# S01E40 -> Video: [Raw] Kaguya.Sama.S02.E40.1080p.mkv | Subtitle: Kaguya.Sama s05 ep40 sub.srt -> [Raw] Kaguya.Sama.S02.E40.1080p.ar_Kaguya.Sama s05 ep40.srt
+# S01E40 -> Video: [Raw] Kaguya.Sama.S02.E40.1080p.mkv | Subtitle: Kaguya.Sama s06 ep40 sub.srt -> [Raw] Kaguya.Sama.S02.E40.1080p.ar_Kaguya.Sama s06 ep40.srt
+# S01E40 -> Video: [Raw] Kaguya.Sama.S02.E40.1080p.mkv | Subtitle: Kaguya.Sama.s2.ep40.sub.srt -> [Raw] Kaguya.Sama.S02.E40.1080p.ar_Kaguya.Sama.s2.ep40.srt
+# S01E44 -> Video: [Group] Soul.Eater.S02.E44.720p.mkv | Subtitle: Soul.Eater S02 Ep44.srt -> [Group] Soul.Eater.S02.E44.720p.ar.srt
+# S01E44 -> Video: [Group] Soul.Eater.S02.E44.720p.mkv | Subtitle: Soul.Eater S03 Ep44.srt -> [Group] Soul.Eater.S02.E44.720p.ar_Soul.Eater S03 Ep44.srt
+# S01E44 -> Video: [Group] Soul.Eater.S02.E44.720p.mkv | Subtitle: Soul.Eater S04 Ep44.srt -> [Group] Soul.Eater.S02.E44.720p.ar_Soul.Eater S04 Ep44.srt
+# S01E44 -> Video: [Group] Soul.Eater.S02.E44.720p.mkv | Subtitle: Soul.Eater S05 Ep44.srt -> [Group] Soul.Eater.S02.E44.720p.ar_Soul.Eater S05 Ep44.srt
+# S01E44 -> Video: [Group] Soul.Eater.S02.E44.720p.mkv | Subtitle: Soul.Eater S06 Ep44.srt -> [Group] Soul.Eater.S02.E44.720p.ar_Soul.Eater S06 Ep44.srt
+# S01E47 -> Video: Monogatari.Series.S02.E47.1080p.mkv | Subtitle: Monogatari series s02 ep47.srt -> Monogatari.Series.S02.E47.1080p.ar.srt
+# S01E47 -> Video: Monogatari.Series.S02.E47.1080p.mkv | Subtitle: Monogatari series s03 ep47.srt -> Monogatari.Series.S02.E47.1080p.ar_Monogatari series s03 ep47.srt
+# S01E47 -> Video: Monogatari.Series.S02.E47.1080p.mkv | Subtitle: Monogatari series s04 ep47.srt -> Monogatari.Series.S02.E47.1080p.ar_Monogatari series s04 ep47.srt
+# S01E47 -> Video: Monogatari.Series.S02.E47.1080p.mkv | Subtitle: Monogatari series s05 ep47.srt -> Monogatari.Series.S02.E47.1080p.ar_Monogatari series s05 ep47.srt
+# S01E47 -> Video: Monogatari.Series.S02.E47.1080p.mkv | Subtitle: Monogatari series s06 ep47.srt -> Monogatari.Series.S02.E47.1080p.ar_Monogatari series s06 ep47.srt
+# S01E49 -> Video: ReLIFE.S02.E49.[BD].mkv | Subtitle: Golden Kamuy - s04 episode 49.srt -> ReLIFE.S02.E49.[BD].ar.srt
+# S01E49 -> Video: ReLIFE.S02.E49.[BD].mkv | Subtitle: Golden Kamuy - s05 episode 49.srt -> ReLIFE.S02.E49.[BD].ar_Golden Kamuy - s05 episode 49.srt
+# S01E49 -> Video: ReLIFE.S02.E49.[BD].mkv | Subtitle: Golden Kamuy - s06 episode 49.srt -> ReLIFE.S02.E49.[BD].ar_Golden Kamuy - s06 episode 49.srt
+# S01E50 -> Video: [RawSite] Golden.Kamuy.S02.E50.1080p.mkv | Subtitle: Golden Kamuy - s03 episode 50.srt -> [RawSite] Golden.Kamuy.S02.E50.1080p.ar.srt
+# S01E50 -> Video: [RawSite] Golden.Kamuy.S02.E50.1080p.mkv | Subtitle: Golden.Kamuy - s02 episode 50.srt -> [RawSite] Golden.Kamuy.S02.E50.1080p.ar_Golden.Kamuy - s02 episode 50.srt
+# S02E02 -> Video: OnePiece.S02E02.1080p.BluRay.x264-Group.mkv | Subtitle: [Fansub] One Piece s2 - E02 (720p).srt -> OnePiece.S02E02.1080p.BluRay.x264-Group.ar.srt
+# S02E03 -> Video: [HorribleSubs] My Hero Academia 2x03 [1080p].mkv | Subtitle: My.Hero.Academia.2X03.[Group].srt -> [HorribleSubs] My Hero Academia 2x03 [1080p].ar.srt
+# S02E04 -> Video: Attack_on_Titan_s02-04_[BD][2160p][HEVC].mkv | Subtitle: Attack on Titan S02 - 04 (eng).srt -> Attack_on_Titan_s02-04_[BD][2160p][HEVC].ar.srt
+# S02E05 -> Video: Fullmetal.Alchemist.S02 - 05 - Brotherhood (BDRip 1080p).mkv | Subtitle: Fullmetal.Alchemist.S02-E05.eng.srt -> Fullmetal.Alchemist.S02 - 05 - Brotherhood (BDRip 1080p).ar.srt
+# S02E07 -> Video: [Erai-raws] Demon.Slayer.S02-07.1080p.mkv | Subtitle: Demon.Slayer - S02EP07 [softsubs].srt -> [Erai-raws] Demon.Slayer.S02-07.1080p.ar.srt
+# S02E09 -> Video: [SubsPlease] Jujutsu Kaisen S02 - 09 (720p).mkv | Subtitle: Jujutsu_Kaisen_S02Ep09_[sub].srt -> [SubsPlease] Jujutsu Kaisen S02 - 09 (720p).ar.srt
+# S02E14 -> Video: [AMZN] The.Expanse.S02 - 14 (WEB-DL).mkv | Subtitle: The.Expanse.s02 - E14.en.srt -> [AMZN] The.Expanse.S02 - 14 (WEB-DL).ar.srt
+# S02E17 -> Video: [FansubGroup] Fairy.Tail.S02 - EP17 [BD].mkv | Subtitle: Fairy.Tail season 2 episode 17.srt -> [FansubGroup] Fairy.Tail.S02 - EP17 [BD].ar.srt
+# S02E20 -> Video: [Release] Ghost_in_the_Shell S02 - 20 (2160p).mkv | Subtitle: Ghost in the Shell S02Ep20.srt -> [Release] Ghost_in_the_Shell S02 - 20 (2160p).ar.srt
+# S02E23 -> Video: Ping Pong The Animation S02 - 23 (WEBRip).mkv | Subtitle: Ping.Pong.S02Ep23.sub.srt -> Ping Pong The Animation S02 - 23 (WEBRip).ar.srt
+# S02E35 -> Video: Kaguya-sama.S02 - 35 (BD).mkv | Subtitle: Kaguya-sama s02ep35.srt -> Kaguya-sama.S02 - 35 (BD).ar.srt
+# S02E37 -> Video: Your Lie in April s02 - 37 (1080p).mkv | Subtitle: Your.Lie.in.April.S02Ep37.srt -> Your Lie in April s02 - 37 (1080p).ar.srt
+# S02E41 -> Video: Made_in_Abyss.S02 - 41 (BD 2160p).mkv | Subtitle: Made in Abyss season 2 episode 41.srt -> Made_in_Abyss.S02 - 41 (BD 2160p).ar.srt
+# S02E46 -> Video: [Fansub] FLCL 2x46 [1080p].mkv | Subtitle: FLCL 2x46 (subs).srt -> [Fansub] FLCL 2x46 [1080p].ar.srt
+# S03E01 -> Video: [Fansub] Re.Zero.S03E01.1080p.mkv | Subtitle: Re.Zero - Season 3 - 01 - [subs].srt -> [Fansub] Re.Zero.S03E01.1080p.ar.srt
+# S03E02 -> Video: OnePiece.S03E02.2160p.BluRay-GROUP.mkv | Subtitle: One Piece s3 - ep02.srt -> OnePiece.S03E02.2160p.BluRay-GROUP.ar.srt
+# S03E03 -> Video: [HorribleSubs] My.Hero.Academia 3x03 [1080p].mkv | Subtitle: My.Hero.Academia.3X03.[sub].srt -> [HorribleSubs] My.Hero.Academia 3x03 [1080p].ar.srt
+# S03E04 -> Video: Attack_on_Titan_s03-04_[BD][1080p].mkv | Subtitle: Attack on Titan S03 - 04.srt -> Attack_on_Titan_s03-04_[BD][1080p].ar.srt
+# S03E05 -> Video: Fullmetal.Alchemist.S03 - 05 (BDRip).mkv | Subtitle: Fullmetal.Alchemist.S03E05.srt -> Fullmetal.Alchemist.S03 - 05 (BDRip).ar.srt
+# S03E07 -> Video: [Erai-raws] Demon.Slayer.S03-07.1080p.mkv | Subtitle: Demon.Slayer.S03Ep07.srt -> [Erai-raws] Demon.Slayer.S03-07.1080p.ar.srt
+# S03E09 -> Video: [SubsPlease] Jujutsu.Kaisen.S03 - 09 (720p).mkv | Subtitle: Jujutsu_Kaisen_S03Ep09_[sub].srt -> [SubsPlease] Jujutsu.Kaisen.S03 - 09 (720p).ar.srt
+# S03E14 -> Video: [AMZN] The.Expanse.S03 - 14 (WEB-DL).mkv | Subtitle: The.Expanse Season 3 Episode 14.srt -> [AMZN] The.Expanse.S03 - 14 (WEB-DL).ar.srt
+# S03E16 -> Video: NARUTO.S03-E16.[720p].mkv | Subtitle: Naruto s03 - e16.srt -> NARUTO.S03-E16.[720p].ar.srt
+# S03E20 -> Video: [Release] Ghost_in_the_Shell S03 - 20 (2160p).mkv | Subtitle: Ghost in the Shell S03Ep20.srt -> [Release] Ghost_in_the_Shell S03 - 20 (2160p).ar.srt
+# S03E22 -> Video: [Otaku] Bakemonogatari.S03E22.[Group].mkv | Subtitle: Bakemonogatari season 3 episode 22.srt -> [Otaku] Bakemonogatari.S03E22.[Group].ar.srt
+# S03E23 -> Video: Ping Pong The Animation S03 - 23 (WEBRip).mkv | Subtitle: Ping.Pong.S03Ep23.srt -> Ping Pong The Animation S03 - 23 (WEBRip).ar.srt
+# S03E35 -> Video: Kaguya-sama.S03 - 35 (BD).mkv | Subtitle: Kaguya-sama s03ep35.srt -> Kaguya-sama.S03 - 35 (BD).ar.srt
+# S03E41 -> Video: Made_in_Abyss.S03 - 41 (BD 2160p).mkv | Subtitle: Made in Abyss season 3 episode 41.srt -> Made_in_Abyss.S03 - 41 (BD 2160p).ar.srt
+# S03E46 -> Video: [Fansub] FLCL 3x46 [1080p].mkv | Subtitle: FLCL 3x46 (subs).srt -> [Fansub] FLCL 3x46 [1080p].ar.srt
+# S04E02 -> Video: OnePiece.S04E02.1080p.BluRay-GROUP.mkv | Subtitle: One Piece s4 - ep02.srt -> OnePiece.S04E02.1080p.BluRay-GROUP.ar.srt
+# S04E03 -> Video: [HorribleSubs] My.Hero.Academia 4x03 [1080p].mkv | Subtitle: My.Hero.Academia.4X03.[sub].srt -> [HorribleSubs] My.Hero.Academia 4x03 [1080p].ar.srt
+# S04E04 -> Video: Attack_on_Titan_s04-04_[BD][1080p].mkv | Subtitle: Attack on Titan S04 - 04.srt -> Attack_on_Titan_s04-04_[BD][1080p].ar.srt
+# S04E05 -> Video: Fullmetal.Alchemist.S04 - 05 (BDRip).mkv | Subtitle: Fullmetal.Alchemist.S04E05.srt -> Fullmetal.Alchemist.S04 - 05 (BDRip).ar.srt
+# S04E07 -> Video: [Erai-raws] Demon.Slayer.S04-07.1080p.mkv | Subtitle: Demon.Slayer.S04Ep07.srt -> [Erai-raws] Demon.Slayer.S04-07.1080p.ar.srt
+# S04E09 -> Video: [SubsPlease] Jujutsu.Kaisen S04 - 09 (720p).mkv | Subtitle: Jujutsu_Kaisen_S04Ep09_[sub].srt -> [SubsPlease] Jujutsu.Kaisen S04 - 09 (720p).ar.srt
+# S04E14 -> Video: [AMZN] The.Expanse.S04 - 14 (WEB-DL).mkv | Subtitle: The.Expanse Season 4 Episode 14.srt -> [AMZN] The.Expanse.S04 - 14 (WEB-DL).ar.srt
+# S04E16 -> Video: NARUTO.S04-E16.[720p].mkv | Subtitle: Naruto s04 - e16.srt -> NARUTO.S04-E16.[720p].ar.srt
+# S04E20 -> Video: [Release] Ghost_in_the_Shell S04 - 20 (2160p).mkv | Subtitle: Ghost in the Shell S04Ep20.srt -> [Release] Ghost_in_the_Shell S04 - 20 (2160p).ar.srt
+# S04E22 -> Video: [Otaku] Bakemonogatari.S04E22.[Group].mkv | Subtitle: Bakemonogatari season 4 episode 22.srt -> [Otaku] Bakemonogatari.S04E22.[Group].ar.srt
+# S04E23 -> Video: Ping Pong S04 - 23 (WEBRip).mkv | Subtitle: Ping.Pong.S04Ep23.srt -> Ping Pong S04 - 23 (WEBRip).ar.srt
+# S04E35 -> Video: Kaguya-sama.S04 - 35 (BD).mkv | Subtitle: Kaguya-sama s04ep35.srt -> Kaguya-sama.S04 - 35 (BD).ar.srt
+# S04E41 -> Video: Made_in_Abyss.S04 - 41 (BD 2160p).mkv | Subtitle: Made in Abyss season 4 episode 41.srt -> Made_in_Abyss.S04 - 41 (BD 2160p).ar.srt
+# S04E46 -> Video: [Fansub] FLCL 4x46 [1080p].mkv | Subtitle: FLCL 4x46 (subs).srt -> [Fansub] FLCL 4x46 [1080p].ar.srt
+# S05E02 -> Video: OnePiece.S05E02.1080p.BluRay-GROUP.mkv | Subtitle: One Piece s5 - ep02.srt -> OnePiece.S05E02.1080p.BluRay-GROUP.ar.srt
+# S05E03 -> Video: [HorribleSubs] My.Hero.Academia 5x03 [1080p].mkv | Subtitle: My.Hero.Academia.5X03.[sub].srt -> [HorribleSubs] My.Hero.Academia 5x03 [1080p].ar.srt
+# S05E04 -> Video: Attack_on_Titan_s05-04_[BD][1080p].mkv | Subtitle: Attack on Titan S05 - 04.srt -> Attack_on_Titan_s05-04_[BD][1080p].ar.srt
+# S05E05 -> Video: Fullmetal.Alchemist.S05 - 05 (BDRip).mkv | Subtitle: Fullmetal.Alchemist.S05E05.srt -> Fullmetal.Alchemist.S05 - 05 (BDRip).ar.srt
+# S05E07 -> Video: [Erai-raws] Demon.Slayer.S05-07.1080p.mkv | Subtitle: Demon.Slayer.S05Ep07.srt -> [Erai-raws] Demon.Slayer.S05-07.1080p.ar.srt
+# S05E09 -> Video: [SubsPlease] Jujutsu.Kaisen S05 - 09 (720p).mkv | Subtitle: Jujutsu_Kaisen_S05Ep09_[sub].srt -> [SubsPlease] Jujutsu.Kaisen S05 - 09 (720p).ar.srt
+# S05E14 -> Video: [AMZN] The.Expanse.S05 - 14 (WEB-DL).mkv | Subtitle: The.Expanse Season 5 Episode 14.srt -> [AMZN] The.Expanse.S05 - 14 (WEB-DL).ar.srt
+# S05E16 -> Video: NARUTO.S05-E16.[720p].mkv | Subtitle: Naruto s05 - e16.srt -> NARUTO.S05-E16.[720p].ar.srt
+# S05E20 -> Video: [Release] Ghost_in_the_Shell S05 - 20 (2160p).mkv | Subtitle: Ghost in the Shell S05Ep20.srt -> [Release] Ghost_in_the_Shell S05 - 20 (2160p).ar.srt
+# S05E22 -> Video: [Otaku] Bakemonogatari.S05E22.[Group].mkv | Subtitle: Bakemonogatari season 5 episode 22.srt -> [Otaku] Bakemonogatari.S05E22.[Group].ar.srt
+# S05E23 -> Video: Ping Pong S05 - 23 (WEBRip).mkv | Subtitle: Ping.Pong.S05Ep23.srt -> Ping Pong S05 - 23 (WEBRip).ar.srt
+# S05E35 -> Video: Kaguya-sama.S05 - 35 (BD).mkv | Subtitle: Kaguya-sama s05ep35.srt -> Kaguya-sama.S05 - 35 (BD).ar.srt
+# S05E41 -> Video: Made_in_Abyss.S05 - 41 (BD 2160p).mkv | Subtitle: Made in Abyss season 5 episode 41.srt -> Made_in_Abyss.S05 - 41 (BD 2160p).ar.srt
+# S05E46 -> Video: [Fansub] FLCL 5x46 [1080p].mkv | Subtitle: FLCL 5x46 (subs).srt -> [Fansub] FLCL 5x46 [1080p].ar.srt
+# S06E02 -> Video: OnePiece.S06E02.1080p.BluRay-GROUP.mkv | Subtitle: One Piece s6 - ep02.srt -> OnePiece.S06E02.1080p.BluRay-GROUP.ar.srt
+# S06E03 -> Video: [HorribleSubs] My.Hero.Academia 6x03 [1080p].mkv | Subtitle: My.Hero.Academia.6X03.[sub].srt -> [HorribleSubs] My.Hero.Academia 6x03 [1080p].ar.srt
+# S06E04 -> Video: Attack_on_Titan_s06-04_[BD][1080p].mkv | Subtitle: Attack on Titan S06 - 04.srt -> Attack_on_Titan_s06-04_[BD][1080p].ar.srt
+# S06E05 -> Video: Fullmetal.Alchemist.S06 - 05 (BDRip).mkv | Subtitle: Fullmetal.Alchemist.S06E05.srt -> Fullmetal.Alchemist.S06 - 05 (BDRip).ar.srt
+# S06E07 -> Video: [Erai-raws] Demon.Slayer.S06-07.1080p.mkv | Subtitle: Demon.Slayer.S06Ep07.srt -> [Erai-raws] Demon.Slayer.S06-07.1080p.ar.srt
+# S06E09 -> Video: [SubsPlease] Jujutsu.Kaisen S06 - 09 (720p).mkv | Subtitle: Jujutsu_Kaisen_S06Ep09_[sub].srt -> [SubsPlease] Jujutsu.Kaisen S06 - 09 (720p).ar.srt
+# S06E14 -> Video: [AMZN] The.Expanse.S06 - 14 (WEB-DL).mkv | Subtitle: The.Expanse Season 6 Episode 14.srt -> [AMZN] The.Expanse.S06 - 14 (WEB-DL).ar.srt
+# S06E16 -> Video: NARUTO.S06-E16.[720p].mkv | Subtitle: Naruto s06 - e16.srt -> NARUTO.S06-E16.[720p].ar.srt
+# S06E20 -> Video: [Release] Ghost_in_the_Shell S06 - 20 (2160p).mkv | Subtitle: Ghost in the Shell S06Ep20.srt -> [Release] Ghost_in_the_Shell S06 - 20 (2160p).ar.srt
+# S06E22 -> Video: [Otaku] Bakemonogatari.S06E22.[Group].mkv | Subtitle: Bakemonogatari season 6 episode 22.srt -> [Otaku] Bakemonogatari.S06E22.[Group].ar.srt
+# S06E23 -> Video: Ping Pong S06 - 23 (WEBRip).mkv | Subtitle: Ping.Pong.S06Ep23.srt -> Ping Pong S06 - 23 (WEBRip).ar.srt
+# S06E35 -> Video: Kaguya-sama.S06 - 35 (BD).mkv | Subtitle: Kaguya-sama s06ep35.srt -> Kaguya-sama.S06 - 35 (BD).ar.srt
+# S06E41 -> Video: Made_in_Abyss.S06 - 41 (BD 2160p).mkv | Subtitle: Made in Abyss season 6 episode 41.srt -> Made_in_Abyss.S06 - 41 (BD 2160p).ar.srt
+# S06E46 -> Video: [Fansub] FLCL 6x46 [1080p].mkv | Subtitle: FLCL 6x46 (subs).srt -> [Fansub] FLCL 6x46 [1080p].ar.srt
+#
+# MISSING MATCHES:
+# S01E12 -> Has Video: [GroupTag] Kimi.no.Na.wa S06.E12 (BD).mkv | Missing: Subtitle
+# S01E29 -> Has Video: AnoHana.S06.E29.[Group].mkv | Missing: Subtitle
+# S02E01 -> Has Video: [Moozzi2] Re.Zero.Kara.Hajimeru.Isekai.Seikatsu.S02E01.[BD-1080p][x265][10bit].mkv | Missing: Subtitle
+# S02E06 -> Has Video: Cowboy.Bebop.S02-E06.720p.BluRay.x264-GROUP.mkv | Missing: Subtitle
+# S02E10 -> Has Video: Haikyuu!! S02- E10 [1080p][FLAC].mkv | Missing: Subtitle
+# S02E15 -> Has Video: [BLANK] Black.Clover.s02e15.720p.mkv | Missing: Subtitle
+# S02E16 -> Has Video: NARUTO.S02-E16.[480p].mkv | Missing: Subtitle
+# S02E18 -> Has Video: Dragon.Ball.S02 - ep18 - (1080p).mkv | Missing: Subtitle
+# S02E19 -> Has Video: Detective.Conan.s02E19.HEVC.mkv | Missing: Subtitle
+# S02E22 -> Has Video: [Otaku] Bakemonogatari.S02E22.1080p.mkv | Missing: Subtitle
+# S02E24 -> Has Video: [SubGroup] Toradora! S02 - 24 720p.mkv | Missing: Subtitle
+# S02E25 -> Has Video: Steins;Gate.S02E25.[BDRip].mkv | Missing: Subtitle
+# S02E26 -> Has Video: Clannad_S02 - 26 [1080p].mkv | Missing: Subtitle
+# S02E28 -> Has Video: K-On! S02 - 28 (BluRay).mkv | Missing: Subtitle
+# S02E30 -> Has Video: [Subbers] Higurashi.S02 - 30 [1080p].mkv | Missing: Subtitle
+# S02E31 -> Has Video: Shingeki no Kyojin S02-31 (BDRip).mkv | Missing: Subtitle
+# S02E33 -> Has Video: [Group] Violet.Evergarden.S02 - 33 (720p).mkv | Missing: Subtitle
+# S02E36 -> Has Video: [Subs] March.Comes.in.Like.a.Lion.S02E36.mkv | Missing: Subtitle
+# S02E38 -> Has Video: [GroupX] Barakamon.S02E38.BDRip.mkv | Missing: Subtitle
+# S02E39 -> Has Video: Spirited_Away.S02-39.[WEB].mkv | Missing: Subtitle
+# S02E42 -> Has Video: [FansubTeam] Gurren.Lagann.S02E42.mkv | Missing: Subtitle
+# S02E43 -> Has Video: Nichijou.S02 - 43 (1080p).mkv | Missing: Subtitle
+# S02E45 -> Has Video: Parasyte.S02 - 45 (BDRip).mkv | Missing: Subtitle
+# S02E48 -> Has Video: [ReleaseGroup] Durarara!! S02-48.mkv | Missing: Subtitle
+# S03E06 -> Has Video: Cowboy.Bebop.S03-E06.1080p-GROUP.mkv | Missing: Subtitle
+# S03E10 -> Has Video: Haikyuu!!.S03-10.[BD].mkv | Missing: Subtitle
+# S03E15 -> Has Video: Black.Clover.s03e15.1080p.mkv | Missing: Subtitle
+# S03E17 -> Has Video: [FansubGroup] Fairy.Tail.S03 - EP17 (BD).mkv | Missing: Subtitle
+# S03E18 -> Has Video: Dragon.Ball.S03 - ep18 (BDRip).mkv | Missing: Subtitle
+# S03E19 -> Has Video: Detective.Conan.s03E19.1080p.mkv | Missing: Subtitle
+# S03E21 -> Has Video: Gintama.S03-21.[BD].mkv | Missing: Subtitle
+# S03E24 -> Has Video: [SubGroup] Toradora! S03 - 24 720p.mkv | Missing: Subtitle
+# S03E25 -> Has Video: Steins;Gate.S03E25.[BDRip].mkv | Missing: Subtitle
+# S03E26 -> Has Video: Clannad_S03 - 26 [1080p].mkv | Missing: Subtitle
+# S03E28 -> Has Video: K-On! S03 - 28 (BluRay).mkv | Missing: Subtitle
+# S03E30 -> Has Video: [Subbers] Higurashi.S03 - 30 [1080p].mkv | Missing: Subtitle
+# S03E31 -> Has Video: Shingeki_no_Kyojin_S03-31 (BDRip).mkv | Missing: Subtitle
+# S03E33 -> Has Video: [Group] Violet.Evergarden.S03 - 33 (720p).mkv | Missing: Subtitle
+# S03E36 -> Has Video: [Subs] March.Comes.in.Like.a.Lion.S03E36.mkv | Missing: Subtitle
+# S03E37 -> Has Video: Your.Lie.in.April.S03 - 37 (1080p).mkv | Missing: Subtitle
+# S03E38 -> Has Video: [GroupX] Barakamon.S03E38.BDRip.mkv | Missing: Subtitle
+# S03E39 -> Has Video: Spirited_Away.S03-39.[WEB].mkv | Missing: Subtitle
+# S03E42 -> Has Video: [FansubTeam] Gurren.Lagann.S03E42.mkv | Missing: Subtitle
+# S03E43 -> Has Video: Nichijou.S03 - 43 (1080p).mkv | Missing: Subtitle
+# S03E45 -> Has Video: Parasyte.S03 - 45 (BDRip).mkv | Missing: Subtitle
+# S03E48 -> Has Video: [ReleaseGroup] Durarara!! S03-48.mkv | Missing: Subtitle
+# S04E01 -> Has Video: [Moozzi2] Re.Zero.S04E01.[BD-1080p][x265].mkv | Missing: Subtitle
+# S04E06 -> Has Video: Cowboy.Bebop.S04-E06.1080p.mkv | Missing: Subtitle
+# S04E10 -> Has Video: Haikyuu!!.S04-10.[BD].mkv | Missing: Subtitle
+# S04E15 -> Has Video: Black.Clover.s04e15.1080p.mkv | Missing: Subtitle
+# S04E17 -> Has Video: [FansubGroup] Fairy.Tail.S04 - EP17 (BD).mkv | Missing: Subtitle
+# S04E18 -> Has Video: Dragon.Ball.S04 - ep18 (BDRip).mkv | Missing: Subtitle
+# S04E19 -> Has Video: Detective.Conan.s04E19.1080p.mkv | Missing: Subtitle
+# S04E21 -> Has Video: Gintama.S04-21.[BD].mkv | Missing: Subtitle
+# S04E24 -> Has Video: [SubGroup] Toradora! S04 - 24 720p.mkv | Missing: Subtitle
+# S04E25 -> Has Video: Steins;Gate.S04E25.[BDRip].mkv | Missing: Subtitle
+# S04E26 -> Has Video: Clannad_S04 - 26 [1080p].mkv | Missing: Subtitle
+# S04E28 -> Has Video: K-On! S04 - 28 (BluRay).mkv | Missing: Subtitle
+# S04E30 -> Has Video: [Subbers] Higurashi.S04 - 30 [1080p].mkv | Missing: Subtitle
+# S04E31 -> Has Video: Shingeki_no_Kyojin_S04-31 (BDRip).mkv | Missing: Subtitle
+# S04E33 -> Has Video: [Group] Violet.Evergarden.S04 - 33 (720p).mkv | Missing: Subtitle
+# S04E36 -> Has Video: [Subs] March.Comes.in.Like.a.Lion.S04E36.mkv | Missing: Subtitle
+# S04E37 -> Has Video: Your.Lie.in.April.S04 - 37 (1080p).mkv | Missing: Subtitle
+# S04E38 -> Has Video: [GroupX] Barakamon.S04E38.BDRip.mkv | Missing: Subtitle
+# S04E39 -> Has Video: Spirited_Away.S04-39.[WEB].mkv | Missing: Subtitle
+# S04E42 -> Has Video: [FansubTeam] Gurren.Lagann.S04E42.mkv | Missing: Subtitle
+# S04E43 -> Has Video: Nichijou.S04 - 43 (1080p).mkv | Missing: Subtitle
+# S04E45 -> Has Video: Parasyte.S04 - 45 (BDRip).mkv | Missing: Subtitle
+# S04E48 -> Has Video: [ReleaseGroup] Durarara!! S04-48.mkv | Missing: Subtitle
+# S05E01 -> Has Video: [Moozzi2] Re.Zero.S05E01.[BD-1080p][x265].mkv | Missing: Subtitle
+# S05E06 -> Has Video: Cowboy.Bebop.S05-E06.1080p.mkv | Missing: Subtitle
+# S05E10 -> Has Video: Haikyuu!!.S05-10.[BD].mkv | Missing: Subtitle
+# S05E15 -> Has Video: Black.Clover.s05e15.1080p.mkv | Missing: Subtitle
+# S05E17 -> Has Video: [FansubGroup] Fairy.Tail.S05 - EP17 (BD).mkv | Missing: Subtitle
+# S05E18 -> Has Video: Dragon.Ball.S05 - ep18 (BDRip).mkv | Missing: Subtitle
+# S05E19 -> Has Video: Detective.Conan.s05E19.1080p.mkv | Missing: Subtitle
+# S05E21 -> Has Video: Gintama.S05-21.[BD].mkv | Missing: Subtitle
+# S05E24 -> Has Video: [SubGroup] Toradora! S05 - 24 720p.mkv | Missing: Subtitle
+# S05E25 -> Has Video: Steins;Gate.S05E25.[BDRip].mkv | Missing: Subtitle
+# S05E26 -> Has Video: Clannad_S05 - 26 [1080p].mkv | Missing: Subtitle
+# S05E28 -> Has Video: K-On! S05 - 28 (BluRay).mkv | Missing: Subtitle
+# S05E30 -> Has Video: [Subbers] Higurashi.S05 - 30 [1080p].mkv | Missing: Subtitle
+# S05E31 -> Has Video: Shingeki_no_Kyojin_S05-31 (BDRip).mkv | Missing: Subtitle
+# S05E33 -> Has Video: [Group] Violet.Evergarden.S05 - 33 (720p).mkv | Missing: Subtitle
+# S05E36 -> Has Video: [Subs] March.Comes.in.Like.a.Lion.S05E36.mkv | Missing: Subtitle
+# S05E37 -> Has Video: Your.Lie.in.April.S05 - 37 (1080p).mkv | Missing: Subtitle
+# S05E38 -> Has Video: [GroupX] Barakamon.S05E38.BDRip.mkv | Missing: Subtitle
+# S05E39 -> Has Video: Spirited_Away.S05-39.[WEB].mkv | Missing: Subtitle
+# S05E42 -> Has Video: [FansubTeam] Gurren.Lagann.S05E42.mkv | Missing: Subtitle
+# S05E43 -> Has Video: Nichijou.S05 - 43 (1080p).mkv | Missing: Subtitle
+# S05E45 -> Has Video: Parasyte.S05 - 45 (BDRip).mkv | Missing: Subtitle
+# S05E48 -> Has Video: [ReleaseGroup] Durarara!! S05-48.mkv | Missing: Subtitle
+# S06E01 -> Has Video: [Moozzi2] Re.Zero.S06E01.[BD-1080p][x265].mkv | Missing: Subtitle
+# S06E06 -> Has Video: Cowboy.Bebop.S06-E06.1080p.mkv | Missing: Subtitle
+# S06E10 -> Has Video: Haikyuu!!.S06-10.[BD].mkv | Missing: Subtitle
+# S06E15 -> Has Video: Black.Clover.s06e15.1080p.mkv | Missing: Subtitle
+# S06E17 -> Has Video: [FansubGroup] Fairy.Tail.S06 - EP17 (BD).mkv | Missing: Subtitle
+# S06E18 -> Has Video: Dragon.Ball.S06 - ep18 (BDRip).mkv | Missing: Subtitle
+# S06E19 -> Has Video: Detective.Conan.s06E19.1080p.mkv | Missing: Subtitle
+# S06E21 -> Has Video: Gintama.S06-21.[BD].mkv | Missing: Subtitle
+# S06E24 -> Has Video: [SubGroup] Toradora! S06 - 24 720p.mkv | Missing: Subtitle
+# S06E25 -> Has Video: Steins;Gate.S06E25.[BDRip].mkv | Missing: Subtitle
+# S06E26 -> Has Video: Clannad_S06 - 26 [1080p].mkv | Missing: Subtitle
+# S06E28 -> Has Video: K-On! S06 - 28 (BluRay).mkv | Missing: Subtitle
+# S06E30 -> Has Video: [Subbers] Higurashi.S06 - 30 [1080p].mkv | Missing: Subtitle
+# S06E31 -> Has Video: Shingeki_no_Kyojin_S06-31 (BDRip).mkv | Missing: Subtitle
+# S06E33 -> Has Video: [Group] Violet.Evergarden.S06 - 33 (720p).mkv | Missing: Subtitle
+# S06E36 -> Has Video: [Subs] March.Comes.in.Like.a.Lion.S06E36.mkv | Missing: Subtitle
+# S06E37 -> Has Video: Your.Lie.in.April.S06 - 37 (1080p).mkv | Missing: Subtitle
+# S06E38 -> Has Video: [GroupX] Barakamon.S06E38.BDRip.mkv | Missing: Subtitle
+# S06E39 -> Has Video: Spirited_Away.S06-39.[WEB].mkv | Missing: Subtitle
+# S06E42 -> Has Video: [FansubTeam] Gurren.Lagann.S06E42.mkv | Missing: Subtitle
+# S06E43 -> Has Video: Nichijou.S06 - 43 (1080p).mkv | Missing: Subtitle
+# S06E45 -> Has Video: Parasyte.S06 - 45 (BDRip).mkv | Missing: Subtitle
+# S06E48 -> Has Video: [ReleaseGroup] Durarara!! S06-48.mkv | Missing: Subtitle
+# S01E01 -> Has Subtitle: Re.Zero - s06.e01 - [Fansub] (1080p).srt | Missing: Video
+# S01E06 -> Has Subtitle: Cowboy Bebop s06 e06.srt | Missing: Video
+# S01E10 -> Has Subtitle: Haikyuu!! s06 e10 subtitle.srt | Missing: Video
+# S01E15 -> Has Subtitle: Black Clover S06 Ep15.srt | Missing: Video
+# S01E16 -> Has Subtitle: Naruto s02 ep 16 subs.srt | Missing: Video
+# S01E17 -> Has Subtitle: Fairy.Tail.s06.ep17.srt | Missing: Video
+# S01E18 -> Has Subtitle: Dragon Ball S06 E18.srt | Missing: Video
+# S01E19 -> Has Subtitle: Detective Conan s6 e19.srt | Missing: Video
+# S01E22 -> Has Subtitle: Bakemonogatari s02 e22 (eng).srt | Missing: Video
+# S01E24 -> Has Subtitle: Toradora! s06 e24.srt | Missing: Video
+# S01E25 -> Has Subtitle: Steins Gate S2 Ep25.srt | Missing: Video
+# S01E26 -> Has Subtitle: Clannad season6 episode 26.srt | Missing: Video
+# S01E28 -> Has Subtitle: K-On! s06 e28 subtitle.srt | Missing: Video
+# S01E30 -> Has Subtitle: Higurashi.s02.ep30.srt | Missing: Video
+# S01E31 -> Has Subtitle: Shingeki_no_Kyojin_s02_ep31.srt | Missing: Video
+# S01E33 -> Has Subtitle: Violet.Evergarden s06 E33.srt | Missing: Video
+# S01E36 -> Has Subtitle: March Comes in Like a Lion S2 E36.srt | Missing: Video
+# S01E37 -> Has Subtitle: Your Lie In April s06 ep37.srt | Missing: Video
+# S01E38 -> Has Subtitle: Barakamon s06 ep38.srt | Missing: Video
+# S01E39 -> Has Subtitle: Spirited Away S06 E39.srt | Missing: Video
+# S01E42 -> Has Subtitle: Gurren Lagann S06 Ep42.srt | Missing: Video
+# S01E43 -> Has Subtitle: Nichijou s2 e43.srt | Missing: Video
+# S01E45 -> Has Subtitle: Parasyte s06.e45.srt | Missing: Video
+# S01E48 -> Has Subtitle: Durarara!! S06 Ep48.srt | Missing: Video
+# S02E12 -> Has Subtitle: Kimi no Na wa - s02-ep12.srt | Missing: Video
+# S02E27 -> Has Subtitle: Psycho-Pass Season 2 Episode 27.srt | Missing: Video
+# S02E29 -> Has Subtitle: Anohana season02 ep29.srt | Missing: Video
+# S02E49 -> Has Subtitle: ReLIFE s02-49 subtitle.srt | Missing: Video
+# S03E08 -> Has Subtitle: Neon.Genesis.Evangelion.S3Ep08.srt | Missing: Video
+# S03E11 -> Has Subtitle: Mob Psycho 100 Season 3 Episode 11.srt | Missing: Video
+# S03E12 -> Has Subtitle: Kimi.no.na.wa s03-ep12.srt | Missing: Video
+# S03E29 -> Has Subtitle: Anohana S03Ep29.srt | Missing: Video
+# S03E34 -> Has Subtitle: Erased season3 ep34.srt | Missing: Video
+# S03E49 -> Has Subtitle: ReLIFE s03-49 subtitle.srt | Missing: Video
+# S04E08 -> Has Subtitle: Neon.Genesis.Evangelion.S4Ep08.srt | Missing: Video
+# S04E11 -> Has Subtitle: Mob Psycho 100 Season 4 Episode 11.srt | Missing: Video
+# S04E12 -> Has Subtitle: Kimi no na wa s04-ep12.srt | Missing: Video
+# S04E29 -> Has Subtitle: Anohana S04Ep29.srt | Missing: Video
+# S04E34 -> Has Subtitle: Erased season4 ep34.srt | Missing: Video
+# S05E08 -> Has Subtitle: Neon.Genesis.Evangelion.S5Ep08.srt | Missing: Video
+# S05E11 -> Has Subtitle: Mob Psycho 100 Season 5 Episode 11.srt | Missing: Video
+# S05E12 -> Has Subtitle: Kimi no na wa s05-ep12.srt | Missing: Video
+# S05E29 -> Has Subtitle: Anohana S05Ep29.srt | Missing: Video
+# S05E34 -> Has Subtitle: Erased season5 ep34.srt | Missing: Video
+# S06E08 -> Has Subtitle: Neon.Genesis.Evangelion.S6Ep08.srt | Missing: Video
+# S06E11 -> Has Subtitle: Mob Psycho 100 Season 6 Episode 11.srt | Missing: Video
+# S06E12 -> Has Subtitle: Kimi no na wa s06-ep12.srt | Missing: Video
+# S06E29 -> Has Subtitle: Anohana S06Ep29.srt | Missing: Video
+# S06E34 -> Has Subtitle: Erased season6 ep34.srt | Missing: Video
+#

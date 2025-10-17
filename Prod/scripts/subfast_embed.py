@@ -1,656 +1,51 @@
 #!/usr/bin/env python3
-# -*- coding: utf-8 -*-
 """
 SubFast - Embedding Module
+Version: 3.1.0
 
-Fast subtitle renaming and embedding for all languages.
-Automatically embeds subtitle files into corresponding MKV video files using mkvmerge.
-Leverages intelligent pattern matching from the rename_subtitles_to_match_videos_ar.py
-script to find matching pairs of videos and subtitles.
+Fast subtitle embedding into MKV video files using mkvmerge.
+Automatically embeds subtitle files into corresponding MKV video files based on
+intelligent pattern matching to find matching pairs.
 
 Features:
-- Automatic video-subtitle file matching based on episode patterns
+- Automatic video-subtitle file matching
 - Configurable mkvmerge.exe path
 - Backup of original files (.original.mkv suffix)
-- Batch processing of multiple files
 - Language tag detection from subtitle filenames
-- Windows context menu integration
-
-Configuration:
-Settings are read from config.ini in the script directory.
-Key settings:
-  - mkvmerge_path: Path to mkvmerge.exe (optional, defaults to script directory)
-  - Default subtitle track properties (language, default flag)
-
-Usage:
-    python embed_subtitles_to_match_videos_ar.py [directory]
-    python embed_subtitles_to_match_videos_ar.py --test-mkvmerge
-    python embed_subtitles_to_match_videos_ar.py --version
+- Batch processing of multiple files
 """
 
 import os
 import sys
-import re
-import argparse
-import configparser
+import json
 import subprocess
 import shutil
-import time
+import argparse
 from pathlib import Path
+from datetime import datetime
+import time
 
-__version__ = "1.0.0"
+# Import shared modules
+from common import config_loader
+from common import pattern_engine
+from common import csv_reporter
 
-# SubFast Branded Banner - Story 3.3
-BANNER = r"""==========================================
-   ____        _     _____          _   
-  / ___| _   _| |__ |  ___|_ _  ___| |_ 
-  \___ \| | | | '_ \| |_ / _` |/ __| __|
-   ___) | |_| | |_) |  _| (_| |\__ \ |_ 
-  |____/ \__,_|_.__/|_|  \__,_||___/\__|
-                                        
-   Fast subtitle renaming and embedding
 
-==========================================
-"""
-
-CSV_BANNER = r"""# ==========================================
-#    ____        _     _____          _   
-#   / ___| _   _| |__ |  ___|_ _  ___| |_ 
-#   \___ \| | | | '_ \| |_ / _` |/ __| __|
-#    ___) | |_| | |_) |  _| (_| |\__ \ |_ 
-#   |____/ \__,_|_.__/|_|  \__,_||___/\__|
-#                                         
-#    Fast subtitle renaming and embedding
-# 
-# ==========================================
-#
-"""
+__version__ = "3.2.0"
 
 # Exit codes
-EXIT_SUCCESS = 0           # All operations completed successfully
-EXIT_FATAL_ERROR = 1       # Fatal error: mkvmerge not found, config invalid, etc.
-EXIT_PARTIAL_FAILURE = 2   # Some operations failed, some succeeded
-EXIT_COMPLETE_FAILURE = 3  # All operations attempted failed
+EXIT_SUCCESS = 0
+EXIT_FATAL_ERROR = 1
+EXIT_PARTIAL_FAILURE = 2
+EXIT_COMPLETE_FAILURE = 3
 
-# Valid ISO-639 language codes (Set 1 and Set 3)
-# Loaded from ISO-639_set1_and_set3.txt resource file
-VALID_LANGUAGE_CODES = {
-    'ab', 'abk', 'aa', 'aar', 'af', 'afr', 'ak', 'aka', 'sq', 'sqi',
-    'am', 'amh', 'ar', 'ara', 'an', 'arg', 'hy', 'hye', 'as', 'asm',
-    'av', 'ava', 'ae', 'ave', 'ay', 'aym', 'az', 'aze', 'bm', 'bam',
-    'ba', 'bak', 'eu', 'eus', 'be', 'bel', 'bn', 'ben', 'bi', 'bis',
-    'bs', 'bos', 'br', 'bre', 'bg', 'bul', 'my', 'mya', 'ca', 'cat',
-    'km', 'khm', 'ch', 'cha', 'ce', 'che', 'ny', 'nya', 'zh', 'zho',
-    'cu', 'chu', 'cv', 'chv', 'kw', 'cor', 'co', 'cos', 'cr', 'cre',
-    'hr', 'hrv', 'cs', 'ces', 'da', 'dan', 'dv', 'div', 'nl', 'nld',
-    'dz', 'dzo', 'en', 'eng', 'eo', 'epo', 'et', 'est', 'ee', 'ewe',
-    'fo', 'fao', 'fj', 'fij', 'fi', 'fin', 'fr', 'fra', 'ff', 'ful',
-    'gd', 'gla', 'gl', 'glg', 'lg', 'lug', 'ka', 'kat', 'de', 'deu',
-    'el', 'ell', 'gn', 'grn', 'gu', 'guj', 'ht', 'hat', 'ha', 'hau',
-    'he', 'heb', 'hz', 'her', 'hi', 'hin', 'ho', 'hmo', 'hu', 'hun',
-    'is', 'isl', 'io', 'ido', 'ig', 'ibo', 'id', 'ind', 'ia', 'ina',
-    'ie', 'ile', 'iu', 'iku', 'ik', 'ipk', 'ga', 'gle', 'it', 'ita',
-    'ja', 'jpn', 'jv', 'jav', 'kl', 'kal', 'kn', 'kan', 'kr', 'kau',
-    'ks', 'kas', 'kk', 'kaz', 'ki', 'kik', 'rw', 'kin', 'kv', 'kom',
-    'kg', 'kon', 'ko', 'kor', 'kj', 'kua', 'ku', 'kur', 'ky', 'kir',
-    'lo', 'lao', 'la', 'lat', 'lv', 'lav', 'li', 'lim', 'ln', 'lin',
-    'lt', 'lit', 'lu', 'lub', 'lb', 'ltz', 'mk', 'mkd', 'mg', 'mlg',
-    'ms', 'msa', 'ml', 'mal', 'mt', 'mlt', 'gv', 'glv', 'mi', 'mri',
-    'mr', 'mar', 'mh', 'mah', 'mn', 'mon', 'na', 'nau', 'nv', 'nav',
-    'ng', 'ndo', 'ne', 'nep', 'nd', 'nde', 'se', 'sme', 'no', 'nor',
-    'nb', 'nob', 'nn', 'nno', 'oc', 'oci', 'oj', 'oji', 'or', 'ori',
-    'om', 'orm', 'os', 'oss', 'pi', 'pli', 'ps', 'pus', 'fa', 'fas',
-    'pl', 'pol', 'pt', 'por', 'pa', 'pan', 'qu', 'que', 'ro', 'ron',
-    'rm', 'roh', 'rn', 'run', 'ru', 'rus', 'sm', 'smo', 'sg', 'sag',
-    'sa', 'san', 'sc', 'srd', 'sr', 'srp', 'sn', 'sna', 'ii', 'iii',
-    'sd', 'snd', 'si', 'sin', 'sk', 'slk', 'sl', 'slv', 'so', 'som',
-    'nr', 'nbl', 'st', 'sot', 'es', 'spa', 'su', 'sun', 'sw', 'swa',
-    'ss', 'ssw', 'sv', 'swe', 'tl', 'tgl', 'ty', 'tah', 'tg', 'tgk',
-    'ta', 'tam', 'tt', 'tat', 'te', 'tel', 'th', 'tha', 'bo', 'bod',
-    'ti', 'tir', 'to', 'ton', 'ts', 'tso', 'tn', 'tsn', 'tr', 'tur',
-    'tk', 'tuk', 'tw', 'twi', 'ug', 'uig', 'uk', 'ukr', 'ur', 'urd',
-    'uz', 'uzb', 've', 'ven', 'vi', 'vie', 'vo', 'vol', 'wa', 'wln',
-    'cy', 'cym', 'fy', 'fry', 'wo', 'wol', 'xh', 'xho', 'yi', 'yid',
-    'yo', 'yor', 'za', 'zha', 'zu', 'zul'
-}
+# Timeout constants for mkvmerge operations
+TIMEOUT_BASE = 300  # 5 minutes minimum
+TIMEOUT_PER_GB = 120  # 2 minutes per GB
+TIMEOUT_MAX = 1800  # 30 minutes maximum cap
 
-
-def migrate_old_config(config, config_path):
-    """
-    Migrate old configuration key names to new unified format.
-    
-    Story 3.1 Task 13: Provides backward compatibility by detecting old key names
-    and migrating them to the new naming scheme with improved prefixes.
-    
-    Args:
-        config (ConfigParser): Loaded configuration object
-        config_path (Path): Path to config.ini file for saving
-    
-    Returns:
-        bool: True if migration was performed, False if already new format
-    """
-    import datetime
-    
-    migration_mapping = {
-        # Old section/key → New section/key
-        ('FileFormats', 'video_extensions'): ('General', 'detected_video_extensions'),
-        ('FileFormats', 'subtitle_extensions'): ('General', 'detected_subtitle_extensions'),
-        ('General', 'enable_export'): ('Renaming', 'renaming_report'),
-        ('General', 'language_suffix'): ('Renaming', 'renaming_language_suffix'),
-        ('Embedding', 'language'): ('Embedding', 'embedding_language_code'),
-        ('Embedding', 'default_track'): ('Embedding', 'default_flag'),
-        ('Reporting', 'csv_export'): ('Embedding', 'embedding_report'),
-    }
-    
-    migrated = False
-    
-    for (old_section, old_key), (new_section, new_key) in migration_mapping.items():
-        if config.has_option(old_section, old_key):
-            # Get old value
-            old_value = config.get(old_section, old_key)
-            
-            # Ensure new section exists
-            if not config.has_section(new_section):
-                config.add_section(new_section)
-            
-            # Migrate value
-            config.set(new_section, new_key, old_value)
-            
-            # Remove old key
-            config.remove_option(old_section, old_key)
-            
-            print(f"[INFO] Migrated '{old_key}' -> '{new_key}'")
-            migrated = True
-    
-    # Handle old sections that are now obsolete
-    if config.has_section('FileFormats') and not config.options('FileFormats'):
-        config.remove_section('FileFormats')
-        migrated = True
-    
-    if config.has_section('Reporting') and not config.options('Reporting'):
-        config.remove_section('Reporting')
-        migrated = True
-    
-    if migrated:
-        # Save migrated config
-        with open(config_path, 'w', encoding='utf-8') as f:
-            f.write('# SubFast - Unified Configuration\n')
-            f.write(f'# Migrated to unified format on {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}\n')
-            f.write('# Language values empty by default (populate for language-specific versions)\n\n')
-            config.write(f)
-        
-        print("[INFO] Configuration migrated to unified format")
-    
-    return migrated
-
-
-def ensure_section_exists(config, section_name, defaults, config_path):
-    """
-    Ensure a configuration section exists with all required keys.
-    
-    Story 3.1 Task 13: Graceful handling of missing sections by auto-adding
-    them with default values.
-    
-    Args:
-        config (ConfigParser): Configuration object
-        section_name (str): Name of section to check/create
-        defaults (dict): Default key-value pairs for the section
-        config_path (Path): Path to config.ini for saving
-    
-    Returns:
-        bool: True if changes were made, False if section was complete
-    """
-    changes_made = False
-    
-    # Add section if missing
-    if not config.has_section(section_name):
-        config.add_section(section_name)
-        print(f"[INFO] Added missing [{section_name}] section to config.ini")
-        changes_made = True
-    
-    # Add missing keys
-    for key, value in defaults.items():
-        if not config.has_option(section_name, key):
-            config.set(section_name, key, value)
-            changes_made = True
-    
-    # Save if changes were made
-    if changes_made:
-        with open(config_path, 'w', encoding='utf-8') as f:
-            f.write('# SubFast - Unified Configuration\n')
-            f.write('# Language values empty by default (populate for language-specific versions)\n\n')
-            config.write(f)
-    
-    return changes_made
-
-
-def load_config():
-    """
-    Load configuration from unified config.ini file.
-    
-    Story 3.1 Task 13: Reads from unified structure with [General], [Renaming], and [Embedding] sections.
-    Automatically migrates old key names and handles missing sections gracefully.
-    
-    Returns:
-        dict: Configuration dictionary with keys:
-            - mkvmerge_path: Path to mkvmerge.exe (or None for default)
-            - default_track: Whether subtitle track should be marked as default
-            - language: Default language code for subtitle tracks (NEW: embedding_language_code)
-            - csv_export: Whether to generate CSV report (NEW: embedding_report)
-            - detected_video_extensions: Video file extensions (NEW: from [General])
-            - detected_subtitle_extensions: Subtitle file extensions (NEW: from [General])
-    """
-    import datetime
-    script_dir = Path(__file__).parent.parent  # Parent of scripts folder
-    config_path = script_dir / 'config.ini'
-    
-    # Default configuration (Story 3.1 Task 13 unified fallbacks)
-    config_dict = {
-        'mkvmerge_path': None,
-        'default_track': True,
-        'language': 'none',    # NEW: embedding_language_code fallback
-        'csv_export': False,   # NEW: embedding_report fallback
-        'detected_video_extensions': ['mkv', 'mp4'],  # NEW: from [General]
-        'detected_subtitle_extensions': ['srt', 'ass'],  # NEW: from [General]
-        'merge_timeout_seconds': 1800  # default 30 minutes for large files
-    }
-    
-    if not config_path.exists():
-        print(f"[INFO] config.ini not found at {config_path}")
-        create_default_config(config_path)
-        # Continue to load the newly created config
-    
-    if not config_path.exists():
-        # Fallback if creation failed
-        print("[INFO] Using default configuration: mkvmerge.exe in script directory")
-        return config_dict
-    
-    try:
-        config = configparser.ConfigParser()
-        
-        # Try to read config with corrupted config handling (Story 3.1 Task 13)
-        try:
-            config.read(config_path, encoding='utf-8')
-        except (configparser.MissingSectionHeaderError, configparser.ParsingError) as e:
-            # Corrupted config - backup and recreate
-            backup_filename = f"config.ini.backup.{datetime.datetime.now().strftime('%Y%m%d_%H%M%S')}"
-            backup_path = config_path.parent / backup_filename
-            shutil.move(str(config_path), str(backup_path))
-            
-            print(f"[WARNING] config.ini is missing section headers or corrupted")
-            print(f"[INFO] Backup saved as: {backup_filename}")
-            
-            create_default_config(config_path)
-            
-            print(f"[INFO] Created new config.ini with unified structure")
-            print(f"[INFO] Please review backup and copy your custom values to new config.ini")
-            
-            # Load the newly created config
-            config.read(config_path, encoding='utf-8')
-        
-        # Migrate old configuration keys if present (Story 3.1 Task 13)
-        migrate_old_config(config, config_path)
-        
-        # Ensure all required sections exist (Story 3.1 Task 13)
-        ensure_section_exists(config, 'General', {
-            'detected_video_extensions': 'mkv, mp4',
-            'detected_subtitle_extensions': 'srt, ass'
-        }, config_path)
-        
-        ensure_section_exists(config, 'Renaming', {
-            'renaming_report': 'true',
-            'renaming_language_suffix': ''
-        }, config_path)
-        
-        ensure_section_exists(config, 'Embedding', {
-            'mkvmerge_path': '',
-            'embedding_language_code': '',
-            'default_flag': 'true',
-            'embedding_report': 'true',
-            'merge_timeout_seconds': ''
-        }, config_path)
-        
-        # Read [General] section (NEW in Task 13)
-        if config.has_section('General'):
-            if config.has_option('General', 'detected_video_extensions'):
-                exts = config.get('General', 'detected_video_extensions').strip()
-                if exts:
-                    config_dict['detected_video_extensions'] = [e.strip() for e in exts.split(',')]
-            
-            if config.has_option('General', 'detected_subtitle_extensions'):
-                exts = config.get('General', 'detected_subtitle_extensions').strip()
-                if exts:
-                    config_dict['detected_subtitle_extensions'] = [e.strip() for e in exts.split(',')]
-        
-        # Read [Embedding] section with NEW unified key names
-        if config.has_section('Embedding'):
-            if config.has_option('Embedding', 'mkvmerge_path'):
-                path = config.get('Embedding', 'mkvmerge_path').strip()
-                if path:
-                    config_dict['mkvmerge_path'] = path
-            
-            # NEW: default_flag (was: default_track)
-            if config.has_option('Embedding', 'default_flag'):
-                val = config.get('Embedding', 'default_flag').strip().lower()
-                if val in ('yes', 'true', '1'):
-                    config_dict['default_track'] = True
-                elif val in ('no', 'false', '0'):
-                    config_dict['default_track'] = False
-                else:
-                    config_dict['default_track'] = True  # Fallback
-                    print("[WARNING] Invalid default_flag value, using fallback: yes")
-            
-            # NEW: embedding_language_code (was: language)
-            if config.has_option('Embedding', 'embedding_language_code'):
-                lang = config.get('Embedding', 'embedding_language_code').strip()
-                if lang and lang.lower() != 'none':
-                    # Validate against ISO-639 codes
-                    if lang.lower() in VALID_LANGUAGE_CODES:
-                        config_dict['language'] = lang
-                    else:
-                        print(f"[WARNING] Invalid language code '{lang}' - not a valid ISO-639 code")
-                        print(f"[WARNING] Falling back to 'none' (no language tag will be set)")
-                        config_dict['language'] = 'none'
-                else:
-                    config_dict['language'] = 'none'  # Explicit none or empty
-            
-            # NEW: embedding_report (was: csv_export from [Reporting])
-            if config.has_option('Embedding', 'embedding_report'):
-                val = config.get('Embedding', 'embedding_report').strip().lower()
-                if val in ('true', 'yes', '1'):
-                    config_dict['csv_export'] = True
-                elif val in ('false', 'no', '0'):
-                    config_dict['csv_export'] = False
-                else:
-                    config_dict['csv_export'] = False  # Fallback
-                    print("[WARNING] Invalid embedding_report value, using fallback: false")
-
-            # Optional timeout override (seconds)
-            if config.has_option('Embedding', 'merge_timeout_seconds'):
-                t_raw = config.get('Embedding', 'merge_timeout_seconds').strip()
-                if t_raw:
-                    try:
-                        t_val = int(t_raw)
-                        if t_val >= 60:
-                            config_dict['merge_timeout_seconds'] = t_val
-                    except Exception:
-                        print("[WARNING] Invalid merge_timeout_seconds; using default 1800s")
-        
-        print(f"[INFO] Configuration loaded from: {config_path}")
-        if config_dict['mkvmerge_path']:
-            print(f"  mkvmerge path: {config_dict['mkvmerge_path']}")
-        else:
-            print(f"  mkvmerge path: (default - script directory)")
-        print(f"  default_flag: {'yes' if config_dict['default_track'] else 'no'}")
-        print(f"  embedding_language_code: {config_dict['language']}")
-        print(f"  embedding_report: {'enabled' if config_dict['csv_export'] else 'disabled'}")
-        
-        return config_dict
-        
-    except Exception as e:
-        print(f"[WARNING] Failed to parse config.ini: {e}")
-        print("[INFO] Using default configuration")
-        return config_dict
-
-
-def create_default_config(config_path):
-    """
-    Create a default unified config.ini file with all three sections.
-    
-    Story 3.1 Task 13: Creates unified config with [General], [Renaming], and [Embedding] sections.
-    Language values are EMPTY by default (populated for language-specific distributions).
-    
-    Args:
-        config_path (Path): Path where config.ini should be created
-    """
-    config = configparser.ConfigParser()
-    
-    # Add [General] section (NEW in Task 13 - shared settings)
-    config['General'] = {
-        'detected_video_extensions': 'mkv, mp4',
-        'detected_subtitle_extensions': 'srt, ass'
-    }
-    
-    # Add [Renaming] section (NEW in Task 13 - renaming script settings)
-    config['Renaming'] = {
-        'renaming_report': 'true',
-        'renaming_language_suffix': ''  # EMPTY by default - Task 13 requirement
-    }
-    
-    # Add [Embedding] section with NEW unified key names
-    config['Embedding'] = {
-        'mkvmerge_path': '',  # Empty = use script directory
-        'embedding_language_code': '',  # EMPTY by default - Task 13 requirement
-        'default_flag': 'true',
-        'embedding_report': 'true'
-    }
-    
-    # Write config with comprehensive comments
-    with open(config_path, 'w', encoding='utf-8') as f:
-        f.write('# ============================================================================\n')
-        f.write('# Unified Configuration - Subtitle Tools\n')
-        f.write('# ============================================================================\n')
-        f.write('# Shared by both renaming and embedding scripts\n')
-        f.write('# Language values empty by default (populated for language-specific distributions)\n')
-        f.write('# ============================================================================\n\n')
-        config.write(f)
-    
-    print(f"[INFO] Created default config.ini at: {config_path}")
-    print("[INFO] Unified configuration with [General], [Renaming], and [Embedding] sections")
-    print("[INFO] Language values are empty - populate for language-specific versions")
-
-
-def validate_mkvmerge(mkvmerge_path=None):
-    """
-    Validate that mkvmerge.exe exists and is executable.
-    
-    Checks for mkvmerge at the specified path, or in the script directory
-    if no path is provided. Runs 'mkvmerge --version' to verify it works.
-    
-    Args:
-        mkvmerge_path: Optional path to mkvmerge.exe. If None, checks script directory.
-    
-    Returns:
-        tuple: (success: bool, resolved_path: str or None, version_info: str or None)
-    
-    Examples:
-        >>> validate_mkvmerge()
-        (True, 'C:/path/to/mkvmerge.exe', 'mkvmerge v82.0')
-        
-        >>> validate_mkvmerge('/invalid/path')
-        (False, None, None)
-    """
-    script_dir = Path(__file__).parent.parent  # Parent of scripts folder
-    
-    # Determine path to check
-    if mkvmerge_path:
-        mkvmerge_exe = Path(mkvmerge_path)
-        # If relative path, resolve from script_dir
-        if not mkvmerge_exe.is_absolute():
-            mkvmerge_exe = script_dir / mkvmerge_exe
-    else:
-        # Default: look in bin/ directory
-        mkvmerge_exe = script_dir / 'bin' / 'mkvmerge.exe'
-    
-    # Check if file exists
-    if not mkvmerge_exe.exists():
-        return False, None, None
-    
-    # Check if file is accessible (try to read it)
-    if not os.access(mkvmerge_exe, os.R_OK):
-        return False, str(mkvmerge_exe), None
-    
-    # Try to run mkvmerge --version
-    try:
-        result = subprocess.run(
-            [str(mkvmerge_exe), '--version'],
-            capture_output=True,
-            text=True,
-            encoding='utf-8',
-            errors='replace',
-            timeout=5
-        )
-        
-        if result.returncode == 0:
-            # Parse version from output (first line usually contains version)
-            version_info = result.stdout.split('\n')[0] if result.stdout else "mkvmerge (version unknown)"
-            return True, str(mkvmerge_exe), version_info
-        else:
-            return False, str(mkvmerge_exe), None
-            
-    except subprocess.TimeoutExpired:
-        return False, str(mkvmerge_exe), None
-    except FileNotFoundError:
-        return False, str(mkvmerge_exe), None
-    except Exception as e:
-        print(f"[WARNING] Error running mkvmerge: {e}")
-        return False, str(mkvmerge_exe), None
-
-
-def detect_subtitle_language(subtitle_filename, config_language):
-    """
-    Detect subtitle language using 3-tier strategy (Story 3.1).
-    
-    Tier 1 (Highest Priority): Filename suffix (e.g., movie.ar.srt)
-    Tier 2: Config file language value
-    Tier 3 (Fallback): 'none' (no language tag)
-    
-    Args:
-        subtitle_filename (str): Name of subtitle file
-        config_language (str): Language from config file (or 'none')
-    
-    Returns:
-        str: Detected language code or 'none'
-    
-    Examples:
-        >>> detect_subtitle_language('movie.ar.srt', 'en')
-        'ar'  # Filename overrides config
-        
-        >>> detect_subtitle_language('movie.srt', 'en')
-        'en'  # No filename suffix, use config
-        
-        >>> detect_subtitle_language('movie.srt', 'none')
-        'none'  # Both missing, use fallback
-    """
-    # Tier 1: Check filename for language suffix
-    filename_lang = detect_language_from_filename(subtitle_filename)
-    if filename_lang:
-        return filename_lang
-    
-    # Tier 2: Use config language if valid (not 'none')
-    if config_language and config_language != 'none' and len(config_language) in [2, 3]:
-        return config_language
-    
-    # Tier 3: Default fallback
-    return 'none'
-
-
-def detect_language_from_filename(subtitle_file):
-    """
-    Detect language code from subtitle filename (Tier 1 helper).
-    
-    Implements strategy pattern: extract language from filename using common patterns.
-    Supports both 2-letter (ISO 639-1) and 3-letter (ISO 639-2) codes.
-    
-    Args:
-        subtitle_file (str or Path): Path to subtitle file
-    
-    Returns:
-        str or None: Language code if detected, None otherwise
-    
-    Examples:
-        >>> detect_language_from_filename('episode.ar.srt')
-        'ar'
-        
-        >>> detect_language_from_filename('movie.eng.srt')
-        'eng'
-        
-        >>> detect_language_from_filename('video.srt')
-        None
-    """
-    filename = Path(subtitle_file).name.lower()
-    
-    # Common 2-letter ISO 639-1 codes
-    two_letter_codes = [
-        'ar', 'en', 'fr', 'de', 'es', 'it', 'pt', 'ru', 'ja', 'ko',
-        'zh', 'hi', 'tr', 'pl', 'nl', 'sv', 'no', 'da', 'fi', 'cs',
-        'el', 'he', 'hu', 'ro', 'sk', 'uk', 'vi', 'th', 'id', 'ms'
-    ]
-    
-    # Common 3-letter ISO 639-2 codes
-    three_letter_codes = [
-        'ara', 'eng', 'fra', 'deu', 'ger', 'spa', 'ita', 'por', 'rus',
-        'jpn', 'kor', 'zho', 'chi', 'hin', 'tur', 'pol', 'nld', 'dut',
-        'swe', 'nor', 'dan', 'fin', 'ces', 'cze', 'ell', 'gre', 'heb',
-        'hun', 'ron', 'rum', 'slk', 'slo', 'ukr', 'vie', 'tha', 'ind',
-        'msa', 'may'
-    ]
-    
-    # Pattern 1: .XX.ext (e.g., episode.ar.srt)
-    pattern = r'\.([a-z]{2,3})\.[^.]+$'
-    match = re.search(pattern, filename)
-    
-    if match:
-        lang_code = match.group(1)
-        if lang_code in two_letter_codes or lang_code in three_letter_codes:
-            return lang_code
-    
-    # Pattern 2: _XX.ext (e.g., episode_ar.srt)
-    pattern = r'_([a-z]{2,3})\.[^.]+$'
-    match = re.search(pattern, filename)
-    
-    if match:
-        lang_code = match.group(1)
-        if lang_code in two_letter_codes or lang_code in three_letter_codes:
-            return lang_code
-    
-    # Pattern 3: [XX] (e.g., episode[ar].srt)
-    pattern = r'\[([a-z]{2,3})\]'
-    match = re.search(pattern, filename)
-    
-    if match:
-        lang_code = match.group(1)
-        if lang_code in two_letter_codes or lang_code in three_letter_codes:
-            return lang_code
-    
-    # No language code detected
-    return None
-
-
-# ============================================================================
-# FILE DISCOVERY AND MATCHING (Story 2.1)
-# ============================================================================
-
-# Episode pattern detection - reused from rename_subtitles_to_match_videos_ar.py
-EPISODE_PATTERNS = [
-    (re.compile(r'[Ss](\d+)[Ee](\d+)'), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'(?:^|[._\s-])(\d{1,2})[xX](\d+)(?=[._\s-]|$)'), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss](\d{1,2})\s*-\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss](\d{1,2})\s*-\s*[Ee](\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss](\d{1,2})\s*-\s*[Ee][Pp](\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'(\d{1,2})(?:st|nd|rd|th)\s+[Ss]eason\s*-\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'(\d{1,2})(?:st|nd|rd|th)\s+[Ss]eason\s+[Ee]pisode\s+(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'(\d{1,2})(?:st|nd|rd|th)\s+[Ss]eason\s+[Ee]\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'(\d{1,2})(?:st|nd|rd|th)\s+[Ss]eason\s+[Ee][Pp]\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss]eason\s+(\d{1,2})\s*-\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss]eason(\d{1,2})\s*-\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss]eason\.(\d+)[\s\._-]*[Ee]pisode\.(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss](\d+)[\s\._-]*[Ee]p(?:isode)?\.(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss](\d+)[Ee]p(?:isode)?(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss]eason\s+(\d+)\s+[Ee]pisode\s+(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss]eason(\d+)[Ee]pisode(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss]eason(\d+)\s+[Ee]pisode(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss]eason(\d+)\s+[Ee]p(?:isode)?(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss]eason(\d+)[Ee]p(?:isode)?(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'(?:^|[._\s-])[Ee](\d+)(?=[._\s-]|$)'), lambda m: ("01", m.group(1).zfill(2))),
-    (re.compile(r'[Ss]eason\s+(\d+)[\s\._-]*[Ee]p(?:isode)?\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'[Ss]eason(\d+)[\s\._-]*[Ee]p(?:isode)?(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'(?:^|[._\s-])[Ee]p(?:isode)?\s*(\d+)(?=[._\s-]|$)', re.IGNORECASE), lambda m: ("01", m.group(1).zfill(2))),
-    (re.compile(r'[Ss]eason\s+(\d+)\s+[Ee]p(?:isode)?\s*(\d+)', re.IGNORECASE), lambda m: (m.group(1).zfill(2), m.group(2).zfill(2))),
-    (re.compile(r'-\s*(\d+)'), lambda m: ("01", m.group(1).zfill(2))),
-]
-
-# Patterns for movie name matching
+# Movie mode matching patterns and helpers
+import re
 YEAR_PATTERN = re.compile(r'(?:19|20)\d{2}')
 BASE_NAME_CLEANUP = re.compile(r'[._\-]+')
 
@@ -664,324 +59,158 @@ COMMON_INDICATORS = {
     'dub', 'dubbed'
 }
 
-_episode_cache = {}
+# Linguistic filler words (stop words) to exclude from movie title matching
+# These words appear frequently in titles but have little semantic value for distinguishing movies
+# Filtering these prevents false matches like "Movie of Year" matching "Subtitle of 2025"
+# Similar to COMMON_INDICATORS which filters technical terms, this filters linguistic noise
+FILLER_WORDS = {
+    # Articles
+    'a', 'an', 'the',
+    # Prepositions
+    'of', 'in', 'on', 'at', 'to', 'for', 'with', 'from', 'by',
+    'about', 'as', 'into', 'through', 'during', 'before', 'after',
+    'above', 'below', 'between', 'among', 'under', 'over',
+    # Conjunctions
+    'and', 'or', 'but', 'nor', 'yet', 'so',
+    # Common pronouns
+    'it', 'its', 'this', 'that', 'these', 'those',
+    # Common verbs
+    'is', 'are', 'was', 'were', 'be', 'been', 'being',
+    'have', 'has', 'had', 'do', 'does', 'did',
+    # Other common words
+    'not', 'all', 'no', 'some', 'more', 'most', 'very',
+    'can', 'will', 'just', 'should', 'than', 'also', 'only',
+    # Numbers as words
+    'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten'
+}
 
 
-def get_episode_number(filename):
-    """
-    Extract episode information from filename using pattern matching.
-    Adapted from rename_subtitles_to_match_videos_ar.py.
-    
-    Args:
-        filename: The filename to parse
-        
-    Returns:
-        Normalized episode string (e.g., 'S01E05') or None if no pattern found
-    """
-    for pattern, formatter in EPISODE_PATTERNS:
-        match = pattern.search(filename)
-        if match:
-            season, episode = formatter(match)
-            return f"S{season}E{episode}"
-    return None
+def load_language_codes():
+    """Load language codes from JSON file."""
+    json_path = Path(__file__).parent.parent / 'resources' / 'data' / 'mkvmerge_language_codes.json'
+    try:
+        with open(json_path, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        print(f"[WARNING] Language codes file not found: {json_path}")
+        print("[INFO] Language detection will be limited")
+        return {'codes': {}, 'common_two_letter_codes': {}}
+    except json.JSONDecodeError as e:
+        print(f"[WARNING] Failed to parse language codes file: {e}")
+        return {'codes': {}, 'common_two_letter_codes': {}}
 
 
-def get_episode_number_cached(filename):
-    """Cached wrapper for get_episode_number - avoids redundant regex operations"""
-    if filename not in _episode_cache:
-        _episode_cache[filename] = get_episode_number(filename)
-    return _episode_cache[filename]
+# Load language codes at module level
+LANGUAGE_DATA = load_language_codes()
 
 
-def extract_base_name(filename):
-    """
-    Extract and clean base filename for comparison.
-    Converts separators (., _, -) to spaces.
-    
-    Args:
-        filename: The filename to process
-        
-    Returns:
-        Cleaned base name with spaces
-    """
-    base_name = Path(filename).stem
-    base_name = BASE_NAME_CLEANUP.sub(' ', base_name)
-    return base_name.strip()
+def is_valid_language_code(lang):
+    """Check if language code is valid for mkvmerge."""
+    if not lang:
+        return False
+    code_lower = lang.lower()
+    return (code_lower in LANGUAGE_DATA.get('codes', {}) or 
+            code_lower in LANGUAGE_DATA.get('common_two_letter_codes', {}))
 
 
-def match_movie_files(video_files, subtitle_files):
-    """
-    Match single movie file with single subtitle file based on title similarity.
-    Adapted from rename_subtitles_to_match_videos_ar.py.
-    
-    Uses two matching strategies:
-    1. Year matching: If both files contain the same 4-digit year
-    2. Word overlap: Compares common words after removing quality indicators
-    
-    Args:
-        video_files: List of video Path objects
-        subtitle_files: List of subtitle Path objects
-        
-    Returns:
-        Tuple of (video_file, subtitle_file) if match found, None otherwise
-    """
-    if len(video_files) != 1 or len(subtitle_files) != 1:
+def normalize_language_code(code):
+    """Normalize language code to 3-letter ISO 639-2 format."""
+    if not code:
         return None
+    code_lower = code.lower()
     
-    video_name = extract_base_name(video_files[0].name)
-    subtitle_name = extract_base_name(subtitle_files[0].name)
+    # Already 3-letter code
+    if code_lower in LANGUAGE_DATA.get('codes', {}):
+        return code_lower
     
-    video_year_match = YEAR_PATTERN.search(video_files[0].name)
-    subtitle_year_match = YEAR_PATTERN.search(subtitle_files[0].name)
-    
-    video_year = video_year_match.group() if video_year_match else None
-    subtitle_year = subtitle_year_match.group() if subtitle_year_match else None
-    
-    video_words = set(video_name.lower().split()) - COMMON_INDICATORS
-    subtitle_words = set(subtitle_name.lower().split()) - COMMON_INDICATORS
-    
-    common_words = video_words.intersection(subtitle_words)
-    years_match = (video_year and subtitle_year and video_year == subtitle_year)
-    
-    if years_match:
-        if len(common_words) > 0:
-            return (video_files[0], subtitle_files[0])
-    else:
-        if len(video_words) > 0 and len(subtitle_words) > 0:
-            match_ratio = len(common_words) / min(len(video_words), len(subtitle_words))
-            if match_ratio >= 0.3 or len(common_words) > 0:
-                return (video_files[0], subtitle_files[0])
+    # Convert 2-letter to 3-letter
+    two_letter_map = LANGUAGE_DATA.get('common_two_letter_codes', {})
+    if code_lower in two_letter_map:
+        return two_letter_map[code_lower]
     
     return None
 
 
-def find_matching_files(directory):
+def detect_language_from_filename(filename):
     """
-    Find and match MKV video files with corresponding subtitle files.
+    Detect language code from subtitle filename.
     
-    Implements comprehensive file discovery and matching using patterns from
-    rename_subtitles_to_match_videos_ar.py. Supports TV show episodes and movies.
-    
-    Args:
-        directory: Path to directory to scan for files
-    
-    Returns:
-        list: List of tuples (video_file, subtitle_file) as Path objects
+    Looks for patterns like:
+    - filename.ar.srt
+    - filename.en.forced.srt
+    - filename.ara.ass
     """
-    dir_path = Path(directory)
+    name_without_ext = filename.rsplit('.', 1)[0] if '.' in filename else filename
+    parts = name_without_ext.split('.')
     
-    # Scan for video and subtitle files
-    video_files = list(dir_path.glob('*.mkv'))
-    subtitle_files = list(dir_path.glob('*.srt')) + list(dir_path.glob('*.ass')) + list(dir_path.glob('*.ssa'))
-    
-    # Filter out hidden files and already-embedded files
-    video_files = [v for v in video_files if not v.name.startswith('.')]
-    video_files = [v for v in video_files if not v.name.endswith('.embedded.mkv')]
-    subtitle_files = [s for s in subtitle_files if not s.name.startswith('.')]
-    
-    print(f"\n[INFO] Files found: {len(video_files)} videos, {len(subtitle_files)} subtitles")
-    
-    if not video_files or not subtitle_files:
-        print("[INFO] No video-subtitle pairs to match")
-        return {
-            'matches': [],
-            'unmatched_videos': video_files,
-            'unmatched_subtitles': subtitle_files,
-            'total_videos': len(video_files),
-            'total_subtitles': len(subtitle_files)
-        }
-    
-    # Build episode context for TV shows
-    video_episodes = {}
-    video_by_episode = {}
-    
-    for video in sorted(video_files, key=lambda v: v.name):
-        episode_string = get_episode_number_cached(video.name)
-        if episode_string:
-            match = re.match(r'S(\d+)E(\d+)', episode_string)
-            if match:
-                season_num = int(match.group(1))
-                episode_num = int(match.group(2))
-                key = (season_num, episode_num)
-                
-                if key not in video_episodes:
-                    video_episodes[key] = episode_string
-                    video_by_episode[episode_string] = video
-                elif episode_string not in video_by_episode:
-                    video_by_episode[episode_string] = video
-    
-    # Match subtitles to videos
-    matches = []
-    matched_videos = set()
-    matched_subtitles = set()
-    
-    # Try episode matching first
-    for subtitle in sorted(subtitle_files, key=lambda s: s.name):
-        episode_string = get_episode_number_cached(subtitle.name)
+    # Check last few parts for language codes
+    for part in reversed(parts[-3:]):
+        part_lower = part.lower().strip()
         
-        if episode_string:
-            # Standardize episode format to match video context
-            match = re.match(r'S(\d+)E(\d+)', episode_string)
-            if match:
-                season_num = int(match.group(1))
-                episode_num = int(match.group(2))
-                key = (season_num, episode_num)
-                
-                # Use standardized episode string if available
-                if key in video_episodes:
-                    adjusted_episode = video_episodes[key]
-                else:
-                    adjusted_episode = episode_string
-                
-                # Find matching video
-                if adjusted_episode in video_by_episode:
-                    video = video_by_episode[adjusted_episode]
-                    matches.append((video, subtitle))
-                    matched_videos.add(video)
-                    matched_subtitles.add(subtitle)
-    
-    # Try movie matching if no episode matches found
-    if not matches:
-        unmatched_videos = [v for v in video_files if v not in matched_videos]
-        unmatched_subtitles = [s for s in subtitle_files if s not in matched_subtitles]
+        # Skip common non-language parts
+        if part_lower in ('forced', 'sdh', 'cc', 'hi'):
+            continue
         
-        movie_match = match_movie_files(unmatched_videos, unmatched_subtitles)
-        if movie_match:
-            video, subtitle = movie_match
-            matches.append((video, subtitle))
-            matched_videos.add(video)
-            matched_subtitles.add(subtitle)
-            print("[INFO] Movie mode: Matched single video-subtitle pair")
+        # Try to normalize
+        normalized = normalize_language_code(part_lower)
+        if normalized:
+            return normalized
     
-    # Report unmatched files
-    unmatched_videos = [v for v in video_files if v not in matched_videos]
-    unmatched_subtitles = [s for s in subtitle_files if s not in matched_subtitles]
-    
-    if unmatched_videos:
-        print(f"\n[WARNING] {len(unmatched_videos)} video(s) without matching subtitles:")
-        for video in unmatched_videos:
-            ep = get_episode_number_cached(video.name)
-            if ep:
-                print(f"  - {video.name} ({ep})")
-            else:
-                print(f"  - {video.name} (no episode pattern detected)")
-    
-    if unmatched_subtitles:
-        print(f"\n[WARNING] {len(unmatched_subtitles)} subtitle(s) without matching videos:")
-        for subtitle in unmatched_subtitles:
-            ep = get_episode_number_cached(subtitle.name)
-            if ep:
-                print(f"  - {subtitle.name} ({ep})")
-            else:
-                print(f"  - {subtitle.name} (no episode pattern detected)")
-    
-    # Display matching results
-    if matches:
-        print(f"\n[INFO] Found {len(matches)} video-subtitle pair(s):")
-        for video, subtitle in matches:
-            ep = get_episode_number_cached(video.name)
-            if ep:
-                print(f"  - {video.name} + {subtitle.name} ({ep})")
-            else:
-                print(f"  - {video.name} + {subtitle.name} (movie)")
-        print()
-    
-    # Return matches along with unmatched file info for CSV reporting
-    return {
-        'matches': matches,
-        'unmatched_videos': unmatched_videos,
-        'unmatched_subtitles': unmatched_subtitles,
-        'total_videos': len(video_files),
-        'total_subtitles': len(subtitle_files)
-    }
+    return None
 
 
-def build_mkvmerge_command(video_file, subtitle_file, output_file, config):
+def detect_language_with_fallback(filename, config_language):
     """
-    Build mkvmerge command line for embedding subtitle into video.
-    
-    Generates Windows-compatible subprocess command as list of arguments.
-    Implements language detection strategy and configurable default track flag.
-    
-    Args:
-        video_file (str or Path): Path to source MKV video file
-        subtitle_file (str or Path): Path to subtitle file to embed
-        output_file (str or Path): Path for output merged file
-        config (dict): Configuration dictionary from load_config()
-    
-    Returns:
-        list: Command line arguments for subprocess.run()
-    
-    Example:
-        >>> config = {'mkvmerge_path': None, 'default_track': True, 'language': 'ar'}
-        >>> cmd = build_mkvmerge_command('video.mkv', 'sub.srt', 'out.mkv', config)
-        >>> cmd[0]  # mkvmerge path
-        >>> cmd[1:3]  # ['-o', 'out.mkv']
+    Detect language with fallback: filename → config → none.
     """
-    # Get validated mkvmerge path
-    success, mkvmerge_path, _ = validate_mkvmerge(config.get('mkvmerge_path'))
+    # Tier 1: Try filename detection
+    filename_lang = detect_language_from_filename(filename)
+    if filename_lang:
+        return filename_lang
     
-    if not success:
-        raise FileNotFoundError("mkvmerge.exe not found or not executable")
+    # Tier 2: Try config value
+    if config_language:
+        normalized = normalize_language_code(config_language)
+        if normalized:
+            return normalized
+        else:
+            print(f"[WARNING] Invalid language code in config: '{config_language}'")
     
-    # Build command as list (Windows subprocess pattern)
-    command = [
-        str(mkvmerge_path),
-        '-o', str(output_file),
-        str(video_file)
-    ]
-    
-    # Story 3.1: 3-tier language detection (filename → config → none)
-    config_language = config.get('language', 'none')
-    detected_language = detect_subtitle_language(Path(subtitle_file).name, config_language)
-    
-    # Only add language option if not 'none'
-    if detected_language and detected_language != 'none':
-        command.extend(['--language', f'0:{detected_language}'])
-    
-    # Add default track flag (explicit yes or no)
-    if config.get('default_track', True):
-        command.extend(['--default-track', '0:yes'])
-    else:
-        command.extend(['--default-track', '0:no'])
-    
-    # Add subtitle file
-    command.append(str(subtitle_file))
-    
-    return command
+    # Tier 3: No language
+    return None
 
 
-# ============================================================================
-# Story 2.2: Backup and Output File Management Functions
-# ============================================================================
-
-def has_sufficient_space(video_file, subtitle_file):
+def find_mkvmerge(config_path):
     """
-    Check if there is sufficient disk space for the embedding operation.
+    Find mkvmerge executable.
     
-    Required space = video file size + subtitle file size + 10% overhead
-    
-    Args:
-        video_file (Path): Path to video file
-        subtitle_file (Path): Path to subtitle file
-    
-    Returns:
-        bool: True if sufficient space available, False otherwise
+    Search order:
+    1. config['mkvmerge_path'] if specified
+    2. Script directory bin/ subdirectory
+    3. System PATH
     """
-    video_size = video_file.stat().st_size
-    subtitle_size = subtitle_file.stat().st_size
-    required_space = video_size + subtitle_size + int((video_size + subtitle_size) * 0.10)
+    config_mkvmerge = config_path.strip() if config_path else ""
     
-    # Check available space on the drive containing the video file
-    disk_usage = shutil.disk_usage(video_file.parent)
-    available_space = disk_usage.free
+    # Check config path first
+    if config_mkvmerge and Path(config_mkvmerge).is_file():
+        return Path(config_mkvmerge)
     
-    return available_space > required_space
+    # Check bin/ subdirectory (v3.0.0 compatible location)
+    script_dir = Path(__file__).parent.parent
+    local_mkvmerge = script_dir / 'bin' / 'mkvmerge.exe'
+    if local_mkvmerge.is_file():
+        return local_mkvmerge
+    
+    # Check system PATH
+    if shutil.which('mkvmerge'):
+        return Path(shutil.which('mkvmerge'))
+    
+    return None
 
 
 def ensure_backups_directory(working_dir):
     """
-    Create backups/ directory if it doesn't exist.
+    Create backups/ directory if it doesn't exist (v3.0.0 workflow).
     
     Args:
         working_dir (Path): Working directory where backups/ should be created
@@ -992,13 +221,13 @@ def ensure_backups_directory(working_dir):
     backups_dir = working_dir / 'backups'
     if not backups_dir.exists():
         backups_dir.mkdir(exist_ok=True)
-        print("[BACKUP] Creating backups/ directory...")
+        print("[INFO] Creating backups/ directory...")
     return backups_dir
 
 
 def backup_originals(video_file, subtitle_file, backups_dir):
     """
-    Intelligently backup original files to backups directory.
+    Intelligently backup original files to backups directory (v3.0.0 workflow).
     
     Checks each file independently - only moves files that don't already
     exist in the backups directory.
@@ -1010,8 +239,6 @@ def backup_originals(video_file, subtitle_file, backups_dir):
     
     Returns:
         tuple[bool, bool]: (video_backed_up, subtitle_backed_up)
-            - True if file was backed up in this operation
-            - False if file already exists in backups (skipped)
     """
     video_backup = backups_dir / video_file.name
     subtitle_backup = backups_dir / subtitle_file.name
@@ -1040,7 +267,7 @@ def backup_originals(video_file, subtitle_file, backups_dir):
 
 def safe_delete_subtitle(subtitle_file, backups_dir):
     """
-    Delete subtitle from working directory ONLY if it exists in backups.
+    Delete subtitle from working directory ONLY if it exists in backups (v3.0.0 workflow).
     
     Safety check prevents data loss if backup failed silently.
     
@@ -1059,7 +286,7 @@ def safe_delete_subtitle(subtitle_file, backups_dir):
 
 def rename_embedded_to_final(embedded_file, final_name):
     """
-    Rename .embedded.mkv to final .mkv filename (overwrites if exists).
+    Rename .embedded.mkv to final .mkv filename (v3.0.0 workflow).
     
     Args:
         embedded_file (Path): Path to temporary .embedded.mkv file
@@ -1070,7 +297,7 @@ def rename_embedded_to_final(embedded_file, final_name):
 
 def cleanup_failed_merge(embedded_file):
     """
-    Delete temporary .embedded.mkv file after merge failure.
+    Delete temporary .embedded.mkv file after merge failure (v3.0.0 workflow).
     Original files remain untouched.
     
     Args:
@@ -1081,717 +308,556 @@ def cleanup_failed_merge(embedded_file):
         print(f"[CLEANUP] Removed temporary file: {embedded_file.name}")
 
 
-# ============================================================================
-# End of Story 2.2 Functions
-# ============================================================================
-
-
-def validate_file_pair(video_file, subtitle_file):
+def embed_subtitle(video_path, subtitle_path, mkvmerge_path, language_code, default_flag, backups_dir=None, config=None):
     """
-    Validate that video and subtitle files are suitable for embedding.
+    Embed subtitle into MKV video file using v3.0.0 workflow.
     
-    Checks file existence, extensions, and permissions.
+    Workflow:
+    1. Create temporary .embedded.mkv file
+    2. On success: 
+       - Create backups/ directory if needed
+       - Move original video + subtitle to backups/
+       - Rename .embedded.mkv to original video name
+    3. On failure: cleanup temp file, originals untouched
+    
+    Dynamic Timeout:
+    - Base: 300s (5 minutes)
+    - Scales: +120s per GB of combined file size
+    - Maximum: 1800s (30 minutes)
     
     Args:
-        video_file (str or Path): Path to video file
-        subtitle_file (str or Path): Path to subtitle file
+        video_path: Path to video file
+        subtitle_path: Path to subtitle file
+        mkvmerge_path: Path to mkvmerge executable
+        language_code: Language code for subtitle
+        default_flag: Whether to set as default track
+        backups_dir: Optional existing backups directory (created if None)
+        config: Configuration dictionary (unused, kept for compatibility)
     
     Returns:
-        tuple: (success: bool, error_message: str or None)
+        tuple: (success: bool, error_message: str or None, backups_dir: Path or None)
     """
-    video_path = Path(video_file)
-    subtitle_path = Path(subtitle_file)
-    
-    # Check video file exists
-    if not video_path.exists():
-        return False, f"Video file not found: {video_path}"
-    
-    # Check video extension
-    if video_path.suffix.lower() != '.mkv':
-        return False, f"Video file must be .mkv format: {video_path}"
-    
-    # Check video read permission
-    if not os.access(video_path, os.R_OK):
-        return False, f"Cannot read video file (permission denied): {video_path}"
-    
-    # Check subtitle file exists
-    if not subtitle_path.exists():
-        return False, f"Subtitle file not found: {subtitle_path}"
-    
-    # Check subtitle extension
-    valid_subtitle_exts = ['.srt', '.ass', '.ssa']
-    if subtitle_path.suffix.lower() not in valid_subtitle_exts:
-        return False, f"Subtitle file must be .srt, .ass, or .ssa format: {subtitle_path}"
-    
-    # Check subtitle read permission
-    if not os.access(subtitle_path, os.R_OK):
-        return False, f"Cannot read subtitle file (permission denied): {subtitle_path}"
-    
-    # Check output directory is writable
-    output_dir = video_path.parent
-    if not os.access(output_dir, os.W_OK):
-        return False, f"Cannot write to output directory (permission denied): {output_dir}"
-    
-    return True, None
-
-
-def embed_subtitle_pair(video_path, subtitle_path, config, backups_dir=None):
-    """
-    Embed a single subtitle file into a video file with intelligent backup management.
-    
-    Story 2.2: Implements the complete workflow:
-    1. Check disk space
-    2. Create temporary .embedded.mkv file
-    3. On success: backup originals to backups/, rename embedded to final
-    4. On failure: cleanup temp file, originals untouched
-    
-    Args:
-        video_path (str or Path): Path to source MKV video file
-        subtitle_path (str or Path): Path to subtitle file to embed
-        config (dict): Configuration dictionary from load_config()
-        backups_dir (Path, optional): Path to backups directory (created if None)
-    
-    Returns:
-        tuple: (success: bool, output_file: Path or None, error_message: str or None, backups_dir: Path or None)
-            - backups_dir is returned so batch processing can reuse it
-    
-    Example:
-        >>> config = load_config()
-        >>> success, output, error, backups = embed_subtitle_pair('video.mkv', 'sub.ar.srt', config)
-        >>> if success:
-        ...     print(f"Created: {output}")
-    """
-    video_path = Path(video_path)
-    subtitle_path = Path(subtitle_path)
-    
-    # Validate file pair
-    valid, error_msg = validate_file_pair(video_path, subtitle_path)
-    if not valid:
-        return False, None, error_msg, backups_dir
-    
-    # Story 2.2: Check disk space before operations
-    if not has_sufficient_space(video_path, subtitle_path):
-        error_msg = f"Insufficient disk space for {video_path.name}"
-        print(f"[ERROR] {error_msg}")
-        return False, None, error_msg, backups_dir
-    
-    # Generate temporary embedded filename
-    embedded_file = video_path.parent / f"{video_path.stem}.embedded.mkv"
-    final_file = video_path  # Final name is the original video name
-    
-    # Detect language for logging
-    language = detect_language_from_filename(subtitle_path)
-    if language:
-        print(f"[INFO] Detected language: {language}")
-    else:
-        fallback_lang = config.get('language')
-        if fallback_lang:
-            print(f"[INFO] No language in filename, using config default: {fallback_lang}")
+    try:
+        # Generate temporary embedded filename (v3.0.0 pattern)
+        embedded_file = video_path.parent / f"{video_path.stem}.embedded.mkv"
+        final_file = video_path  # Final name is the original video name
+        
+        # Build mkvmerge command
+        cmd = [
+            str(mkvmerge_path),
+            '-o', str(embedded_file),
+            str(video_path)
+        ]
+        
+        # Add subtitle track with language if specified
+        if language_code:
+            cmd.extend(['--language', f'0:{language_code}'])
+        
+        if default_flag:
+            cmd.extend(['--default-track', '0:yes'])
         else:
-            print(f"[INFO] No language detected or configured")
-    
-    # Build mkvmerge command
-    try:
-        command = build_mkvmerge_command(video_path, subtitle_path, embedded_file, config)
-    except FileNotFoundError as e:
-        return False, None, str(e), backups_dir
-    
-    print(f"[INFO] Executing mkvmerge...")
-    print(f"  Video: {video_path.name}")
-    print(f"  Subtitle: {subtitle_path.name}")
-    print(f"  Temporary output: {embedded_file.name}")
-    
-    # Execute mkvmerge command with dynamic timeout
-    try:
-        total_bytes = video_path.stat().st_size + subtitle_path.stat().st_size
-    except Exception:
-        total_bytes = 0
-    # Dynamic timeout: base 300s + 120s per GB, capped by config
-    gb = total_bytes / (1024 ** 3)
-    dyn_timeout = 300 + int(max(0, gb) * 120)
-    max_cfg = int(config.get('merge_timeout_seconds', 1800)) if isinstance(config.get('merge_timeout_seconds', 1800), int) else 1800
-    timeout_seconds = max(300, min(max_cfg, dyn_timeout))
-
-    success, stdout, stderr = run_command(command, timeout=timeout_seconds)
-    
-    if not success:
-        # Merge failed - cleanup temp file
-        cleanup_failed_merge(embedded_file)
-        error_msg = f"mkvmerge failed: {stderr if stderr else 'Unknown error'}"
-        print(f"[ERROR] {error_msg}")
-        return False, None, error_msg, backups_dir
-    
-    # Merge succeeded - Story 2.2: Backup workflow
-    try:
-        # Create backups directory on first success
-        if backups_dir is None:
-            backups_dir = ensure_backups_directory(video_path.parent)
+            cmd.extend(['--default-track', '0:no'])
         
-        # Intelligently backup originals (checks each file independently)
-        video_backed_up, subtitle_backed_up = backup_originals(video_path, subtitle_path, backups_dir)
+        cmd.append(str(subtitle_path))
         
-        # Only delete subtitle if it's safely in backups/
-        safe_delete_subtitle(subtitle_path, backups_dir)
+        # Calculate dynamic timeout (v3.0.0 system)
+        try:
+            total_bytes = video_path.stat().st_size + subtitle_path.stat().st_size
+        except Exception:
+            total_bytes = 0
         
-        # Rename embedded file to original name (overwrites original video)
-        rename_embedded_to_final(embedded_file, final_file)
+        # Dynamic timeout: base 300s + 120s per GB, capped at 1800s (30 min)
+        gb = total_bytes / (1024 ** 3)
+        dyn_timeout = TIMEOUT_BASE + int(max(0, gb) * TIMEOUT_PER_GB)
+        timeout_seconds = max(TIMEOUT_BASE, min(TIMEOUT_MAX, dyn_timeout))
         
-        print(f"[SUCCESS] Created: {final_file.name}")
-        return True, final_file, None, backups_dir
-        
-    except Exception as e:
-        # Ensure temp file cleanup on any error
-        cleanup_failed_merge(embedded_file)
-        error_msg = f"Backup workflow failed: {str(e)}"
-        print(f"[ERROR] {error_msg}")
-        return False, None, error_msg, backups_dir
-
-
-def run_command(command, timeout=300):
-    """
-    Execute a command using subprocess and return the result.
-    
-    Args:
-        command: List of command arguments to execute
-    
-    Returns:
-        tuple: (success: bool, stdout: str, stderr: str)
-    """
-    try:
+        # Execute mkvmerge with dynamic timeout
         result = subprocess.run(
-            command,
+            cmd,
             capture_output=True,
             text=True,
-            encoding='utf-8',
-            errors='replace',
-            timeout=timeout
+            creationflags=subprocess.CREATE_NO_WINDOW if sys.platform == 'win32' else 0,
+            timeout=timeout_seconds
         )
         
-        success = (result.returncode == 0)
-        return success, result.stdout, result.stderr
-        
-    except subprocess.TimeoutExpired:
-        return False, "", f"Command timed out after {timeout} seconds"
-    except Exception as e:
-        return False, "", str(e)
-
-
-def generate_report(processed_files, output_path, config, elapsed_time=0, unmatched_videos=None, unmatched_subtitles=None):
-    """
-    Generate CSV report of embedding operations (Story 3.3).
-    
-    Story 3.1: Checks config['csv_export'] flag (fallback: false).
-    Only generates report if csv_export is True.
-    
-    Story 3.3 FIX (MNT-001): Now includes actual execution time and detailed statistics.
-    Story 3.3 FIX: Added unmatched pairs and unidentified files sections.
-    
-    Args:
-        processed_files: List of processed file information
-        output_path: Path where CSV report should be saved
-        config: Configuration dictionary with csv_export flag
-        elapsed_time: Actual execution time in seconds (Story 3.3 FIX)
-        unmatched_videos: List of video files without matching subtitles
-        unmatched_subtitles: List of subtitle files without matching videos
-    """
-    # Story 3.1: Check csv_export flag
-    csv_export = config.get('csv_export', False)
-    if not csv_export:
-        return  # Skip CSV generation
-    
-    # Story 3.3: Implement CSV generation
-    from datetime import datetime
-    import csv
-    
-    # Generate filename and path
-    directory = Path(output_path) if output_path else Path.cwd()
-    csv_path = directory / "embedding_report.csv"
-    timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-    
-    # Calculate statistics
-    total_operations = len(processed_files)
-    successful = sum(1 for r in processed_files if r.get('success', False))
-    failed = total_operations - successful
-    success_rate = (successful / total_operations * 100) if total_operations > 0 else 0
-    
-    # Story 3.3 FIX (MNT-001): Format actual execution time
-    if elapsed_time < 60:
-        formatted_time = f"{elapsed_time:.2f} seconds"
-    elif elapsed_time < 3600:
-        minutes = int(elapsed_time // 60)
-        seconds = elapsed_time % 60
-        formatted_time = f"{minutes}m {seconds:.2f}s"
-    else:
-        hours = int(elapsed_time // 3600)
-        minutes = int((elapsed_time % 3600) // 60)
-        seconds = elapsed_time % 60
-        formatted_time = f"{hours}h {minutes}m {seconds:.0f}s"
-    
-    # Write CSV report
-    try:
-        with open(csv_path, 'w', newline='', encoding='utf-8') as csvfile:
-            # SECTION 1: SubFast Banner + Header (Story 3.3)
-            csvfile.write(CSV_BANNER)
-            csvfile.write(f"# SubFast Embedding Report\n")
-            csvfile.write(f"# Generated: {timestamp}\n")
-            csvfile.write(f"# Directory: {directory}\n")
-            csvfile.write("#\n")
-            
-            # SECTION 2: Configuration Summary
-            csvfile.write("# CONFIGURATION SUMMARY:\n")
-            csvfile.write(f"# mkvmerge path: {config.get('mkvmerge_path') or 'None'}\n")
-            csvfile.write(f"# Language code: {config.get('language') or 'none'}\n")
-            csvfile.write(f"# Default flag: {'yes' if config.get('default_track') else 'no'}\n")
-            csvfile.write(f"# CSV export: enabled\n")
-            csvfile.write("#\n")
-            
-            # SECTION 3: Statistics Summary
-            csvfile.write("# STATISTICS:\n")
-            csvfile.write(f"# Total files processed: {total_operations}\n")
-            csvfile.write(f"# Successful: {successful}\n")
-            csvfile.write(f"# Failed: {failed}\n")
-            csvfile.write(f"# Success rate: {success_rate:.1f}%\n")
-            csvfile.write(f"# Execution time: {formatted_time}\n")
-            csvfile.write("#\n")
-            
-            # Story 3.3 FIX (MNT-001): SECTION 4 - Successfully processed pairs
-            csvfile.write("# SUCCESSFULLY PROCESSED PAIRS:\n")
-            successful_files = [r for r in processed_files if r.get('success', False)]
-            if successful_files:
-                for result in successful_files:
-                    video_name = result['video'].name if result.get('video') else 'N/A'
-                    subtitle_name = result['subtitle'].name if result.get('subtitle') else 'N/A'
-                    csvfile.write(f"#   - {video_name} + {subtitle_name}\n")
-            else:
-                csvfile.write("#   (None)\n")
-            csvfile.write("#\n")
-            
-            # Story 3.3 FIX (MNT-001): SECTION 5 - Failed operations
-            csvfile.write("# FAILED OPERATIONS:\n")
-            failed_files = [r for r in processed_files if not r.get('success', False)]
-            if failed_files:
-                for result in failed_files:
-                    video_name = result['video'].name if result.get('video') else 'N/A'
-                    subtitle_name = result['subtitle'].name if result.get('subtitle') else 'N/A'
-                    error_detail = result.get('error', 'Unknown error')
-                    csvfile.write(f"#   - {video_name} + {subtitle_name}\n")
-                    csvfile.write(f"#     Error: {error_detail}\n")
-            else:
-                csvfile.write("#   (None)\n")
-            csvfile.write("#\n")
-            
-            # Story 3.3 FIX: SECTION 6 - Unmatched videos
-            csvfile.write("# UNMATCHED VIDEOS (No matching subtitles):\n")
-            if unmatched_videos:
-                for video in unmatched_videos:
-                    csvfile.write(f"#   - {video.name}\n")
-            else:
-                csvfile.write("#   (None)\n")
-            csvfile.write("#\n")
-            
-            # Story 3.3 FIX: SECTION 7 - Unmatched subtitles
-            csvfile.write("# UNMATCHED SUBTITLES (No matching videos):\n")
-            if unmatched_subtitles:
-                for subtitle in unmatched_subtitles:
-                    csvfile.write(f"#   - {subtitle.name}\n")
-            else:
-                csvfile.write("#   (None)\n")
-            csvfile.write("#\n")
-            
-            csvfile.write("# ══════════════════════════════════════════════════════════════\n")
-            csvfile.write("#\n")
-            
-            # SECTION 8: Operations Table
-            writer = csv.writer(csvfile)
-            writer.writerow(['Original Video', 'Subtitle File', 'Output File', 'Status', 'Error Details', 'Timestamp'])
-            
-            for result in processed_files:
-                video_name = result['video'].name if result.get('video') else 'N/A'
-                subtitle_name = result['subtitle'].name if result.get('subtitle') else 'N/A'
-                output_name = result['output'].name if result.get('output') else 'N/A'
-                status = 'Success' if result.get('success', False) else 'Failed'
-                error_details = result.get('error', '') if not result.get('success', False) else ''
-                operation_timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        if result.returncode == 0:
+            # Merge succeeded - v3.0.0 backup workflow
+            try:
+                # Create backups directory on first success
+                if backups_dir is None:
+                    backups_dir = ensure_backups_directory(video_path.parent)
                 
-                writer.writerow([video_name, subtitle_name, output_name, status, error_details, operation_timestamp])
-        
-        print(f"\n[INFO] Exported embedding report to:")
-        print(f"       {csv_path}")
-        print()
+                # Intelligently backup originals (checks each file independently)
+                video_backed_up, subtitle_backed_up = backup_originals(video_path, subtitle_path, backups_dir)
+                
+                # Only delete subtitle if it's safely in backups/
+                safe_delete_subtitle(subtitle_path, backups_dir)
+                
+                # Rename embedded file to original name
+                rename_embedded_to_final(embedded_file, final_file)
+                
+                print(f"[SUCCESS] Created: {final_file.name}")
+                return True, None, backups_dir
+                
+            except Exception as e:
+                # Ensure temp file cleanup on any error
+                cleanup_failed_merge(embedded_file)
+                error_msg = f"Backup workflow failed: {str(e)}"
+                print(f"[ERROR] {error_msg}")
+                return False, error_msg, backups_dir
+        else:
+            # Merge failed - cleanup temp file
+            cleanup_failed_merge(embedded_file)
+            error_msg = result.stderr if result.stderr else 'Unknown mkvmerge error'
+            return False, error_msg, backups_dir
+            
+    except subprocess.TimeoutExpired:
+        if 'embedded_file' in locals():
+            cleanup_failed_merge(Path(locals()['embedded_file']))
+        return False, "mkvmerge timeout (file too large or system too slow)", backups_dir
     except Exception as e:
-        print(f"[WARNING] Failed to generate CSV report: {e}")
+        if 'embedded_file' in locals():
+            cleanup_failed_merge(Path(locals()['embedded_file']))
+        return False, str(e), backups_dir
 
 
-def print_operation_summary(results):
+def extract_base_name(filename):
     """
-    Display a formatted summary of embedding operations.
-    
-    Shows success/failure counts and details of any failures.
+    Extract and clean base filename for movie comparison.
+    Converts separators (., _, -) to spaces.
     
     Args:
-        results (list): List of result dictionaries with keys:
-            - video: Path to video file
-            - subtitle: Path to subtitle file
-            - success: bool indicating success
-            - output: Path to output file (if successful)
-            - error: Error message (if failed)
-    """
-    print()
-    print("=" * 80)
-    print("OPERATION SUMMARY")
-    print("=" * 80)
-    
-    total = len(results)
-    successful = sum(1 for r in results if r['success'])
-    failed = total - successful
-    
-    print(f"Total Processed: {total}")
-    print(f"Successful: {successful}")
-    print(f"Failed: {failed}")
-    
-    if failed > 0:
-        print()
-        print("FAILURES:")
-        failure_num = 1
-        for result in results:
-            if not result['success']:
-                print(f"  [{failure_num}] {result['video'].name} + {result['subtitle'].name}")
-                print(f"      Error: {result['error']}")
-                print()
-                failure_num += 1
-    
-    print("=" * 80)
-
-
-def determine_exit_code(results, mkvmerge_valid=True):
-    """
-    Determine appropriate exit code based on operation results.
-    
-    Args:
-        results (list): List of result dictionaries
-        mkvmerge_valid (bool): Whether mkvmerge was found and validated
-    
-    Returns:
-        int: Exit code (EXIT_SUCCESS, EXIT_FATAL_ERROR, EXIT_PARTIAL_FAILURE, EXIT_COMPLETE_FAILURE)
-    """
-    if not mkvmerge_valid:
-        return EXIT_FATAL_ERROR
-    
-    if not results:
-        # No files to process is not an error
-        return EXIT_SUCCESS
-    
-    failed_count = sum(1 for r in results if not r['success'])
-    total_count = len(results)
-    
-    if failed_count == 0:
-        return EXIT_SUCCESS
-    elif failed_count == total_count:
-        return EXIT_COMPLETE_FAILURE
-    else:
-        return EXIT_PARTIAL_FAILURE
-
-
-def display_batch_progress(current: int, total: int, filename: str) -> None:
-    """
-    Display progress for current file in batch processing.
-    
-    Args:
-        current: Current file number (1-indexed)
-        total: Total number of files to process
-        filename: Name of the file being processed
-    """
-    percentage = int((current / total) * 100)
-    print(f"\n[{current}/{total}] ({percentage}%) Processing: {filename}...")
-    print("-" * 60)
-
-
-def format_duration(seconds: float) -> str:
-    """
-    Convert seconds to human-readable duration format.
-    
-    Args:
-        seconds: Duration in seconds
+        filename: The filename to process
         
     Returns:
-        Formatted string (e.g., "2m 35s", "1h 15m 30s")
+        Cleaned base name with spaces
     """
-    if seconds < 60:
-        return f"{int(seconds)}s"
-    elif seconds < 3600:
-        minutes = int(seconds // 60)
-        remaining_seconds = int(seconds % 60)
-        return f"{minutes}m {remaining_seconds}s"
-    else:
-        hours = int(seconds // 3600)
-        minutes = int((seconds % 3600) // 60)
-        remaining_seconds = int(seconds % 60)
-        return f"{hours}h {minutes}m {remaining_seconds}s"
+    base_name = Path(filename).stem
+    base_name = BASE_NAME_CLEANUP.sub(' ', base_name)
+    return base_name.strip()
 
 
-def display_batch_summary(total: int, successful: int, failed: int, duration: float) -> None:
+def match_movie_files(video_files, subtitle_files):
     """
-    Display comprehensive summary after batch processing.
+    Match single movie file with single subtitle file based on title similarity.
+    
+    Uses two matching strategies:
+    1. Year matching: If both files contain the same 4-digit year
+    2. Word overlap: Compares common words after removing quality indicators
     
     Args:
-        total: Total number of pairs found
-        successful: Number of successful operations
-        failed: Number of failed operations
-        duration: Total processing time in seconds
+        video_files: List of video Path objects
+        subtitle_files: List of subtitle Path objects
+        
+    Returns:
+        Tuple of (video_file, subtitle_file) if match found, None otherwise
     """
-    success_rate = (successful / total * 100) if total > 0 else 0
-    formatted_time = format_duration(duration)
+    if len(video_files) != 1 or len(subtitle_files) != 1:
+        return None
     
-    print("\n" + "=" * 40)
-    print("=== BATCH PROCESSING COMPLETE ===")
-    print("=" * 40)
-    print(f"Total pairs found: {total}")
-    print(f"Successfully processed: {successful}")
-    print(f"Failed operations: {failed}")
-    print(f"Success rate: {success_rate:.1f}%")
-    print(f"Total time: {formatted_time}")
-    print("=" * 40)
+    video_name = extract_base_name(video_files[0].name)
+    subtitle_name = extract_base_name(subtitle_files[0].name)
+    
+    video_year_match = YEAR_PATTERN.search(video_files[0].name)
+    subtitle_year_match = YEAR_PATTERN.search(subtitle_files[0].name)
+    
+    video_year = video_year_match.group() if video_year_match else None
+    subtitle_year = subtitle_year_match.group() if subtitle_year_match else None
+    
+    # Filter out both technical indicators AND linguistic filler words
+    video_words = set(video_name.lower().split()) - COMMON_INDICATORS - FILLER_WORDS
+    subtitle_words = set(subtitle_name.lower().split()) - COMMON_INDICATORS - FILLER_WORDS
+    
+    common_words = video_words.intersection(subtitle_words)
+    years_match = (video_year and subtitle_year and video_year == subtitle_year)
+    
+    if years_match:
+        if len(common_words) > 0:
+            return (video_files[0], subtitle_files[0])
+    else:
+        if len(video_words) > 0 and len(subtitle_words) > 0:
+            match_ratio = len(common_words) / min(len(video_words), len(subtitle_words))
+            if match_ratio >= 0.3 or len(common_words) > 0:
+                return (video_files[0], subtitle_files[0])
+    
+    return None
 
 
-def parse_arguments():
+def build_episode_context(video_files):
     """
-    Parse command-line arguments.
+    Build reference mappings for episode matching.
     
     Returns:
-        argparse.Namespace: Parsed arguments
+        Tuple of (video_episodes dict, temp_video_dict)
     """
-    parser = argparse.ArgumentParser(
-        description='Embed subtitle files into MKV video files using mkvmerge',
-        formatter_class=argparse.RawDescriptionHelpFormatter,
-        epilog="""
-Examples:
-  %(prog)s                    Process files in current directory
-  %(prog)s /path/to/videos    Process files in specified directory
-  %(prog)s --test-mkvmerge    Test mkvmerge connectivity
-  %(prog)s --version          Show script version
-        """
-    )
+    video_episodes = {}
+    temp_video_dict = {}
     
-    parser.add_argument(
-        'directory',
-        nargs='?',
-        default='.',
-        help='Directory containing video and subtitle files (default: current directory)'
-    )
+    for video in sorted(video_files):
+        episode_string = pattern_engine.get_episode_number_cached(video)
+        if episode_string:
+            season, episode = pattern_engine.extract_season_episode_numbers(episode_string)
+            if season and episode:
+                season_num, episode_num = int(season), int(episode)
+                key = (season_num, episode_num)
+                
+                if key not in video_episodes:
+                    video_episodes[key] = episode_string
+                    temp_video_dict[episode_string] = video
+                elif episode_string not in temp_video_dict:
+                    temp_video_dict[episode_string] = video
     
-    parser.add_argument(
-        '--version',
-        action='version',
-        version=f'%(prog)s {__version__}'
-    )
-    
-    parser.add_argument(
-        '--test-mkvmerge',
-        action='store_true',
-        help='Test mkvmerge connectivity and exit'
-    )
-    
-    return parser.parse_args()
+    return video_episodes, temp_video_dict
 
 
-def print_banner():
-    """Display SubFast branded banner at startup - Story 3.3"""
-    print(BANNER)
+def process_embedding(folder_path, config, mkvmerge_path):
+    """Main embedding logic."""
+    # Discover files
+    video_exts = tuple(f'.{ext}' for ext in config['video_extensions'])
+    subtitle_exts = tuple(f'.{ext}' for ext in config['subtitle_extensions'])
+    
+    all_video_files = [f for f in folder_path.iterdir() if f.suffix.lower().lstrip('.') in config['video_extensions']]
+    all_subtitle_files = [f for f in folder_path.iterdir() if f.suffix.lower().lstrip('.') in config['subtitle_extensions']]
+    
+    # Filter MKV only
+    mkv_videos = [v for v in all_video_files if v.suffix.lower() == '.mkv']
+    
+    if not mkv_videos:
+        print("[INFO] No MKV video files found in directory")
+        return []
+    
+    if not all_subtitle_files:
+        print("[INFO] No subtitle files found in directory")
+        return []
+    
+    print(f"\nFILES FOUND: {len(mkv_videos)} MKV videos | {len(all_subtitle_files)} subtitles")
+    print("=" * 60 + "\n")
+    
+    # Build episode mappings
+    video_episodes, temp_video_dict = build_episode_context([v.name for v in mkv_videos])
+    
+    # Process embeddings with v3.0.0 workflow
+    results = []
+    embedded_count = 0
+    failed_count = 0
+    backups_dir = None  # Track backups directory across iterations
+    
+    print("PROCESSING EMBEDDINGS:")
+    print("-" * 40)
+    
+    for subtitle_file in sorted(all_subtitle_files):
+        ep = pattern_engine.get_episode_number_cached(subtitle_file.name)
+        
+        # Pattern 30: FINAL SEASON contextual matching
+        # Check if subtitle has FINAL SEASON keyword and needs season inference
+        target_video_name = None
+        adjusted_episode_string = ep
+        
+        if pattern_engine.detect_final_season_keyword(subtitle_file.name):
+            # Subtitle has FINAL SEASON - try to match with videos using contextual logic
+            for video in sorted(mkv_videos):
+                sub_ep, vid_ep = pattern_engine.match_subtitle_to_video(subtitle_file.name, video.name)
+                if sub_ep and vid_ep:
+                    # Match found via FINAL SEASON inference
+                    adjusted_episode_string = sub_ep
+                    target_video_name = video.name
+                    if sub_ep != ep:
+                        print(f"'{subtitle_file.name}' -> {ep} adjusted to {sub_ep} (FINAL SEASON inference from '{video.name}')")
+                    break
+        
+        # Check if any video has FINAL SEASON and might match this subtitle
+        if not target_video_name:
+            for video in sorted(mkv_videos):
+                if pattern_engine.detect_final_season_keyword(video.name):
+                    sub_ep, vid_ep = pattern_engine.match_subtitle_to_video(subtitle_file.name, video.name)
+                    if sub_ep and vid_ep:
+                        # Match found via FINAL SEASON inference
+                        adjusted_episode_string = sub_ep
+                        target_video_name = video.name
+                        print(f"'{subtitle_file.name}' -> {ep} matched with '{video.name}' (FINAL SEASON inference)")
+                        break
+        
+        # Fallback: Standardize episode format (existing logic)
+        if not target_video_name and ep:
+            season, episode = pattern_engine.extract_season_episode_numbers(ep)
+            if season and episode:
+                key = (int(season), int(episode))
+                if key in video_episodes:
+                    adjusted_episode_string = video_episodes[key]
+        
+        # Find matching video (if not already found via FINAL SEASON)
+        if not target_video_name:
+            if adjusted_episode_string and adjusted_episode_string in temp_video_dict:
+                target_video_name = temp_video_dict[adjusted_episode_string]
+            elif ep and ep in temp_video_dict:
+                target_video_name = temp_video_dict[ep]
+        
+        if target_video_name:
+            target_video_path = folder_path / target_video_name
+            
+            # Detect language
+            language_code = detect_language_with_fallback(
+                subtitle_file.name,
+                config.get('embedding_language_code')
+            )
+            
+            print(f"\nEMBEDDING: '{subtitle_file.name}' into '{target_video_name}'")
+            if language_code:
+                lang_name = LANGUAGE_DATA.get('codes', {}).get(language_code, {}).get('name', language_code)
+                print(f"  Language: {lang_name} ({language_code})")
+            else:
+                print(f"  Language: (none detected)")
+            
+            # Embed subtitle with v3.0.0 workflow (tracks backups_dir + dynamic timeout)
+            success, error, backups_dir = embed_subtitle(
+                target_video_path,
+                subtitle_file,
+                mkvmerge_path,
+                language_code,
+                config.get('default_flag', True),
+                backups_dir,  # Pass existing backups_dir
+                config  # Pass config for dynamic timeout calculation
+            )
+            
+            if success:
+                print(f"  ✓ SUCCESS")
+                embedded_count += 1
+                results.append({
+                    'subtitle': subtitle_file.name,
+                    'video': target_video_name,
+                    'episode': adjusted_episode_string,
+                    'language': language_code or 'N/A',
+                    'status': 'success'
+                })
+            else:
+                print(f"  ✗ FAILED: {error}")
+                failed_count += 1
+                results.append({
+                    'subtitle': subtitle_file.name,
+                    'video': target_video_name,
+                    'episode': adjusted_episode_string,
+                    'language': language_code or 'N/A',
+                    'status': 'failed',
+                    'error': error
+                })
+        else:
+            print(f"\nNO MATCH: '{subtitle_file.name}' -> episode {ep or '(undetected)'}")
+            results.append({
+                'subtitle': subtitle_file.name,
+                'video': None,
+                'episode': ep or 'N/A',
+                'language': 'N/A',
+                'status': 'no_match'
+            })
+    
+    # Movie mode fallback - try if no embeddings succeeded
+    if embedded_count == 0 and len(mkv_videos) == 1 and len(all_subtitle_files) == 1:
+        print("\n" + "=" * 60)
+        print("MOVIE MODE: Attempting title-based matching...")
+        print("=" * 60)
+        
+        movie_match = match_movie_files(mkv_videos, all_subtitle_files)
+        
+        if movie_match:
+            video_file, subtitle_file = movie_match
+            
+            print(f"\n[MOVIE MODE] Matched: '{video_file.name}' + '{subtitle_file.name}'")
+            
+            # Detect language
+            language_code = detect_language_with_fallback(
+                subtitle_file.name,
+                config.get('embedding_language_code')
+            )
+            
+            print(f"\nEMBEDDING: '{subtitle_file.name}' into '{video_file.name}'")
+            if language_code:
+                lang_name = LANGUAGE_DATA.get('codes', {}).get(language_code, {}).get('name', language_code)
+                print(f"  Language: {lang_name} ({language_code})")
+            else:
+                print(f"  Language: (none detected)")
+            
+            # Embed subtitle
+            success, error, backups_dir = embed_subtitle(
+                video_file,
+                subtitle_file,
+                mkvmerge_path,
+                language_code,
+                config.get('default_flag', True),
+                backups_dir,
+                config
+            )
+            
+            if success:
+                print(f"  ✓ SUCCESS")
+                embedded_count += 1
+                
+                # Update results - replace the 'no_match' entry with success
+                results = [r for r in results if r.get('subtitle') != subtitle_file.name]
+                results.append({
+                    'subtitle': subtitle_file.name,
+                    'video': video_file.name,
+                    'episode': 'Movie',
+                    'language': language_code or 'N/A',
+                    'status': 'success'
+                })
+            else:
+                print(f"  ✗ FAILED: {error}")
+                failed_count += 1
+                
+                # Update results - replace the 'no_match' entry with failed
+                results = [r for r in results if r.get('subtitle') != subtitle_file.name]
+                results.append({
+                    'subtitle': subtitle_file.name,
+                    'video': video_file.name,
+                    'episode': 'Movie',
+                    'language': language_code or 'N/A',
+                    'status': 'failed',
+                    'error': error
+                })
+        else:
+            print("\n[MOVIE MODE] No match found - files are too dissimilar")
+    
+    print("\n" + "=" * 60)
+    print(f"COMPLETED: {embedded_count} embedded | {failed_count} failed | {len(all_subtitle_files) - embedded_count - failed_count} unmatched")
+    print("=" * 60)
+    
+    # Return results plus additional context for comprehensive reporting
+    return {
+        'results': results,
+        'all_videos': [v.name for v in mkv_videos],
+        'all_subtitles': [s.name for s in all_subtitle_files]
+    }
 
 
 def main():
-    """
-    Main entry point for the subtitle embedding script.
+    """Main entry point."""
+    parser = argparse.ArgumentParser(description='SubFast Subtitle Embedding v3.2.0')
+    parser.add_argument('directory', nargs='?', default='.', help='Target directory (default: current)')
+    parser.add_argument('--test-mkvmerge', action='store_true', help='Test mkvmerge availability')
+    parser.add_argument('--version', action='store_true', help='Show version')
+    args = parser.parse_args()
     
-    Workflow:
-    1. Parse command-line arguments
-    2. Load configuration
-    3. Validate mkvmerge (fail fast if not found)
-    4. Find matching files (if not in test mode)
-    5. Process each file pair with resilient batch processing
-    6. Display operation summary
-    7. Return appropriate exit code
+    if args.version:
+        print(f"SubFast Embedding Module v{__version__}")
+        return 0
     
-    Returns:
-        int: Exit code
-            0 (EXIT_SUCCESS): All operations succeeded
-            1 (EXIT_FATAL_ERROR): mkvmerge not found or fatal error
-            2 (EXIT_PARTIAL_FAILURE): Some operations failed, some succeeded
-            3 (EXIT_COMPLETE_FAILURE): All operations failed
-    """
-    # Story 3.3: Display SubFast branded banner
-    print_banner()
-    
-    # Parse arguments
-    args = parse_arguments()
+    print("\n" + "=" * 60)
+    print("SubFast v3.2.0 - Subtitle Embedding")
+    print("=" * 60 + "\n")
     
     # Load configuration
-    config = load_config()
-    print()
+    config = config_loader.load_config()
     
-    # Validate mkvmerge (EARLY VALIDATION - fail fast)
-    print("Validating mkvmerge...")
-    success, mkvmerge_path, version_info = validate_mkvmerge(config['mkvmerge_path'])
+    # Find mkvmerge
+    mkvmerge_path = find_mkvmerge(config.get('mkvmerge_path', ''))
     
-    if not success:
-        print("[ERROR] mkvmerge.exe not found or not executable")
-        if mkvmerge_path:
-            print(f"  Checked path: {mkvmerge_path}")
-        else:
-            script_dir = Path(__file__).parent.parent
-            print(f"  Checked path: {script_dir / 'bin' / 'mkvmerge.exe'}")
-        print("\nPlease ensure:")
-        print("  1. MKVToolNix is installed")
-        print("  2. mkvmerge.exe is in bin/ directory, OR")
-        print("  3. mkvmerge_path is correctly set in config.ini [Embedding] section")
-        return EXIT_FATAL_ERROR
-    
-    print(f"[OK] {version_info}")
-    print(f"  Path: {mkvmerge_path}")
-    print()
-    
-    # If test mode, exit here
     if args.test_mkvmerge:
-        print("[SUCCESS] mkvmerge connectivity test passed")
-        return EXIT_SUCCESS
+        if mkvmerge_path:
+            print(f"[OK] mkvmerge found: {mkvmerge_path}")
+            exit_code = EXIT_SUCCESS
+        else:
+            print("[ERROR] mkvmerge not found")
+            print("  Install mkvmerge or specify path in config.ini")
+            exit_code = EXIT_FATAL_ERROR
+        
+        # Console handling for test mode
+        keep_console_open = config.get('keep_console_open', False)
+        if keep_console_open or exit_code != EXIT_SUCCESS:
+            input("\nPress Enter to close this window...")
+        return exit_code
     
-    # Validate target directory
-    target_dir = Path(args.directory).resolve()
-    if not target_dir.exists():
-        print(f"[ERROR] Directory does not exist: {target_dir}")
+    if not mkvmerge_path:
+        script_dir = Path(__file__).parent.parent
+        print("[ERROR] mkvmerge.exe not found!")
+        print(f"  Checked: {script_dir / 'bin' / 'mkvmerge.exe'}")
+        print("  Checked: System PATH")
+        print("\nPlease ensure:")
+        print("  1. MKVToolNix is installed, OR")
+        print("  2. Place mkvmerge.exe in bin/ directory, OR")
+        print("  3. Set mkvmerge_path in config.ini [Embedding] section")
+        
+        # Console handling - ALWAYS execute
+        keep_console_open = config.get('keep_console_open', False)
+        if keep_console_open or True:  # Always stay open on fatal errors
+            input("\nPress Enter to close this window...")
         return EXIT_FATAL_ERROR
     
-    if not target_dir.is_dir():
-        print(f"[ERROR] Path is not a directory: {target_dir}")
+    print(f"[INFO] Using mkvmerge: {mkvmerge_path}")
+    
+    # Get target directory
+    folder_path = Path(args.directory).resolve()
+    if not folder_path.is_dir():
+        print(f"[ERROR] Directory not found: {folder_path}")
+        
+        # Console handling - ALWAYS execute
+        keep_console_open = config.get('keep_console_open', False)
+        if keep_console_open or True:  # Always stay open on fatal errors
+            input("\nPress Enter to close this window...")
         return EXIT_FATAL_ERROR
     
-    print(f"Target directory: {target_dir}")
-    print()
+    print(f"[INFO] Processing directory: {folder_path}\n")
     
-    # Find matching video-subtitle pairs
-    print("Searching for matching video and subtitle files...")
-    match_results = find_matching_files(target_dir)
-    file_pairs = match_results['matches']
-    unmatched_videos = match_results['unmatched_videos']
-    unmatched_subtitles = match_results['unmatched_subtitles']
-    
-    if not file_pairs:
-        print("[INFO] No matching video-subtitle pairs found")
-        print("[INFO] Console will remain open - please review the search directory")
-        # Generate CSV report even with no pairs (for tracking)
-        generate_report([], target_dir, config, 0, unmatched_videos, unmatched_subtitles)
-        return EXIT_PARTIAL_FAILURE  # Console should persist when no pairs found
-    
-    print(f"[INFO] Found {len(file_pairs)} video-subtitle pair(s)")
-    print()
-    
-    # Initialize tracking (Story 2.3)
-    total_pairs = len(file_pairs)
-    successful_count = 0
-    failed_count = 0
+    # Track execution time
     start_time = time.time()
     
-    # Process each file pair with resilient batch processing (Story 2.2 + 2.3)
-    results = []
-    backups_dir = None  # Lazy creation on first successful merge
+    # Process embeddings
+    process_data = process_embedding(folder_path, config, mkvmerge_path)
+    results = process_data['results']
+    all_videos = process_data['all_videos']
+    all_subtitles = process_data['all_subtitles']
     
-    for idx, (video_file, subtitle_file) in enumerate(file_pairs, 1):
-        # Display progress (Story 2.3)
-        display_batch_progress(idx, total_pairs, video_file.name)
-        print(f"           Subtitle: {subtitle_file.name}")
-        
-        # Process the pair with error recovery (Story 2.2 + 2.3)
-        try:
-            success, output_file, error_message, backups_dir = embed_subtitle_pair(
-                video_file, subtitle_file, config, backups_dir
-            )
-            
-            # Track result
-            results.append({
-                'video': video_file,
-                'subtitle': subtitle_file,
-                'success': success,
-                'output': output_file,
-                'error': error_message
-            })
-            
-            # Display result and update counters (Story 2.3)
-            if success:
-                successful_count += 1
-                print(f"[SUCCESS] Completed: {video_file.name}")
-            else:
-                failed_count += 1
-                print(f"[ERROR] Failed: {error_message}")
-        except Exception as e:
-            # Graceful error recovery (Story 2.3)
-            failed_count += 1
-            error_msg = str(e)
-            print(f"[ERROR] Failed to process pair: {video_file.name} + {subtitle_file.name}")
-            print(f"Error details: {error_msg}")
-            
-            # Track failed result
-            results.append({
-                'video': video_file,
-                'subtitle': subtitle_file,
-                'success': False,
-                'output': None,
-                'error': error_msg
-            })
-            # Continue to next pair - don't stop batch processing
-        
+    # Calculate execution time
+    elapsed_time = time.time() - start_time
+    time_str = csv_reporter.format_execution_time(elapsed_time)
+    
+    # Export CSV if enabled
+    if config.get('embedding_report', False):
+        csv_path = folder_path / 'embedding_report.csv'
+        csv_reporter.generate_csv_report(
+            results=results,
+            output_path=csv_path,
+            operation_type='embedding',
+            config=config,
+            execution_time_str=time_str,
+            all_videos=all_videos,
+            all_subtitles=all_subtitles,
+            elapsed_seconds=elapsed_time
+        )
+    
+    # Always display summary with accurate timing
+    csv_reporter.print_summary(
+        results, 
+        'Embedding',
+        execution_time=time_str,
+        total_files=len(results),
+        elapsed_seconds=elapsed_time
+    )
+    
+    # Determine exit code
+    successful = sum(1 for r in results if r.get('status') == 'success')
+    failed = sum(1 for r in results if r.get('status') == 'failed')
+    
+    if failed == 0:
+        exit_code = EXIT_SUCCESS
+    elif successful > 0:
+        exit_code = EXIT_PARTIAL_FAILURE
+    else:
+        exit_code = EXIT_COMPLETE_FAILURE
+    
+    # v3.0.0: Final tip about backups
+    backups_dir = folder_path / 'backups'
+    if successful > 0 and backups_dir.exists():
         print()
-    
-    # Calculate total duration (Story 2.3)
-    total_duration = time.time() - start_time
-    
-    # Display comprehensive batch summary (Story 2.3)
-    display_batch_summary(total_pairs, successful_count, failed_count, total_duration)
-    
-    # Story 3.3 FIX (MNT-001): Generate CSV report with actual execution time and unmatched files
-    generate_report(results, target_dir, config, total_duration, unmatched_videos, unmatched_subtitles)
-    
-    # Story 2.2: Final tip about backups
-    if backups_dir and backups_dir.exists():
-        print()
-        print("Tip: Verify merged files before manually deleting backups/ directory")
+        print("Tip: Verify merged files before manually deleting backups directory")
         print(f"     Backups location: {backups_dir}")
     
-    # Return exit code (console behavior handled by finally block in __main__)
-    return determine_exit_code(results)
+    # Smart console behavior
+    keep_console_open = config.get('keep_console_open', False)
+    if keep_console_open or exit_code != EXIT_SUCCESS:
+        input("\nPress Enter to close this window...")
+    
+    return exit_code
 
 
 if __name__ == "__main__":
-    # Story 3.3 FIX (REL-001): Ensure console logic runs even on fatal errors
-    exit_code = EXIT_SUCCESS
-    config = {}
-    should_pause = False
-    
-    try:
-        exit_code = main()
-    except Exception as e:
-        print(f"\n[FATAL ERROR] Unexpected error: {e}")
-        import traceback
-        traceback.print_exc()
-        exit_code = EXIT_FATAL_ERROR
-        should_pause = True
-    
-    # Story 3.3 FIX: Smart console behavior - check if we should pause
-    # This MUST happen before sys.exit() for context menu execution
-    try:
-        if not config:
-            config = load_config()
-        keep_console_open = config.get('keep_console_open', False)
-    except:
-        keep_console_open = False
-    
-    # Hold console if error OR keep_console_open is true
-    if exit_code != EXIT_SUCCESS or keep_console_open or should_pause:
-        try:
-            input("\nPress Enter to close this window...")
-        except:
-            # If input() fails (no stdin), use time.sleep as fallback
-            import time
-            print("\n[Console will close in 10 seconds...]")
-            time.sleep(10)
-    
-    sys.exit(exit_code)
+    sys.exit(main())
