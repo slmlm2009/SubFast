@@ -1,0 +1,43 @@
+# ==========================================
+#    ____        _     _____          _   
+#   / ___| _   _| |__ |  ___|_ _  ___| |_ 
+#   \___ \| | | | '_ \| |_ / _` |/ __| __|
+#    ___) | |_| | |_) |  _| (_| |\__ \ |_ 
+#   |____/ \__,_|_.__/|_|  \__,_||___/\__|
+#                                         
+#    Fast subtitle renaming and embedding
+# 
+# ==========================================
+#
+# SubFast Embedding Report
+# Generated: 2025-10-14 00:57:49
+# Directory: C:\Users\slmlm2009\Desktop\Github\SubFast\v3.1.0_preview_rename_subtitles_to_match_videos_ar\tests\2 - Embedding\3- Movie
+#
+# CONFIGURATION:
+# mkvmerge path: bin\mkvmerge.exe
+# Language code: ar
+# Default flag: yes
+# Embedding report: enabled
+#
+# STATISTICS:
+# Total Videos: 1
+# Total Subtitles: 1
+# Pairs Matched: 1
+# Successfully Embedded: 1
+# Failed: 0
+# Videos Without Subtitles: 0
+# Subtitles Without Videos: 0
+# Success Rate: 100.0%
+# Total Execution Time: 0.15s
+# Average Time Per File: 0.15s
+#
++---------------------------------------+--------------------------------+----------+----------+------------+
+| Video File                            | Subtitle File                  | Episode  | Language | Status     |
++---------------------------------------+--------------------------------+----------+----------+------------+
+| Movie of the Year [BD][3840x2160].mkv | Subtitle of 2025 year [AR].srt | Movie    | ara      | EMBEDDED   |
++---------------------------------------+--------------------------------+----------+----------+------------+
+#
+# SUCCESSFULLY EMBEDDED PAIRS:
+# Movie -> Video: Movie of the Year [BD][3840x2160].mkv | Subtitle: Subtitle of 2025 year [AR].srt | Language: ara
+# (1 total)
+#

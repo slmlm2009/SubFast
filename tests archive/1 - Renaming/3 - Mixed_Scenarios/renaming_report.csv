@@ -1,0 +1,65 @@
+# ==========================================
+#    ____        _     _____          _   
+#   / ___| _   _| |__ |  ___|_ _  ___| |_ 
+#   \___ \| | | | '_ \| |_ / _` |/ __| __|
+#    ___) | |_| | |_) |  _| (_| |\__ \ |_ 
+#   |____/ \__,_|_.__/|_|  \__,_||___/\__|
+#                                         
+#    Fast subtitle renaming and embedding
+# 
+# ==========================================
+#
+# Subtitle Renaming Report
+# Generated: 2025-10-13 23:39:49
+# Directory: C:\Users\slmlm2009\Desktop\Github\SubFast\v3.1.0_preview_rename_subtitles_to_match_videos_ar\tests\1 - Renaming\3 - Mixed_Scenarios_1
+# Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass
+#
+# SUMMARY:
+# Total Videos: 9
+# Total Subtitles: 8
+# Renamed: 7/8 subtitles
+# Videos Missing Subtitles: 1
+# Subtitles Missing Videos: 0
+# Videos Without Episode Pattern: 1
+# Subtitles Without Episode Pattern: 1
+# Movie Mode: No
+# Execution Time: 0.01s
+#
++-------------------------------------+------------------+----------+----------------------------------------+
+| Original Filename                   | Detected Episode | Action   | New Name                               |
++-------------------------------------+------------------+----------+----------------------------------------+
+| Long S11E03.mp4                     | S11E03           | MATCHED  | No Change                              |
+| OnePiece - 1050.mp4                 | S01E1050         | MATCHED  | No Change                              |
+| Program S2Ep10.mkv                  | S02E10           | MATCHED  | No Change                              |
+| Program Season2 Ep15.mkv            | S02E15           | MATCHED  | No Change                              |
+| Show Season 4 Episode 2.mp4         | S04E02           | MATCHED  | No Change                              |
+| ShowName EP8.mkv                    | S01E08           | MATCHED  | No Change                              |
+| ShowName S02E0160 - Copy - Copy.mkv | S02E160          | MATCHED  | No Change                              |
+| ShowName-11111.mkv                  | S01E11111        | NO MATCH | No Change                              |
+| ShowName-Final.mkv                  | (UNIDENTIFIED)   | --       | No Change                              |
+| Ok Season11.Episode003 - Copy.ass   | S11E03           | RENAMED  | Long S11E03.ar.ass                     |
+| ShowName Episode1050 - Copy.srt     | S01E1050         | RENAMED  | OnePiece - 1050.ar.srt                 |
+| Sub Season 4 Episode 02 - Copy.ass  | S04E02           | RENAMED  | Show Season 4 Episode 2.ar.ass         |
+| SubDL S02Ep015.srt                  | S02E15           | RENAMED  | Program Season2 Ep15.ar.srt            |
+| SubSC Season1 Ep08 - Copy.srt       | S01E08           | RENAMED  | ShowName EP8.ar.srt                    |
+| Yes Season2.Ep160.ass               | S02E160          | RENAMED  | ShowName S02E0160 - Copy - Copy.ar.ass |
+| other. 2x10.ass                     | S02E10           | RENAMED  | Program S2Ep10.ar.ass                  |
+| subtitle 3.srt                      | (UNIDENTIFIED)   | --       | No Change                              |
++-------------------------------------+------------------+----------+----------------------------------------+
+#
+# MATCHED EPISODES:
+# S01E08 -> Video: ShowName EP8.mkv | Subtitle: SubSC Season1 Ep08 - Copy.srt -> ShowName EP8.ar.srt
+# S01E1050 -> Video: OnePiece - 1050.mp4 | Subtitle: ShowName Episode1050 - Copy.srt -> OnePiece - 1050.ar.srt
+# S02E10 -> Video: Program S2Ep10.mkv | Subtitle: other. 2x10.ass -> Program S2Ep10.ar.ass
+# S02E15 -> Video: Program Season2 Ep15.mkv | Subtitle: SubDL S02Ep015.srt -> Program Season2 Ep15.ar.srt
+# S02E160 -> Video: ShowName S02E0160 - Copy - Copy.mkv | Subtitle: Yes Season2.Ep160.ass -> ShowName S02E0160 - Copy - Copy.ar.ass
+# S04E02 -> Video: Show Season 4 Episode 2.mp4 | Subtitle: Sub Season 4 Episode 02 - Copy.ass -> Show Season 4 Episode 2.ar.ass
+# S11E03 -> Video: Long S11E03.mp4 | Subtitle: Ok Season11.Episode003 - Copy.ass -> Long S11E03.ar.ass
+#
+# MISSING MATCHES:
+# S01E11111 -> Has Video: ShowName-11111.mkv | Missing: Subtitle
+#
+# FILES WITHOUT EPISODE PATTERN:
+# ShowName-Final.mkv (no episode pattern detected)
+# subtitle 3.srt (no episode pattern detected)
+#
