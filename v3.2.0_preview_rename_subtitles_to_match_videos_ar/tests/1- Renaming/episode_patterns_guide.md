@@ -1,13 +1,18 @@
 # Episode Pattern Recognition - All Supported Formats
 
-This document lists all 26 naming patterns supported by the pattern engine, ordered by priority (first match wins).
+This document lists all 29 naming patterns (98 variations) supported by the pattern engine, ordered by priority (first match wins).
+
+**Recent Updates (2025-01-17):**
+- ✅ Pattern 5a: Fixed to allow space before episode number (`s2 ep 08`)
+- ✅ Pattern 5b: Added for dot separator before EP (`s02.ep13`)
+- ✅ Pattern 22 (19a): Added for `season## e##` format (`season2 e21`)
 
 ---
 
 ## Pattern 1: S##E## Format
-**Regex:** `[Ss](\d+)\s?[Ee](\d+)`
+**Regex:** `[Ss](\d+)\s?[Ee](\d+)` and `[Ss](\d+)\s+[Ee]pisode\s+(\d+)`
 
-**Description:** The most common format with 'S' followed by season number, 'E' followed by episode number. Supports optional space between S## and E##.
+**Description:** The most common format with 'S' followed by season number, 'E' followed by episode number. Supports optional space between S## and E##, and full 'Episode' word variation.
 
 **Examples:**
 - `S01E05` → Season 1, Episode 5
@@ -15,6 +20,7 @@ This document lists all 26 naming patterns supported by the pattern engine, orde
 - `s03e15` → Season 3, Episode 15
 - `S02 E3` → Season 2, Episode 3 (space-separated)
 - `s3 e2` → Season 3, Episode 2 (space-separated, lowercase)
+- `S02 Episode 08` → Season 2, Episode 8 (full Episode word)
 - `Show.Name.S01E01.720p.mkv`
 - `ShowName.S02 E3.mkv` (space-separated variation)
 
@@ -48,28 +54,33 @@ This document lists all 26 naming patterns supported by the pattern engine, orde
 
 ---
 
-## Pattern 4: S## - E## Format
-**Regex:** `[Ss](\d{1,2})\s*-\s*[Ee](\d+)`
+## Pattern 4: S## - E## Format (and variations)
+**Regex:** `[Ss](\d{1,2})\s*-\s*[Ee](\d+)`, `[Ss](\d{1,2})\.E(\d+)`, `[Ss](\d{1,2})_[Ee](\d+)`
 
-**Description:** Season with dash separator to 'E' + episode number.
+**Description:** Season with separator to 'E' + episode number. Supports dash, dot, and underscore separators.
 
 **Examples:**
-- `S01 - E05` → Season 1, Episode 5
-- `S2 - E10` → Season 2, Episode 10
-- `S03-E15` → Season 3, Episode 15
+- `S01 - E05` → Season 1, Episode 5 (dash)
+- `S2 - E10` → Season 2, Episode 10 (dash)
+- `S03-E15` → Season 3, Episode 15 (dash, no space)
+- `S02.E12` → Season 2, Episode 12 (dot separator)
+- `S03_E07` → Season 3, Episode 7 (underscore separator)
 - `s1 - e7` → Season 1, Episode 7
 
 ---
 
-## Pattern 5: S## - EP## Format
-**Regex:** `[Ss](\d{1,2})\s*-\s*[Ee][Pp](\d+)`
+## Pattern 5: S## - EP## Format (and variations)
+**Regex:** `[Ss](\d{1,2})\s*-\s*[Ee][Pp](\d+)`, `[Ss](\d{1,2})\s+[Ee][Pp]\s*(\d+)`, and `[Ss](\d{1,2})\.[Ee][Pp](\d+)` **[FIXED + NEW]**
 
-**Description:** Season with dash separator to 'EP' + episode number.
+**Description:** Season with separator to 'EP' + episode number. Supports dash, space, and dot separators. **Fixed to allow optional space before episode number** (e.g., `s2 ep 08`). **Added dot separator** (e.g., `s02.ep13`).
 
 **Examples:**
-- `S01 - EP05` → Season 1, Episode 5
-- `S2 - EP10` → Season 2, Episode 10
-- `S03-ep15` → Season 3, Episode 15
+- `S01 - EP05` → Season 1, Episode 5 (dash)
+- `S2 - EP10` → Season 2, Episode 10 (dash)
+- `S03-ep15` → Season 3, Episode 15 (dash, no space)
+- `S01 EP15` → Season 1, Episode 15 (space, no dash)
+- `s2 ep 08` → Season 2, Episode 8 (**space before episode** - fixed)
+- `s02.ep13` → Season 2, Episode 13 (**dot separator** - new)
 - `s1 - Ep7` → Season 1, Episode 7
 
 ---
@@ -184,14 +195,17 @@ This document lists all 26 naming patterns supported by the pattern engine, orde
 
 ---
 
-## Pattern 15: Season # Episode # Format
-**Regex:** `[Ss]eason\s+(\d+)\s+[Ee]pisode\s+(\d+)`
+## Pattern 15: Season # Episode # Format (and variations)
+**Regex:** `[Ss]eason\s+(\d+)\s+[Ee]pisode\s+(\d+)` and `[Ss]eason\s*(\d+)[\s_]+[Ee]pisode\s*(\d+)`
 
-**Description:** Full words with spaces throughout.
+**Description:** Full words with spaces throughout, plus variation with optional spaces and space/underscore separator.
 
 **Examples:**
-- `Season 1 Episode 5` → Season 1, Episode 5
-- `Season 2 Episode 10` → Season 2, Episode 10
+- `Season 1 Episode 5` → Season 1, Episode 5 (all spaces)
+- `Season 2 Episode 10` → Season 2, Episode 10 (all spaces)
+- `Season02 Episode 20` → Season 2, Episode 20 (concatenated season)
+- `Season 01_Episode 05` → Season 1, Episode 5 (underscore separator)
+- `Season01_Episode05` → Season 1, Episode 5 (no spaces, underscore)
 - `season 3 episode 7` → Season 3, Episode 7
 
 ---
@@ -244,21 +258,21 @@ This document lists all 26 naming patterns supported by the pattern engine, orde
 
 ---
 
-## Pattern 20: E## Format (Assumes Season 1)
-**Regex:** `(?:^|[._\s-])[Ee](\d+)(?=[._\s-]|$)`
+## Pattern 19a: season## e## Format **[NEW]**
+**Regex:** `[Ss]eason(\d+)\s+[Ee](\d+)`
 
-**Description:** Just episode number with 'E' prefix. Assumes Season 1.
+**Description:** Lowercase 'season' concatenated with season number (no space), then space, then just 'e' (not 'ep') + episode number. **Added to fix issue with filenames like `Gintama season2 e21.srt`**.
 
 **Examples:**
-- `E05` → Season 1, Episode 5
-- `E10` → Season 1, Episode 10
-- `Show.Name.E07.mkv` → Season 1, Episode 7
+- `season2 e21` → Season 2, Episode 21 (**user-reported fix**)
+- `Season3 E05` → Season 3, Episode 5
+- `season1 e10` → Season 1, Episode 10
 
-**Note:** Requires word boundaries to avoid false matches.
+**Note:** This pattern matches BEFORE Pattern 25 (E##) to capture the season number instead of assuming Season 1.
 
 ---
 
-## Pattern 21: Season #.Ep # Format
+## Pattern 20: Season #.Ep # Format
 **Regex:** `[Ss]eason\s+(\d+)[\s\._-]*[Ee]p(?:isode)?\s*(\d+)`
 
 **Description:** 'Season' with space, flexible separator to 'Ep/Episode'.
@@ -282,10 +296,39 @@ This document lists all 26 naming patterns supported by the pattern engine, orde
 
 ---
 
-## Pattern 23: Ep## Format (Assumes Season 1)
+## Pattern 22: season## e## Format **[NEW - USER FIX]**
+**Regex:** `[Ss]eason(\d+)\s+[Ee](\d+)`
+
+**Description:** Lowercase 'season' concatenated with season number (no space after 'season'), then space, then just 'e' (not 'ep') followed by episode number. **Added to fix user-reported issue** with filenames like `Gintama season2 e21.srt`. This pattern matches BEFORE Pattern 25 (E##) to capture the season number instead of assuming Season 1.
+
+**Also Known As:** Pattern 19a in the engine (inserted after Pattern 19)
+
+**Examples:**
+- `season2 e21` → Season 2, Episode 21 (**user-reported fix** ✅)
+- `Gintama season2 e21.srt` → Season 2, Episode 21
+- `Season3 E05` → Season 3, Episode 5
+- `season1 e10` → Season 1, Episode 10
+
+**Note:** This pattern is different from Pattern 18 (Season# Ep#) which requires 'ep' or 'episode', not just 'e'.
+
+---
+
+## Pattern 23: Season # Ep # Format (REORDERED for specificity)
+**Regex:** `[Ss]eason\s+(\d+)\s+[Ee]p(?:isode)?\s*(\d+)`
+
+**Description:** Full words with consistent spacing. **Moved before Pattern 24 for better specificity** (Season keyword makes it more specific than just Ep##).
+
+**Examples:**
+- `Season 1 Ep 5` → Season 1, Episode 5
+- `Season 2 Episode 10` → Season 2, Episode 10
+- `season 3 ep 7` → Season 3, Episode 7
+
+---
+
+## Pattern 24: Ep## Format (Assumes Season 1) (REORDERED)
 **Regex:** `(?:^|[._\s-])[Ee]p(?:isode)?\s*(\d+)(?=[._\s-]|$)`
 
-**Description:** Just 'Ep' or 'Episode' with number. Assumes Season 1.
+**Description:** Just 'Ep' or 'Episode' with number. Assumes Season 1. **Swapped with Pattern 23** for better pattern matching order.
 
 **Examples:**
 - `Ep05` → Season 1, Episode 5
@@ -296,19 +339,21 @@ This document lists all 26 naming patterns supported by the pattern engine, orde
 
 ---
 
-## Pattern 24: Season # Ep # Format
-**Regex:** `[Ss]eason\s+(\d+)\s+[Ee]p(?:isode)?\s*(\d+)`
+## Pattern 25: E## Format (Assumes Season 1) (MOVED from Pattern 20)
+**Regex:** `(?:^|[._\s-])[Ee](\d+)(?=[._\s-]|$)`
 
-**Description:** Full words with consistent spacing.
+**Description:** Just episode number with 'E' prefix. Assumes Season 1. **Moved from Pattern 20 for better specificity ordering** (more generic patterns moved to end).
 
 **Examples:**
-- `Season 1 Ep 5` → Season 1, Episode 5
-- `Season 2 Episode 10` → Season 2, Episode 10
-- `season 3 ep 7` → Season 3, Episode 7
+- `E05` → Season 1, Episode 5
+- `E10` → Season 1, Episode 10
+- `Show.Name.E07.mkv` → Season 1, Episode 7
+
+**Note:** Requires word boundaries to avoid false matches.
 
 ---
 
-## Pattern 25: ## - ## Format
+## Pattern 26: ## - ## Format
 **Regex:** `(?<![0-9])(\d{1,2})\s*-\s*(\d{1,2})(?![a-zA-Z0-9])`
 
 **Description:** Season and episode numbers separated by dash, no S/E prefix. Optional spaces around dash. Supports 1-99 for both season and episode.
@@ -323,7 +368,7 @@ This document lists all 26 naming patterns supported by the pattern engine, orde
 
 ---
 
-## Pattern 26: - ## Format (Assumes Season 1)
+## Pattern 27: - ## Format (Assumes Season 1)
 **Regex:** `-\s*(?:1[0-8]\d{2}|\d{1,3})(?![a-zA-Z0-9])`
 
 **Description:** Just a dash followed by episode number. Assumes Season 1. **Hardened** to avoid common false positives.
@@ -346,6 +391,51 @@ This document lists all 26 naming patterns supported by the pattern engine, orde
 - `Movie-x264.mkv` ❌ (codec, blocked)
 
 **Warning:** This is the most permissive pattern but has been hardened to reduce false positives.
+
+---
+
+## Pattern 28: [##] Format (Assumes Season 1)
+**Regex:** `\[(\d{1,2})\](?![a-zA-Z0-9])`
+
+**Description:** Bracket-enclosed episode number. Assumes Season 1. **Hardened** to avoid matching codec/quality tags.
+
+**Hardening Features:**
+- Supports episodes 1-99
+- Blocks letter/number suffixes (prevents matching [10bit], [1080p], [x265])
+- Uses negative lookahead to prevent matching [10bit], [x265], etc.
+
+**Examples:**
+- `[VCB-Studio] IS [07].mkv` → Season 1, Episode 7
+- `Show.[12].720p.mkv` → Season 1, Episode 12
+- `Series [5] Episode.mkv` → Season 1, Episode 5
+
+**Won't Match (Protected):**
+- `Show[10bit].mkv` ❌ (codec tag, blocked)
+- `Video[1080p].mkv` ❌ (resolution tag, blocked)
+- `Movie[x265].mkv` ❌ (codec tag, blocked)
+
+---
+
+## Pattern 29: _## Format (Assumes Season 1) - LAST PATTERN
+**Regex:** `_(?:1[0-8]\d{2}|\d{1,3})(?![a-zA-Z0-9])`
+
+**Description:** Underscore with episode number. Assumes Season 1. **Hardened** same as Pattern 26. **This is the LAST pattern** - most permissive.
+
+**Hardening Features:**
+- Supports episodes 1-1899 (same as Pattern 26)
+- Blocks years 1900+ and resolution/codec suffixes
+- Uses negative lookahead to prevent matching letter/number combinations
+
+**Examples:**
+- `[DB]Maoyuu_09.mkv` → Season 1, Episode 9
+- `Show_15.mkv` → Season 1, Episode 15
+- `Example_3.720p.mkv` → Season 1, Episode 3
+
+**Won't Match (Protected):**
+- `Video_1080p.mkv` ❌ (resolution, blocked)
+- `Show_x264.mkv` ❌ (codec, blocked)
+
+**Warning:** This is the MOST permissive pattern (last in order) but has been hardened to reduce false positives.
 
 ---
 

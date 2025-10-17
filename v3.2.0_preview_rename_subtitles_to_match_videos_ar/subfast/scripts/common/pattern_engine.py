@@ -26,6 +26,13 @@ EPISODE_PATTERNS = [
         lambda m: (int(m.group(1)), int(m.group(2)))
     ),
     
+    # Pattern 1a: S## Episode ## format (e.g., S01 Episode 05, S2 Episode 10) - full Episode word
+    (
+        'S## Episode ##',
+        re.compile(r'[Ss](\d+)\s+[Ee]pisode\s+(\d+)', re.IGNORECASE),
+        lambda m: (int(m.group(1)), int(m.group(2)))
+    ),
+    
     # Pattern 2: ##x## format (e.g., 2x05, 1x10)
     (
         '##x##',
@@ -47,10 +54,38 @@ EPISODE_PATTERNS = [
         lambda m: (int(m.group(1)), int(m.group(2)))
     ),
     
+    # Pattern 4a: S##.E## format (e.g., S01.E05, S2.E10) - dot separator variation
+    (
+        'S##.E##',
+        re.compile(r'[Ss](\d{1,2})\.E(\d+)', re.IGNORECASE),
+        lambda m: (int(m.group(1)), int(m.group(2)))
+    ),
+    
+    # Pattern 4b: S##_E## format (e.g., S01_E05, S2_E10) - underscore separator variation
+    (
+        'S##_E##',
+        re.compile(r'[Ss](\d{1,2})_[Ee](\d+)', re.IGNORECASE),
+        lambda m: (int(m.group(1)), int(m.group(2)))
+    ),
+    
     # Pattern 5: S## - EP## format (e.g., S01 - EP05, S2 - EP10)
     (
         'S## - EP##',
         re.compile(r'[Ss](\d{1,2})\s*-\s*[Ee][Pp](\d+)', re.IGNORECASE),
+        lambda m: (int(m.group(1)), int(m.group(2)))
+    ),
+    
+    # Pattern 5a: S## EP## format (e.g., S01 EP05, S2 EP10, s2 ep 08) - no dash variation, allows space before episode
+    (
+        'S## EP##',
+        re.compile(r'[Ss](\d{1,2})\s+[Ee][Pp]\s*(\d+)', re.IGNORECASE),
+        lambda m: (int(m.group(1)), int(m.group(2)))
+    ),
+    
+    # Pattern 5b: S##.EP## format (e.g., S02.EP13, s02.ep13) - dot separator variation
+    (
+        'S##.EP##',
+        re.compile(r'[Ss](\d{1,2})\.[Ee][Pp](\d+)', re.IGNORECASE),
         lambda m: (int(m.group(1)), int(m.group(2)))
     ),
     
@@ -124,6 +159,14 @@ EPISODE_PATTERNS = [
         lambda m: (int(m.group(1)), int(m.group(2)))
     ),
     
+    # Pattern 15a: Season## Episode ## format (optional spaces, space OR underscore separator)
+    # Examples: Season01 Episode05, Season 01_Episode 05, Season01_Episode05
+    (
+        'Season##_Episode##',
+        re.compile(r'[Ss]eason\s*(\d+)[\s_]+[Ee]pisode\s*(\d+)', re.IGNORECASE),
+        lambda m: (int(m.group(1)), int(m.group(2)))
+    ),
+    
     # Pattern 16: Season#Episode# format (no spaces)
     (
         'Season#Episode#',
@@ -152,14 +195,14 @@ EPISODE_PATTERNS = [
         lambda m: (int(m.group(1)), int(m.group(2)))
     ),
     
-    # Pattern 20: E# format (assumes Season 1)
+    # Pattern 19a: season## e## format (lowercase, concatenated season, just 'e', e.g., season2 e21)
     (
-        'E##',
-        re.compile(r'(?:^|[._\s-])[Ee](\d+)(?=[._\s-]|$)'),
-        lambda m: (1, int(m.group(1)))
+        'season## e##',
+        re.compile(r'[Ss]eason(\d+)\s+[Ee](\d+)', re.IGNORECASE),
+        lambda m: (int(m.group(1)), int(m.group(2)))
     ),
     
-    # Pattern 21: Season #.Ep # format (separator between Season and Ep)
+    # Pattern 20: Season #.Ep # format (separator between Season and Ep)
     (
         'Season #.Ep #',
         re.compile(r'[Ss]eason\s+(\d+)[\s\._-]*[Ee]p(?:isode)?\s*(\d+)', re.IGNORECASE),
@@ -173,21 +216,28 @@ EPISODE_PATTERNS = [
         lambda m: (int(m.group(1)), int(m.group(2)))
     ),
     
-    # Pattern 23: Ep# format (assumes Season 1)
-    (
-        'Ep##',
-        re.compile(r'(?:^|[._\s-])[Ee]p(?:isode)?\s*(\d+)(?=[._\s-]|$)', re.IGNORECASE),
-        lambda m: (1, int(m.group(1)))
-    ),
-    
-    # Pattern 24: Season # Ep # format (spaces everywhere)
+    # Pattern 23: Season # Ep # format (spaces everywhere) - SWAPPED for better specificity
     (
         'Season # Ep #',
         re.compile(r'[Ss]eason\s+(\d+)\s+[Ee]p(?:isode)?\s*(\d+)', re.IGNORECASE),
         lambda m: (int(m.group(1)), int(m.group(2)))
     ),
     
-    # Pattern 25: ## - ## format (Season-Episode with dash, e.g., "Show 3 - 04.mkv")
+    # Pattern 24: Ep# format (assumes Season 1) - SWAPPED from Pattern 23
+    (
+        'Ep##',
+        re.compile(r'(?:^|[._\s-])[Ee]p(?:isode)?\s*(\d+)(?=[._\s-]|$)', re.IGNORECASE),
+        lambda m: (1, int(m.group(1)))
+    ),
+    
+    # Pattern 25: E# format (assumes Season 1) - MOVED from Pattern 20 for better specificity
+    (
+        'E##',
+        re.compile(r'(?:^|[._\s-])[Ee](\d+)(?=[._\s-]|$)'),
+        lambda m: (1, int(m.group(1)))
+    ),
+    
+    # Pattern 26: ## - ## format (Season-Episode with dash, e.g., "Show 3 - 04.mkv")
     # Season and episode numbers separated by dash, no S/E prefix
     # Optional spaces around dash, supports 1-99 for both season and episode
     (
@@ -196,12 +246,30 @@ EPISODE_PATTERNS = [
         lambda m: (int(m.group(1)), int(m.group(2)))
     ),
     
-    # Pattern 26: - # format (assumes Season 1, e.g., "Show - 15.mkv")
+    # Pattern 27: - # format (assumes Season 1, e.g., "Show - 15.mkv")
     # Hardened: Episodes 1-1899 only, excludes years 1900+, blocks letter suffixes (1080p, x264)
     (
         '- ##',
         re.compile(r'-\s*(?:1[0-8]\d{2}|\d{1,3})(?![a-zA-Z0-9])'),
         lambda m: (1, int(m.group(0).split('-')[1].strip()))
+    ),
+    
+    # Pattern 28: [##] format (assumes Season 1, e.g., "[07].mkv")
+    # Hardened: Same as Pattern 27, blocks [10bit], [1080p], [x265] etc.
+    # Examples: [07] → S01E07, but [10bit] → no match
+    (
+        '[##]',
+        re.compile(r'\[(\d{1,2})\](?![a-zA-Z0-9])'),
+        lambda m: (1, int(m.group(1)))
+    ),
+    
+    # Pattern 29: _## format (assumes Season 1, e.g., "Show_09.mkv")
+    # Hardened: Same as Pattern 27, blocks _1080p etc.
+    # LAST PATTERN - most permissive
+    (
+        '_##',
+        re.compile(r'_(?:1[0-8]\d{2}|\d{1,3})(?![a-zA-Z0-9])'),
+        lambda m: (1, int(m.group(0).split('_')[1].strip()))
     ),
 ]
 
