@@ -252,45 +252,6 @@ This utility has been extensively tested across multible different scenarios. If
 3. Include generated CSV report that along with the issue details
 4. Consider contributing regex patterns for new format support
 
-## Version History
-
-### v3.0.0 (Current)
-- **SubFast** rebranding replacing previous **Subtitle Renamer Tool [AR]**
-- **Added new MKV soft-sub subtitle embedding feature** through mkvmerge (credits to MKVToolNix devs)
-- **Dual-feature context menu** (Rename + Embed in one menu under SubFast parent menu)
-- **Smart console behavior** (auto-close on success, stay open on errors)
-- Unified configuration system to handle config of both features in one config.ini file
-- New Folder structure (scripts/, bin/, resources/)
-- Enhanced error messages
-
-### v2.5.0
-- **Configuration system** via config.ini
-- **9 new episode patterns** (25+ total patterns)
-  - `S## - ##` / `S## - E##` / `S## - EP##` formats
-  - Ordinal season patterns (1st/2nd/3rd Season)
-- **12x performance improvement** via episode number caching
-- **Enhanced CSV export** with original filename tracking and execution time
-- **Configurable language suffix** and file formats
-- **Smart resolution detection** (fixes ##x## pattern conflicts)
-- **Performance tracking** with detailed metrics
-- Bug fixes for negative count display and pattern conflicts
-- Memory usage optimization (42% reduction)
-
-### v2.0.0
-- Windows context menu integration
-- Enhanced pattern recognition (15+ formats)
-- Context-aware episode matching
-- Movie mode detection
-- Comprehensive collision handling
-- Detailed analysis and reporting
-- Basic CSV export functionality
-
-### v1.0.0
-- Basic episode detection
-- Simple S##E## and - ## patterns
-- Command-line only operation
-- Basic file renaming functionality
-
 ## License
 
 This project is released as open source. Feel free to modify and distribute according to your needs.
