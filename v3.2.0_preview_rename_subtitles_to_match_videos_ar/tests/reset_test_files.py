@@ -16,9 +16,59 @@ What it does:
 Version: 3.2.0
 """
 
+import json
 import shutil
 import sys
 from pathlib import Path
+
+
+def extract_extensions_from_definitions(pattern_file: Path) -> dict:
+    """
+    Extract all unique file extensions from pattern_definitions.json.
+    DYNAMIC: Auto-detects all extensions used in patterns.
+    
+    Args:
+        pattern_file: Path to pattern_definitions.json
+    
+    Returns:
+        Dictionary with 'video' and 'subtitle' extension sets
+        Example: {'video': {'.mkv', '.mp4'}, 'subtitle': {'.srt', '.ass'}}
+    """
+    try:
+        with open(pattern_file, 'r', encoding='utf-8') as f:
+            data = json.load(f)
+        
+        video_exts = set()
+        subtitle_exts = set()
+        
+        for pattern in data.get('patterns', []):
+            for variation in pattern.get('variations', []):
+                # Extract video extension
+                video_template = variation.get('video_template', '')
+                if video_template:
+                    video_ext = Path(video_template).suffix.lower()
+                    if video_ext:
+                        video_exts.add(video_ext)
+                
+                # Extract subtitle extension
+                subtitle_template = variation.get('subtitle_template', '')
+                if subtitle_template:
+                    subtitle_ext = Path(subtitle_template).suffix.lower()
+                    if subtitle_ext:
+                        subtitle_exts.add(subtitle_ext)
+        
+        return {
+            'video': video_exts,
+            'subtitle': subtitle_exts
+        }
+    
+    except Exception as e:
+        print(f"[WARNING] Failed to extract extensions: {e}")
+        # Fallback to common extensions
+        return {
+            'video': {'.mkv', '.mp4'},
+            'subtitle': {'.srt', '.ass'}
+        }
 
 
 def reset_test_environment():
@@ -107,24 +157,57 @@ def reset_test_environment():
         print(f"  [ERROR] Failed to regenerate files: {e}")
         return 1
     
-    # Step 3: Verify file count
-    print("\n[STEP 3] Verifying file count...")
+    # Step 3: Verify file count (DYNAMIC - auto-detects extensions)
+    print("\n[STEP 3] Verifying file count (dynamic extension detection)...")
     try:
         if not pattern_files_dir.exists():
             print("  [ERROR] Pattern files directory was not created")
             return 1
         
-        video_count = sum(1 for _ in pattern_files_dir.rglob('*.mkv'))
-        subtitle_count = sum(1 for _ in pattern_files_dir.rglob('*.srt'))
+        # DYNAMIC: Extract extensions from pattern_definitions.json
+        pattern_def_file = script_dir / 'fixtures' / 'pattern_definitions.json'
+        detected_exts = extract_extensions_from_definitions(pattern_def_file)
+        
+        print(f"  Detected extensions from JSON:")
+        print(f"    Videos: {', '.join(sorted(detected_exts['video']))}")
+        print(f"    Subtitles: {', '.join(sorted(detected_exts['subtitle']))}")
+        print()
+        
+        # Count files by extension (DYNAMIC)
+        video_count_by_ext = {}
+        for ext in detected_exts['video']:
+            count = sum(1 for _ in pattern_files_dir.rglob(f'*{ext}'))
+            video_count_by_ext[ext] = count
+        
+        subtitle_count_by_ext = {}
+        for ext in detected_exts['subtitle']:
+            count = sum(1 for _ in pattern_files_dir.rglob(f'*{ext}'))
+            subtitle_count_by_ext[ext] = count
+        
+        video_count = sum(video_count_by_ext.values())
+        subtitle_count = sum(subtitle_count_by_ext.values())
         total_files = video_count + subtitle_count
         
-        # Expected: 25 patterns × ~3-4 variations each = 77 videos + 77 subtitles = 154 total
-        expected_min = 150  # Allow some variation
-        expected_max = 160
+        # Display counts by extension
+        print(f"  Video files:")
+        for ext in sorted(video_count_by_ext.keys()):
+            print(f"    {ext}: {video_count_by_ext[ext]}")
+        print(f"  Total videos: {video_count}")
+        print()
         
-        print(f"  Video files: {video_count}")
-        print(f"  Subtitle files: {subtitle_count}")
+        print(f"  Subtitle files:")
+        for ext in sorted(subtitle_count_by_ext.keys()):
+            print(f"    {ext}: {subtitle_count_by_ext[ext]}")
+        print(f"  Total subtitles: {subtitle_count}")
+        print()
+        
         print(f"  Total files: {total_files}")
+        
+        # Expected: 30 patterns, 101 variations total = 202 files (101 videos + 101 subtitles)
+        # See pattern_definitions.json for exact counts
+        # DYNAMIC: This will auto-adjust if you add more patterns/variations
+        expected_min = 195  # Allow some variation for backups/reports
+        expected_max = 210  # Adjusted range after Pattern 30 simplification
         
         if expected_min <= total_files <= expected_max:
             print(f"  [OK] File count within expected range ({expected_min}-{expected_max})")

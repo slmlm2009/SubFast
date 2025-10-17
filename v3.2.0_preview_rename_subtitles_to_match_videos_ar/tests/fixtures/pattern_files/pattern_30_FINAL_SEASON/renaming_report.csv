@@ -1,0 +1,44 @@
+# ==========================================
+#    ____        _     _____          _   
+#   / ___| _   _| |__ |  ___|_ _  ___| |_ 
+#   \___ \| | | | '_ \| |_ / _` |/ __| __|
+#    ___) | |_| | |_) |  _| (_| |\__ \ |_ 
+#   |____/ \__,_|_.__/|_|  \__,_||___/\__|
+#                                         
+#    Fast subtitle renaming and embedding
+# 
+# ==========================================
+#
+# Subtitle Renaming Report
+# Generated: 2025-10-17 19:05:39
+# Directory: C:\Users\slmlm2009\Desktop\Github\SubFast\v3.2.0_preview_rename_subtitles_to_match_videos_ar\tests\fixtures\pattern_files\pattern_30_FINAL_SEASON
+# Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass
+#
+# SUMMARY:
+# Total Videos: 2
+# Total Subtitles: 2
+# Renamed: 2/2 subtitles
+# Videos Missing Subtitles: 2
+# Subtitles Missing Videos: 2
+# Videos Without Episode Pattern: 0
+# Subtitles Without Episode Pattern: 0
+# Movie Mode: No
+# Execution Time: 0.00s
+#
++-----------------------------------------------------------------------+------------------+----------+--------------------------------------------------------------------------+
+| Original Filename                                                     | Detected Episode | Action   | New Name                                                                 |
++-----------------------------------------------------------------------+------------------+----------+--------------------------------------------------------------------------+
+| [VAR1]-My.Hero.Academia.S08E01.Toshinori.Yagi.Rising-Origin.1080p.mkv | S08E01           | NO MATCH | No Change                                                                |
+| [VAR2]-Attack.on.Titan.FINAL.SEASON - 05.mkv                          | S01E05           | NO MATCH | No Change                                                                |
+| [VAR1]-[Heroacainarabic] Boku no Hero Academia FINAL SEASON - 01.ass  | S01E01           | RENAMED  | [VAR1]-My.Hero.Academia.S08E01.Toshinori.Yagi.Rising-Origin.1080p.ar.ass |
+| [VAR2]-Attack on Titan S04E05.ass                                     | S04E05           | RENAMED  | [VAR2]-Attack.on.Titan.FINAL.SEASON - 05.ar.ass                          |
++-----------------------------------------------------------------------+------------------+----------+--------------------------------------------------------------------------+
+#
+# MATCHED EPISODES:
+#
+# MISSING MATCHES:
+# S01E05 -> Has Video: [VAR2]-Attack.on.Titan.FINAL.SEASON - 05.mkv | Missing: Subtitle
+# S08E01 -> Has Video: [VAR1]-My.Hero.Academia.S08E01.Toshinori.Yagi.Rising-Origin.1080p.mkv | Missing: Subtitle
+# S01E01 -> Has Subtitle: [VAR1]-[Heroacainarabic] Boku no Hero Academia FINAL SEASON - 01.ass | Missing: Video
+# S04E05 -> Has Subtitle: [VAR2]-Attack on Titan S04E05.ass | Missing: Video
+#

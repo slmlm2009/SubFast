@@ -507,14 +507,39 @@ def generate_pattern_test_files(pattern_id: int, base_path: Optional[Path] = Non
         video_filename = f"[{var_id}]-{video_template}"
         subtitle_filename = f"[{var_id}]-{subtitle_template}"
         
-        # Create dummy video file
+        # Create dummy video file (supports .mkv, .mp4, etc.)
         video_path = pattern_dir / video_filename
-        video_path.write_text(f"Dummy video file for {var_id}\n")
+        video_ext = video_path.suffix.lower()
+        
+        if video_ext == '.mkv':
+            header = b'\x1a\x45\xdf\xa3'  # EBML header
+        elif video_ext == '.mp4':
+            header = b'\x00\x00\x00\x20\x66\x74\x79\x70\x69\x73\x6f\x6d'  # MP4 ftyp
+        else:
+            header = b'\x00\x00\x00\x01'
+        
+        content = header + b'\x00' * (1024 - len(header))  # 1KB file
+        video_path.write_bytes(content)
         files_created.append(video_filename)
         
-        # Create dummy subtitle file
+        # Create dummy subtitle file (supports .srt, .ass, etc.)
         subtitle_path = pattern_dir / subtitle_filename
-        subtitle_path.write_text(f"Dummy subtitle file for {var_id}\n")
+        subtitle_ext = subtitle_path.suffix.lower()
+        
+        if subtitle_ext == '.srt':
+            subtitle_content = f"1\n00:00:01,000 --> 00:00:05,000\nDummy subtitle for {var_id}\n\n"
+        elif subtitle_ext == '.ass':
+            subtitle_content = f"""[Script Info]
+Title: Test {var_id}
+
+[Events]
+Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text
+Dialogue: 0,0:00:01.00,0:00:05.00,Default,,0,0,0,,Dummy subtitle for {var_id}
+"""
+        else:
+            subtitle_content = f"Dummy subtitle for {var_id}\n"
+        
+        subtitle_path.write_text(subtitle_content, encoding='utf-8')
         files_created.append(subtitle_filename)
     
     print(f"[SUCCESS] Generated {len(files_created)} test files in: {pattern_dir.name}")

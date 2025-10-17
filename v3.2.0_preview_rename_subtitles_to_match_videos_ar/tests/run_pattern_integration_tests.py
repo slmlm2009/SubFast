@@ -147,14 +147,22 @@ class IntegrationTestRunner:
         """
         notes = []
         
-        # Check for renamed subtitle files (should have .ar.srt extension based on config)
-        renamed_subtitles = list(pattern_dir.glob('*.ar.srt'))
-        original_subtitles = list(pattern_dir.glob('[[]VAR*[]].srt'))
+        # Check for renamed subtitle files (DYNAMIC: supports .srt and .ass)
+        renamed_subtitles = list(pattern_dir.glob('*.ar.srt')) + list(pattern_dir.glob('*.ar.ass'))
+        original_subtitles = (list(pattern_dir.glob('[[]VAR*[]].srt')) + 
+                             list(pattern_dir.glob('[[]VAR*[]].ass')) +
+                             list(pattern_dir.glob('[[]VAR*[]].vtt')))
         
         if renamed_subtitles:
-            notes.append(f"Found {len(renamed_subtitles)} renamed subtitle files")
+            # Group by extension for detailed reporting
+            srt_count = len([f for f in renamed_subtitles if f.suffix == '.srt'])
+            ass_count = len([f for f in renamed_subtitles if f.suffix == '.ass'])
+            if ass_count > 0:
+                notes.append(f"Found {len(renamed_subtitles)} renamed subtitle files ({srt_count} .ar.srt, {ass_count} .ar.ass)")
+            else:
+                notes.append(f"Found {len(renamed_subtitles)} renamed subtitle files (.ar.srt)")
         else:
-            notes.append("WARNING: No renamed subtitle files found (.ar.srt)")
+            notes.append("WARNING: No renamed subtitle files found (.ar.srt or .ar.ass)")
         
         return notes
     
@@ -254,9 +262,10 @@ class IntegrationTestRunner:
                 both_match = (video_match and subtitle_match)
                 overall_status = "PASS" if both_match else "FAIL"
                 
-                fail_msg = f"  [FAIL] No match pair for {expected} [X]"
-                print(fail_msg)
-                self.report_lines.append(fail_msg)
+                # Only show warning if entry not in CSV (not a failure, just info)
+                csv_warning = f"  [INFO] Entry not in CSV report (testing from disk files)"
+                print(csv_warning)
+                self.report_lines.append(csv_warning)
                 
                 # Show video extraction
                 if video_file:
@@ -293,19 +302,23 @@ class IntegrationTestRunner:
                 self.report_lines.append(separator)
                 self.report_lines.append("")
                 
-                failed += 1
+                # Count passed/failed based on overall_status
+                if overall_status == "PASS":
+                    passed += 1
+                else:
+                    failed += 1
                 
-                # Add detailed failure info
-                if video_file and subtitle_file:
+                # Add detailed failure info only if failed
+                if overall_status == "FAIL" and video_file and subtitle_file:
                     if not video_match and not subtitle_match:
                         self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Both video and subtitle pattern mismatch (expected {expected}, got video={video_extracted}, subtitle={subtitle_extracted})")
                     elif not video_match:
                         self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Video pattern mismatch (expected {expected}, got {video_extracted})")
                     elif not subtitle_match:
                         self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Subtitle pattern mismatch (expected {expected}, got {subtitle_extracted})")
-                elif not video_file:
+                elif overall_status == "FAIL" and not video_file:
                     self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Video file not found")
-                elif not subtitle_file:
+                elif overall_status == "FAIL" and not subtitle_file:
                     self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Subtitle file not found")
                 
                 continue

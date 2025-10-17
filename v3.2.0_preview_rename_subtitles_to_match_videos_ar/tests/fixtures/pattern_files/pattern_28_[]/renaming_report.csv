@@ -10,7 +10,7 @@
 # ==========================================
 #
 # Subtitle Renaming Report
-# Generated: 2025-10-17 16:34:45
+# Generated: 2025-10-17 19:05:39
 # Directory: C:\Users\slmlm2009\Desktop\Github\SubFast\v3.2.0_preview_rename_subtitles_to_match_videos_ar\tests\fixtures\pattern_files\pattern_28_[]
 # Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass
 #
@@ -25,19 +25,19 @@
 # Movie Mode: No
 # Execution Time: 0.00s
 #
-+---------------------------------------------------------------------------------+------------------+----------+----------------------------------------------------------------------------------+
-| Original Filename                                                               | Detected Episode | Action   | New Name                                                                         |
-+---------------------------------------------------------------------------------+------------------+----------+----------------------------------------------------------------------------------+
-| [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].mkv    | S01E07           | MATCHED  | No Change                                                                        |
-| [VAR2]-Show.Name.[12].720p.mkv                                                  | S01E12           | MATCHED  | No Change                                                                        |
-| [VAR3]-Series [5] Episode.mkv                                                   | S01E05           | MATCHED  | No Change                                                                        |
-| [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].ar.srt | S01E07           | RENAMED  | [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].ar_[VAR |
-| [VAR2]-Show.Name.[12].720p.ar.srt                                               | S01E12           | RENAMED  | [VAR2]-Show.Name.[12].720p.ar_[VAR2]-Show.Name.[12].720p.ar.srt                  |
-| [VAR3]-Series [5] Episode.ar.srt                                                | S01E05           | RENAMED  | [VAR3]-Series [5] Episode.ar_[VAR3]-Series [5] Episode.ar.srt                    |
-+---------------------------------------------------------------------------------+------------------+----------+----------------------------------------------------------------------------------+
++------------------------------------------------------------------------------+------------------+----------+---------------------------------------------------------------------------------+
+| Original Filename                                                            | Detected Episode | Action   | New Name                                                                        |
++------------------------------------------------------------------------------+------------------+----------+---------------------------------------------------------------------------------+
+| [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].mkv | S01E07           | MATCHED  | No Change                                                                       |
+| [VAR2]-Show.Name.[12].720p.mkv                                               | S01E12           | MATCHED  | No Change                                                                       |
+| [VAR3]-Series [5] Episode.mkv                                                | S01E05           | MATCHED  | No Change                                                                       |
+| [VAR1]-[VCB-Studio] IS Infinite Stratos [07].srt                             | S01E07           | RENAMED  | [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].ar.srt |
+| [VAR2]-Show.Name.[12].srt                                                    | S01E12           | RENAMED  | [VAR2]-Show.Name.[12].720p.ar.srt                                               |
+| [VAR3]-Series [5] Episode.srt                                                | S01E05           | RENAMED  | [VAR3]-Series [5] Episode.ar.srt                                                |
++------------------------------------------------------------------------------+------------------+----------+---------------------------------------------------------------------------------+
 #
 # MATCHED EPISODES:
-# S01E05 -> Video: [VAR3]-Series [5] Episode.mkv | Subtitle: [VAR3]-Series [5] Episode.ar.srt -> [VAR3]-Series [5] Episode.ar_[VAR3]-Series [5] Episode.ar.srt
-# S01E07 -> Video: [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].mkv | Subtitle: [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].ar.srt -> [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].ar_[VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].ar.srt
-# S01E12 -> Video: [VAR2]-Show.Name.[12].720p.mkv | Subtitle: [VAR2]-Show.Name.[12].720p.ar.srt -> [VAR2]-Show.Name.[12].720p.ar_[VAR2]-Show.Name.[12].720p.ar.srt
+# S01E05 -> Video: [VAR3]-Series [5] Episode.mkv | Subtitle: [VAR3]-Series [5] Episode.srt -> [VAR3]-Series [5] Episode.ar.srt
+# S01E07 -> Video: [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].mkv | Subtitle: [VAR1]-[VCB-Studio] IS Infinite Stratos [07].srt -> [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].ar.srt
+# S01E12 -> Video: [VAR2]-Show.Name.[12].720p.mkv | Subtitle: [VAR2]-Show.Name.[12].srt -> [VAR2]-Show.Name.[12].720p.ar.srt
 #

@@ -10,14 +10,14 @@
 # ==========================================
 #
 # Subtitle Renaming Report
-# Generated: 2025-10-17 16:34:43
+# Generated: 2025-10-17 19:05:37
 # Directory: C:\Users\slmlm2009\Desktop\Github\SubFast\v3.2.0_preview_rename_subtitles_to_match_videos_ar\tests\fixtures\pattern_files\pattern_01_SE
 # Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass
 #
 # SUMMARY:
-# Total Videos: 6
-# Total Subtitles: 6
-# Renamed: 6/6 subtitles
+# Total Videos: 7
+# Total Subtitles: 7
+# Renamed: 7/7 subtitles
 # Videos Missing Subtitles: 0
 # Subtitles Missing Videos: 0
 # Videos Without Episode Pattern: 0
@@ -25,28 +25,31 @@
 # Movie Mode: No
 # Execution Time: 0.00s
 #
-+----------------------------------------------------------------------------------+------------------+----------+----------------------------------------------+
-| Original Filename                                                                | Detected Episode | Action   | New Name                                     |
-+----------------------------------------------------------------------------------+------------------+----------+----------------------------------------------+
-| [VAR1]-Show.Name.S01E05.720p.mkv                                                 | S01E05           | MATCHED  | No Change                                    |
-| [VAR2]-Series.S2E10.BluRay.mkv                                                   | S02E10           | MATCHED  | No Change                                    |
-| [VAR3]-Example.s03e15.WEB-DL.mkv                                                 | S03E15           | MATCHED  | No Change                                    |
-| [VAR4]-Test.S01E01.mkv                                                           | S01E01           | MATCHED  | No Change                                    |
-| [VAR5]-Hajimeru Isekai Seikatsu s3 e2.mkv                                        | S03E02           | MATCHED  | No Change                                    |
-| [VAR6]-Show.S02 Episode 08.mkv                                                   | S02E08           | MATCHED  | No Change                                    |
-| [VAR1]-Show.Name.S01E05.720p.ar_[VAR1]-Show.Name.S01E05.720p.ar.srt              | S01E05           | RENAMED  | [VAR1]-Show.Name.S01E05.720p.ar.srt          |
-| [VAR2]-Series.S2E10.BluRay.ar_[VAR2]-Series.S2E10.BluRay.ar.srt                  | S02E10           | RENAMED  | [VAR2]-Series.S2E10.BluRay.ar.srt            |
-| [VAR3]-Example.s03e15.WEB-DL.ar_[VAR3]-Example.s03e15.WEB-DL.ar.srt              | S03E15           | RENAMED  | [VAR3]-Example.s03e15.WEB-DL.ar.srt          |
-| [VAR4]-Test.S01E01.ar_[VAR4]-Test.S01E01.ar.srt                                  | S01E01           | RENAMED  | [VAR4]-Test.S01E01.ar.srt                    |
-| [VAR5]-Hajimeru Isekai Seikatsu s3 e2.ar_[VAR5]-Hajimeru Isekai Seikatsu s3 e2.a | S03E02           | RENAMED  | [VAR5]-Hajimeru Isekai Seikatsu s3 e2.ar.ass |
-| [VAR6]-Show.S02 Episode 08.ar_[VAR6]-Show.S02 Episode 08.ar.srt                  | S02E08           | RENAMED  | [VAR6]-Show.S02 Episode 08.ar.srt            |
-+----------------------------------------------------------------------------------+------------------+----------+----------------------------------------------+
++--------------------------------------------------+------------------+----------+----------------------------------------------+
+| Original Filename                                | Detected Episode | Action   | New Name                                     |
++--------------------------------------------------+------------------+----------+----------------------------------------------+
+| [VAR1]-Show.Name.S01E05.720p.mkv                 | S01E05           | MATCHED  | No Change                                    |
+| [VAR2]-Series.S2E10.BluRay.mkv                   | S02E10           | MATCHED  | No Change                                    |
+| [VAR3]-Example.s03e15.WEB-DL.mkv                 | S03E15           | MATCHED  | No Change                                    |
+| [VAR4]-Test.S01E01.mkv                           | S01E01           | MATCHED  | No Change                                    |
+| [VAR5]-Hajimeru Isekai Seikatsu s3 e2.mkv        | S03E02           | MATCHED  | No Change                                    |
+| [VAR6]-Show.S02 Episode 08.mkv                   | S02E08           | MATCHED  | No Change                                    |
+| [VAR7]-Movie.S04E12.WEB-DL.mp4                   | S04E12           | MATCHED  | No Change                                    |
+| [VAR1]-Show.Name.S01E05.srt                      | S01E05           | RENAMED  | [VAR1]-Show.Name.S01E05.720p.ar.srt          |
+| [VAR2]-Different.S2E10.srt                       | S02E10           | RENAMED  | [VAR2]-Series.S2E10.BluRay.ar.srt            |
+| [VAR3]-Another.s03e15.srt                        | S03E15           | RENAMED  | [VAR3]-Example.s03e15.WEB-DL.ar.srt          |
+| [VAR4]-Test.S01E01.eng.srt                       | S01E01           | RENAMED  | [VAR4]-Test.S01E01.ar.srt                    |
+| [VAR5]-kara Hajimeru Isekai Seikatsu S03 E02.ass | S03E02           | RENAMED  | [VAR5]-Hajimeru Isekai Seikatsu s3 e2.ar.ass |
+| [VAR6]-Show.S02 Episode 08.srt                   | S02E08           | RENAMED  | [VAR6]-Show.S02 Episode 08.ar.srt            |
+| [VAR7]-Movie.S04E12.srt                          | S04E12           | RENAMED  | [VAR7]-Movie.S04E12.WEB-DL.ar.srt            |
++--------------------------------------------------+------------------+----------+----------------------------------------------+
 #
 # MATCHED EPISODES:
-# S01E01 -> Video: [VAR4]-Test.S01E01.mkv | Subtitle: [VAR4]-Test.S01E01.ar_[VAR4]-Test.S01E01.ar.srt -> [VAR4]-Test.S01E01.ar.srt
-# S01E05 -> Video: [VAR1]-Show.Name.S01E05.720p.mkv | Subtitle: [VAR1]-Show.Name.S01E05.720p.ar_[VAR1]-Show.Name.S01E05.720p.ar.srt -> [VAR1]-Show.Name.S01E05.720p.ar.srt
-# S02E08 -> Video: [VAR6]-Show.S02 Episode 08.mkv | Subtitle: [VAR6]-Show.S02 Episode 08.ar_[VAR6]-Show.S02 Episode 08.ar.srt -> [VAR6]-Show.S02 Episode 08.ar.srt
-# S02E10 -> Video: [VAR2]-Series.S2E10.BluRay.mkv | Subtitle: [VAR2]-Series.S2E10.BluRay.ar_[VAR2]-Series.S2E10.BluRay.ar.srt -> [VAR2]-Series.S2E10.BluRay.ar.srt
-# S03E02 -> Video: [VAR5]-Hajimeru Isekai Seikatsu s3 e2.mkv | Subtitle: [VAR5]-Hajimeru Isekai Seikatsu s3 e2.ar_[VAR5]-Hajimeru Isekai Seikatsu s3 e2.ar.ass -> [VAR5]-Hajimeru Isekai Seikatsu s3 e2.ar.ass
-# S03E15 -> Video: [VAR3]-Example.s03e15.WEB-DL.mkv | Subtitle: [VAR3]-Example.s03e15.WEB-DL.ar_[VAR3]-Example.s03e15.WEB-DL.ar.srt -> [VAR3]-Example.s03e15.WEB-DL.ar.srt
+# S01E01 -> Video: [VAR4]-Test.S01E01.mkv | Subtitle: [VAR4]-Test.S01E01.eng.srt -> [VAR4]-Test.S01E01.ar.srt
+# S01E05 -> Video: [VAR1]-Show.Name.S01E05.720p.mkv | Subtitle: [VAR1]-Show.Name.S01E05.srt -> [VAR1]-Show.Name.S01E05.720p.ar.srt
+# S02E08 -> Video: [VAR6]-Show.S02 Episode 08.mkv | Subtitle: [VAR6]-Show.S02 Episode 08.srt -> [VAR6]-Show.S02 Episode 08.ar.srt
+# S02E10 -> Video: [VAR2]-Series.S2E10.BluRay.mkv | Subtitle: [VAR2]-Different.S2E10.srt -> [VAR2]-Series.S2E10.BluRay.ar.srt
+# S03E02 -> Video: [VAR5]-Hajimeru Isekai Seikatsu s3 e2.mkv | Subtitle: [VAR5]-kara Hajimeru Isekai Seikatsu S03 E02.ass -> [VAR5]-Hajimeru Isekai Seikatsu s3 e2.ar.ass
+# S03E15 -> Video: [VAR3]-Example.s03e15.WEB-DL.mkv | Subtitle: [VAR3]-Another.s03e15.srt -> [VAR3]-Example.s03e15.WEB-DL.ar.srt
+# S04E12 -> Video: [VAR7]-Movie.S04E12.WEB-DL.mp4 | Subtitle: [VAR7]-Movie.S04E12.srt -> [VAR7]-Movie.S04E12.WEB-DL.ar.srt
 #

@@ -1,0 +1,44 @@
+====================================================================================================
+SUBFAST PATTERN INTEGRATION TESTS
+====================================================================================================
+Test Run: 2025-10-17 18:39:38
+
+====================================================================================================
+SUMMARY
+====================================================================================================
+Total Patterns Tested:  30
+Total Variations:       2
+Passed:                 0 (0.0%)
+Failed:                 2 (100.0%)
+
+FAILED VARIATIONS:
+====================================================================================================
+
+
+====================================================================================================
+DETAILED TEST RESULTS
+====================================================================================================
+
+====================================================================================================
+Pattern 30: FINAL SEASON
+====================================================================================================
+
+  Found 2 renamed subtitle files (0 .ar.srt, 2 .ar.ass)
+
+[VAR1] Expected: S08E01
+  [INFO] Entry not in CSV report (testing from disk files)
+  Video:    [VAR1]-My.Hero.Academia.S08E01.Toshinori.Yagi.Rising-Origin.1080p.mkv -> Extracted: S08E01   | [MATCH]
+  Subtitle: [VAR1]-My.Hero.Academia.S08E01.Toshinori.Yagi.Rising-Origin.1080p.ar.ass -> Extracted: S08E01   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED                    | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S01E05
+  [INFO] Entry not in CSV report (testing from disk files)
+  Video:    [VAR2]-Attack.on.Titan.FINAL.SEASON - 05.mkv       -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR2]-Attack.on.Titan.FINAL.SEASON - 05.ar.ass    -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED                    | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 30 Summary: 0/2 PASSED (0.0%)
+                  2 FAILED
+====================================================================================================
