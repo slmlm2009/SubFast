@@ -10,8 +10,8 @@
 # ==========================================
 #
 # Subtitle Renaming Report
-# Generated: 2025-10-18 09:26:39
-# Directory: C:\Users\slmlm2009\Desktop\Github\SubFast\tests archive\1 - Renaming\4 - Long_Anime
+# Generated: 2025-10-13 23:57:45
+# Directory: C:\Users\slmlm2009\Desktop\Github\SubFast\v3.1.0_preview_rename_subtitles_to_match_videos_ar\tests\1 - Renaming\4 - Long_Anime
 # Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass
 #
 # SUMMARY:
@@ -23,7 +23,7 @@
 # Videos Without Episode Pattern: 0
 # Subtitles Without Episode Pattern: 0
 # Movie Mode: No
-# Execution Time: 1.57s
+# Execution Time: 0.85s
 #
 +---------------------------------+------------------+----------+-------------------------+
 | Original Filename               | Detected Episode | Action   | New Name                |
