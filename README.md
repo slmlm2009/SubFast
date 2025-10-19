@@ -43,22 +43,6 @@ Soft-subtitle embedding of external subtitle files directly into detected MKV vi
 
 **IMPORTANT:** Extract SubFast to `C:\subfast` (exact path required for registry files)
 
-```
-C:\subfast\
-├── scripts/
-│   ├── subfast_rename.py
-│   └── subfast_embed.py
-├── bin/
-│   └── mkvmerge.exe
-├── resources/
-│   ├── subfast_logo.ico
-│   └── docs/
-│       └── CONFIGURATION_README.md
-├── config.ini
-├── add_subfast_menu.reg
-└── remove_subfast_menu.reg
-```
-
 ### Step 2: Install Context Menu
 
 1. Double-click: `add_subfast_menu.reg`
