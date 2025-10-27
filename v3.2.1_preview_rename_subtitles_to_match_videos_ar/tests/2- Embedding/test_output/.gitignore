@@ -1,0 +1,7 @@
+# Ignore all embedded test output files
+*.mkv
+*.mp4
+*.avi
+
+# But keep this directory
+!.gitignore

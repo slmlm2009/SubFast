@@ -1,0 +1,132 @@
+schema: 1
+story: '3.4'
+story_title: 'Unified Context Menu and Project Structure'
+gate: CONCERNS
+status_reason: 'Implementation complete and working, but cleanup required before shipment: duplicate subfast\ folder and test files in wrong location.'
+reviewer: 'Quinn (Test Architect)'
+updated: '2025-01-08T00:45:00Z'
+
+top_issues:
+  - id: 'STRUCT-001'
+    severity: high
+    finding: 'Duplicate subfast\subfast\ folder found - testing artifact not cleaned up'
+    suggested_action: 'Delete subfast\subfast\ folder entirely before shipment'
+    suggested_owner: 'dev'
+    
+  - id: 'STRUCT-002'
+    severity: medium
+    finding: 'Test files in subfast\ root instead of subfast\tests\ folder'
+    suggested_action: 'Move test_*.py files to tests\ folder or delete if obsolete'
+    suggested_owner: 'dev'
+    
+  - id: 'REG-001'
+    severity: medium
+    finding: 'add_subfast_menu.reg hardcoded to C:\subfast - will not work from other locations'
+    suggested_action: 'Document in README that .reg file is for C:\ only, promote INSTALL_CONTEXT_MENU.bat as primary installation method'
+    suggested_owner: 'dev'
+    
+  - id: 'DOC-001'
+    severity: low
+    finding: 'Old logo file ARAB_STREAMS_LOGO.ico still present in subfast\ root'
+    suggested_action: 'Delete ARAB_STREAMS_LOGO.ico before shipment (replaced by resources\subfast_logo.ico)'
+    suggested_owner: 'dev'
+
+waiver: { active: false }
+
+quality_score: 70
+# Calculation: 100 - (10 × 4 CONCERNS) = 60, adjusted +10 for working implementation
+
+evidence:
+  tests_reviewed: 0  # Manual testing story - no automated tests
+  risks_identified: 4
+  trace:
+    ac_covered: [1, 2, 3, 4, 5, 6, 7, 8, 9]
+    ac_gaps: []
+
+nfr_validation:
+  _assessed: [security, reliability, maintainability, usability]
+  security:
+    status: PASS
+    notes: 'Registry modifications require Admin privileges (appropriate). No security vulnerabilities detected. Installation scripts validate files before registry changes.'
+  performance:
+    status: PASS
+    notes: 'Context menu integration has negligible performance impact. Scripts execute immediately.'
+  reliability:
+    status: PASS
+    notes: 'Error handling in INSTALL/UNINSTALL .bat files is appropriate. Registry removal is clean. Scripts work from any installation location.'
+  maintainability:
+    status: CONCERNS
+    notes: 'Code organization good (scripts/, bin/, resources/), but cleanup needed. Duplicate folder and misplaced test files reduce clarity.'
+  usability:
+    status: PASS
+    notes: 'Excellent user experience: auto-elevation, branded installers, 10-second auto-close, clear error messages, location-independent installation.'
+
+requirements_traceability:
+  AC1_resources_folder:
+    status: PASS
+    evidence: 'resources/ folder exists with subfast_logo.ico (1,864 bytes) and README.txt'
+  AC2_cascading_menu:
+    status: PASS_WITH_CONCERNS
+    evidence: 'add_subfast_menu.reg creates proper cascading structure with SubCommands. CONCERN: hardcoded C:\subfast path'
+    mitigation: 'INSTALL_CONTEXT_MENU.bat provides location-independent installation'
+  AC3_menu_ordering:
+    status: PASS
+    evidence: 'Uses 01-Rename and 02-Embed key names for alphabetical ordering. User confirmed working.'
+  AC4_logo_display:
+    status: PASS
+    evidence: 'User confirmed logo displays correctly in context menu'
+  AC5_removal_reg:
+    status: PASS
+    evidence: 'remove_subfast_menu.reg cleanly removes all SubFast registry entries'
+  AC6_readme:
+    status: PASS
+    evidence: 'README.md created at root (7,059 bytes) with SubFast branding throughout'
+  AC7_config_readme:
+    status: PASS
+    evidence: 'CONFIGURATION_README.md updated (2,491 bytes) with context menu and new structure'
+  AC8_old_files_archived:
+    status: PASS
+    evidence: 'archive/ folder contains 4 old .reg files with README.txt explaining deprecation'
+  AC9_branding:
+    status: PASS_WITH_CLEANUP
+    evidence: 'All documentation uses SubFast branding. CLEANUP NEEDED: Old ARAB_STREAMS_LOGO.ico file still in root'
+
+recommendations:
+  immediate:
+    - action: 'Delete subfast\subfast\ duplicate folder'
+      refs: ['subfast\subfast\']
+      priority: 'HIGH'
+    - action: 'Delete or move test files to tests\ folder'
+      refs: ['subfast\test_*.py']
+      priority: 'MEDIUM'
+    - action: 'Delete old logo file ARAB_STREAMS_LOGO.ico'
+      refs: ['subfast\ARAB_STREAMS_LOGO.ico']
+      priority: 'LOW'
+    - action: 'Update README.md to specify .reg file is for C:\ only, promote .bat installer'
+      refs: ['subfast\README.md']
+      priority: 'MEDIUM'
+      
+  future:
+    - action: 'Consider adding automated tests for path resolution logic'
+      refs: ['scripts\subfast_embed.py', 'scripts\subfast_rename.py']
+      priority: 'LOW'
+    - action: 'Move __pycache__ to .gitignore or delete before distribution'
+      refs: ['subfast\__pycache__\']
+      priority: 'LOW'
+
+deployment_readiness:
+  status: 'READY_AFTER_CLEANUP'
+  blockers:
+    - 'Remove subfast\subfast\ duplicate folder (MUST FIX)'
+    - 'Clean up test files and old logo (SHOULD FIX)'
+  strengths:
+    - 'All ACs met with working implementation'
+    - 'Location-independent installation via .bat files'
+    - 'Excellent user experience with branding and auto-elevation'
+    - 'Clean folder structure (scripts/, bin/, resources/)'
+    - 'Professional documentation'
+  verified_working:
+    - 'Scripts work from C:\ dev location (mkvmerge test passed)'
+    - 'Scripts work from D:\ deployment location (user confirmed)'
+    - 'Context menu displays with logo (user confirmed)'
+    - 'Menu ordering correct: Rename above Embed (user confirmed)'

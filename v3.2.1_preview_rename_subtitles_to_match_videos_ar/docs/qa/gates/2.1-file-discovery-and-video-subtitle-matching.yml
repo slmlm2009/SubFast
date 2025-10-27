@@ -1,0 +1,40 @@
+schema: 1
+story: '2.1'
+story_title: 'File Discovery and Video-Subtitle Matching'
+gate: PASS
+status_reason: 'All QA concerns resolved. Implementation now filters .embedded files, integration test auto-discovers pairs in both directories (2 episodes + 1 movie), and CSV summaries include all test scenarios with proper categorization.'
+reviewer: 'Quinn (Test Architect)'
+updated: '2025-01-12T20:00:00Z'
+
+top_issues: []
+waiver: { active: false }
+
+quality_score: 100
+expires: '2025-01-26T18:30:00Z'
+
+evidence:
+  tests_reviewed: 21
+  risks_identified: 0
+  trace:
+    ac_covered: [1, 2, 3, 4, 5, 6, 7, 8]
+    ac_gaps: []
+
+nfr_validation:
+  security:
+    status: PASS
+    notes: 'Read-only file operations, no security concerns. Proper path handling with pathlib prevents traversal attacks.'
+  performance:
+    status: PASS
+    notes: 'Episode caching implemented for optimization. Regex patterns pre-compiled for efficiency. File discovery completes quickly even with large directories.'
+  reliability:
+    status: PASS
+    notes: 'Proper error handling with clear console messages. Handles edge cases (empty directories, hidden files, unmatched files). Integration test confirms batch processing compatibility.'
+  maintainability:
+    status: PASS
+    notes: 'Well-structured code with clear separation of concerns. Functions are focused and documented. Pattern extraction from original script ensures consistency. Test coverage at 95%.'
+
+recommendations:
+  immediate: []
+  future:
+    - action: 'Consider adding pattern for "Episode 10" format (space before number) if this becomes common in real usage'
+      refs: ['embed_subtitles_to_match_videos_ar.py:EPISODE_PATTERNS']

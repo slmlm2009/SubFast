@@ -1,0 +1,764 @@
+{
+  "metadata": {
+    "version": "3.2.0",
+    "description": "Pattern definitions for SubFast episode matching tests with VAR-based structure",
+    "total_patterns": 28,
+    "comment": "Each variation has [VAR#] prefix for stable reference during manual testing"
+  },
+  "patterns": [
+    {
+      "id": 1,
+      "name": "S##E##",
+      "description": "Most common format with S and E separators (e.g., S01E05, S2E10)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.Name.S01E05.720p.mkv",
+          "subtitle_template": "Show.Name.S01E05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.S2E10.BluRay.mkv",
+          "subtitle_template": "Different.S2E10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.s03e15.WEB-DL.mkv",
+          "subtitle_template": "Another.s03e15.srt"
+        },
+        {
+          "var_id": "VAR4",
+          "expected": "S01E01",
+          "video_template": "Test.S01E01.mkv",
+          "subtitle_template": "Test.S01E01.eng.srt"
+        },
+        {
+          "var_id": "VAR5",
+          "expected": "S03E02",
+          "video_template": "Hajimeru Isekai Seikatsu s3 e2.mkv",
+          "subtitle_template": "kara Hajimeru Isekai Seikatsu S03 E02.ass"
+        },
+        {
+          "var_id": "VAR6",
+          "expected": "S02E08",
+          "video_template": "Show.S02 Episode 08.mkv",
+          "subtitle_template": "Show.S02 Episode 08.srt"
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "name": "##x##",
+      "description": "Format with 'x' separator (e.g., 2x05, 1x10)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S02E05",
+          "video_template": "Show.2x05.mkv",
+          "subtitle_template": "Show.2x05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S01E10",
+          "video_template": "Series.1x10.720p.mkv",
+          "subtitle_template": "Series.1x10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.3X15.BluRay.mkv",
+          "subtitle_template": "Example.3x15.srt"
+        },
+        {
+          "var_id": "VAR4",
+          "expected": "S04E01",
+          "video_template": "Test.Name.4x01.mkv",
+          "subtitle_template": "Test.4x01.srt"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "S## - ##",
+      "description": "S## - ## format with hyphen separator (e.g., S01 - 05)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.S01 - 05.mkv",
+          "subtitle_template": "Show.S01 - 05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.S2 - 10.720p.mkv",
+          "subtitle_template": "Series.S2-10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.s03-15.BluRay.mkv",
+          "subtitle_template": "Example.S03 - 15.srt"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "S## - E##",
+      "description": "S## - E## format (e.g., S01 - E05)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.S01 - E05.mkv",
+          "subtitle_template": "Show.S01-E05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.S2-E10.720p.mkv",
+          "subtitle_template": "Series.S2 - E10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.s03 - e15.BluRay.mkv",
+          "subtitle_template": "Example.S03-E15.srt"
+        },
+        {
+          "var_id": "VAR4",
+          "expected": "S02E12",
+          "video_template": "Show.S02.E12.mkv",
+          "subtitle_template": "Show.S02.E12.srt"
+        },
+        {
+          "var_id": "VAR5",
+          "expected": "S03E07",
+          "video_template": "Show.S03_E07.mkv",
+          "subtitle_template": "Show.S03_E07.srt"
+        }
+      ]
+    },
+    {
+      "id": 5,
+      "name": "S## - EP##",
+      "description": "S## - EP## format (e.g., S01 - EP05)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.S01 - EP05.mkv",
+          "subtitle_template": "Show.S01-EP05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.S2-EP10.720p.mkv",
+          "subtitle_template": "Series.S2 - EP10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.s03 - ep15.BluRay.mkv",
+          "subtitle_template": "Example.S03-EP15.srt"
+        },
+        {
+          "var_id": "VAR4",
+          "expected": "S01E15",
+          "video_template": "Show.S01 EP15.mkv",
+          "subtitle_template": "Show.S01 EP15.srt"
+        }
+      ]
+    },
+    {
+      "id": 6,
+      "name": "1st Season - ##",
+      "description": "Ordinal season format (e.g., 1st Season - 05, 2nd Season - 10)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.1st Season - 05.mkv",
+          "subtitle_template": "Show.1st Season-05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.2nd Season - 10.720p.mkv",
+          "subtitle_template": "Series.2nd Season - 10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.3rd Season - 15.BluRay.mkv",
+          "subtitle_template": "Example.3rd Season-15.srt"
+        }
+      ]
+    },
+    {
+      "id": 7,
+      "name": "1st Season Episode ##",
+      "description": "Ordinal season with Episode keyword (e.g., 3rd Season Episode 8)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.1st Season Episode 05.mkv",
+          "subtitle_template": "Show.1st Season Episode 05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.2nd Season Episode 10.720p.mkv",
+          "subtitle_template": "Series.2nd Season Episode 10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.3rd Season Episode 15.BluRay.mkv",
+          "subtitle_template": "Example.3rd Season Episode 15.srt"
+        }
+      ]
+    },
+    {
+      "id": 8,
+      "name": "1st Season E##",
+      "description": "Ordinal season with E prefix (e.g., 2nd Season E10)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.1st Season E05.mkv",
+          "subtitle_template": "Show.1st Season E05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.2nd Season E10.720p.mkv",
+          "subtitle_template": "Series.2nd Season E10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.3rd Season E15.BluRay.mkv",
+          "subtitle_template": "Example.3rd Season E15.srt"
+        }
+      ]
+    },
+    {
+      "id": 9,
+      "name": "1st Season EP##",
+      "description": "Ordinal season with EP prefix (e.g., 2nd Season EP10)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.1st Season EP05.mkv",
+          "subtitle_template": "Show.1st Season EP05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.2nd Season EP10.720p.mkv",
+          "subtitle_template": "Series.2nd Season EP10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.3rd Season EP15.BluRay.mkv",
+          "subtitle_template": "Example.3rd Season EP15.srt"
+        }
+      ]
+    },
+    {
+      "id": 10,
+      "name": "Season ## - ##",
+      "description": "Season keyword with hyphen (e.g., Season 2 - 23)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.Season 1 - 05.mkv",
+          "subtitle_template": "Show.Season 1-05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.Season 2 - 10.720p.mkv",
+          "subtitle_template": "Series.Season 2 - 10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.Season 3 - 15.BluRay.mkv",
+          "subtitle_template": "Example.Season 3-15.srt"
+        }
+      ]
+    },
+    {
+      "id": 11,
+      "name": "Season## - ##",
+      "description": "Season without space before number (e.g., Season1 - 5)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.Season1 - 05.mkv",
+          "subtitle_template": "Show.Season1-05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.Season2-10.720p.mkv",
+          "subtitle_template": "Series.Season2 - 10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.Season3 - 15.BluRay.mkv",
+          "subtitle_template": "Example.Season3-15.srt"
+        }
+      ]
+    },
+    {
+      "id": 12,
+      "name": "Season.#.Episode.#",
+      "description": "Dot-separated season and episode (e.g., Season.1.Episode.5)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.Season.1.Episode.5.mkv",
+          "subtitle_template": "Show.Season.1.Episode.5.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.Season.2.Episode.10.720p.mkv",
+          "subtitle_template": "Series.Season.2.Episode.10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.Season.3.Episode.15.BluRay.mkv",
+          "subtitle_template": "Example.Season.3.Episode.15.srt"
+        }
+      ]
+    },
+    {
+      "id": 13,
+      "name": "S#.Ep.#",
+      "description": "S with dot-separated Ep (e.g., S1.Ep.5)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.S1.Ep.5.mkv",
+          "subtitle_template": "Show.S1.Ep.5.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.S2.Ep.10.720p.mkv",
+          "subtitle_template": "Series.S2.Ep.10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.S3.Ep.15.BluRay.mkv",
+          "subtitle_template": "Example.S3.Ep.15.srt"
+        }
+      ]
+    },
+    {
+      "id": 14,
+      "name": "S#Ep#",
+      "description": "S and Ep concatenated (e.g., S1Ep5)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.S1Ep5.mkv",
+          "subtitle_template": "Show.S1Ep5.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.S2Ep10.720p.mkv",
+          "subtitle_template": "Series.S2Ep10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.S3Ep15.BluRay.mkv",
+          "subtitle_template": "Example.S3Ep15.srt"
+        }
+      ]
+    },
+    {
+      "id": 15,
+      "name": "Season # Episode #",
+      "description": "Full words with spaces (e.g., Season 1 Episode 5)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.Season 1 Episode 5.mkv",
+          "subtitle_template": "Show.Season 1 Episode 5.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.Season 2 Episode 10.720p.mkv",
+          "subtitle_template": "Series.Season 2 Episode 10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.Season 3 Episode 15.BluRay.mkv",
+          "subtitle_template": "Example.Season 3 Episode 15.srt"
+        },
+        {
+          "var_id": "VAR4",
+          "expected": "S02E20",
+          "video_template": "Show.Season02 Episode 20.mkv",
+          "subtitle_template": "Show.Season02 Episode 20.srt"
+        }
+      ]
+    },
+    {
+      "id": 16,
+      "name": "Season#Episode#",
+      "description": "Concatenated without spaces (e.g., Season1Episode5)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.Season1Episode5.mkv",
+          "subtitle_template": "Show.Season1Episode5.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.Season2Episode10.720p.mkv",
+          "subtitle_template": "Series.Season2Episode10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.Season3Episode15.BluRay.mkv",
+          "subtitle_template": "Example.Season3Episode15.srt"
+        }
+      ]
+    },
+    {
+      "id": 17,
+      "name": "Season# Episode#",
+      "description": "Space before Episode only (e.g., Season1 Episode5)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.Season1 Episode5.mkv",
+          "subtitle_template": "Show.Season1 Episode5.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.Season2 Episode10.720p.mkv",
+          "subtitle_template": "Series.Season2 Episode10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.Season3 Episode15.BluRay.mkv",
+          "subtitle_template": "Example.Season3 Episode15.srt"
+        }
+      ]
+    },
+    {
+      "id": 18,
+      "name": "Season# Ep#",
+      "description": "Season concatenated, space before Ep (e.g., Season1 Ep5)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.Season1 Ep5.mkv",
+          "subtitle_template": "Show.Season1 Ep5.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.Season2 Ep10.720p.mkv",
+          "subtitle_template": "Series.Season2 Ep10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.Season3 Ep15.BluRay.mkv",
+          "subtitle_template": "Example.Season3 Ep15.srt"
+        }
+      ]
+    },
+    {
+      "id": 19,
+      "name": "Season#Ep#",
+      "description": "Fully concatenated (e.g., Season1Ep5)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.Season1Ep5.mkv",
+          "subtitle_template": "Show.Season1Ep5.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.Season2Ep10.720p.mkv",
+          "subtitle_template": "Series.Season2Ep10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.Season3Ep15.BluRay.mkv",
+          "subtitle_template": "Example.Season3Ep15.srt"
+        }
+      ]
+    },
+    {
+      "id": 20,
+      "name": "E##",
+      "description": "Episode only, assumes Season 1 (e.g., E05)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.E05.mkv",
+          "subtitle_template": "Show.E05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S01E10",
+          "video_template": "Series.E10.720p.mkv",
+          "subtitle_template": "Series.E10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S01E15",
+          "video_template": "Example.E15.BluRay.mkv",
+          "subtitle_template": "Example.E15.srt"
+        }
+      ]
+    },
+    {
+      "id": 21,
+      "name": "Season #.Ep #",
+      "description": "Season with space, dot separator before Ep (e.g., Season 1.Ep 5)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.Season 1.Ep 5.mkv",
+          "subtitle_template": "Show.Season 1.Ep 5.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.Season 2.Ep 10.720p.mkv",
+          "subtitle_template": "Series.Season 2.Ep 10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.Season 3.Ep 15.BluRay.mkv",
+          "subtitle_template": "Example.Season 3.Ep 15.srt"
+        }
+      ]
+    },
+    {
+      "id": 22,
+      "name": "Season#.Ep#",
+      "description": "Concatenated Season, dot before Ep (e.g., Season1.Ep5)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.Season1.Ep5.mkv",
+          "subtitle_template": "Show.Season1.Ep5.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.Season2.Ep10.720p.mkv",
+          "subtitle_template": "Series.Season2.Ep10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.Season3.Ep15.BluRay.mkv",
+          "subtitle_template": "Example.Season3.Ep15.srt"
+        }
+      ]
+    },
+    {
+      "id": 23,
+      "name": "Ep##",
+      "description": "Ep prefix only, assumes Season 1 (e.g., Ep05)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.Ep05.mkv",
+          "subtitle_template": "Show.Ep05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S01E10",
+          "video_template": "Series.Ep10.720p.mkv",
+          "subtitle_template": "Series.Ep10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S01E15",
+          "video_template": "Example.Ep15.BluRay.mkv",
+          "subtitle_template": "Example.Ep15.srt"
+        }
+      ]
+    },
+    {
+      "id": 24,
+      "name": "Season # Ep #",
+      "description": "Full Season with spaces and Ep (e.g., Season 1 Ep 5)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show.Season 1 Ep 5.mkv",
+          "subtitle_template": "Show.Season 1 Ep 5.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "Series.Season 2 Ep 10.720p.mkv",
+          "subtitle_template": "Series.Season 2 Ep 10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S03E15",
+          "video_template": "Example.Season 3 Ep 15.BluRay.mkv",
+          "subtitle_template": "Example.Season 3 Ep 15.srt"
+        }
+      ]
+    },
+    {
+      "id": 25,
+      "name": "## - ##",
+      "description": "Season and episode numbers separated by dash, no S/E prefix (e.g., '3 - 04')",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S03E04",
+          "video_template": "[VAR1]-Show 3 - 04.mkv",
+          "subtitle_template": "[VAR1]-Show 3 - 04.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S02E10",
+          "video_template": "[VAR2]-Series 2-10.720p.mkv",
+          "subtitle_template": "[VAR2]-Series 2-10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S01E25",
+          "video_template": "[VAR3]-Example 1 - 25.BluRay.mkv",
+          "subtitle_template": "[VAR3]-Example 1 - 25.srt"
+        }
+      ]
+    },
+    {
+      "id": 26,
+      "name": "- ##",
+      "description": "Hyphen with number only, assumes Season 1 (e.g., Show - 15.mkv)",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E05",
+          "video_template": "Show - 05.mkv",
+          "subtitle_template": "Show - 05.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S01E10",
+          "video_template": "Series - 10.720p.mkv",
+          "subtitle_template": "Series - 10.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S01E15",
+          "video_template": "Example - 15.BluRay.mkv",
+          "subtitle_template": "Example - 15.srt"
+        },
+        {
+          "var_id": "VAR4",
+          "expected": "S01E20",
+          "video_template": "Example-1080p - 20.mkv",
+          "subtitle_template": "Example-2025 - 20.srt"
+        }
+      ]
+    },
+    {
+      "id": 27,
+      "name": "[##]",
+      "description": "Bracket-enclosed episode number, assumes Season 1 (e.g., '[07].mkv')",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E07",
+          "video_template": "[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].mkv",
+          "subtitle_template": "[VCB-Studio] IS Infinite Stratos [07].srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S01E12",
+          "video_template": "Show.Name.[12].720p.mkv",
+          "subtitle_template": "Show.Name.[12].srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S01E05",
+          "video_template": "Series [5] Episode.mkv",
+          "subtitle_template": "Series [5] Episode.srt"
+        }
+      ]
+    },
+    {
+      "id": 28,
+      "name": "_##",
+      "description": "Underscore with episode number, assumes Season 1 (e.g., 'Show_09.mkv'). LAST PATTERN.",
+      "variations": [
+        {
+          "var_id": "VAR1",
+          "expected": "S01E09",
+          "video_template": "[DB]Maoyuu Maou Yuusha_-_09_(10bit_BD1080p_x265).mkv",
+          "subtitle_template": "[DB]Maoyuu Maou Yuusha_09.srt"
+        },
+        {
+          "var_id": "VAR2",
+          "expected": "S01E15",
+          "video_template": "Show_15.mkv",
+          "subtitle_template": "Show_15.srt"
+        },
+        {
+          "var_id": "VAR3",
+          "expected": "S01E03",
+          "video_template": "Example_3.720p.mkv",
+          "subtitle_template": "Example_3.srt"
+        }
+      ]
+    }
+  ]
+}
