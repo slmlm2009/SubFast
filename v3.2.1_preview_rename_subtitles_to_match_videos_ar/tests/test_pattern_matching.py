@@ -1,7 +1,7 @@
 """
 Pattern Matching Test Suite
 
-Tests all 25 episode patterns using data-driven approach with dummy files.
+Tests all 30 episode patterns using data-driven approach with dummy files.
 Validates pattern recognition, priority, caching, and edge cases.
 
 Test Categories:
@@ -37,7 +37,7 @@ from subfast.scripts.common.pattern_engine import (
 
 
 class TestPatternMatching(unittest.TestCase):
-    """Test all 25 episode patterns with dummy files."""
+    """Test all 30 episode patterns with dummy files."""
     
     @classmethod
     def setUpClass(cls):
@@ -56,8 +56,8 @@ class TestPatternMatching(unittest.TestCase):
         cls.patterns = data.get('patterns', [])
         cls.total_patterns = len(cls.patterns)
         
-        if cls.total_patterns != 29:
-            raise ValueError(f"Expected 29 patterns, found {cls.total_patterns}")
+        if cls.total_patterns != 30:
+            raise ValueError(f"Expected 30 patterns, found {cls.total_patterns}")
     
     def setUp(self):
         """Clear cache before each test for consistent results."""
@@ -489,6 +489,76 @@ class TestPattern25_HyphenOnly(TestPatternMatching):
     def test_subtitle_variations(self):
         """Test all subtitle file variations for Pattern 25."""
         pattern = self.patterns[24]
+        self._test_pattern_variations(pattern, 'subtitle_variations')
+
+
+class TestPattern26_SeasonEpisodeDash(TestPatternMatching):
+    """Test Pattern 26: ## - ## format (Season-Episode with dash)"""
+    
+    def test_video_variations(self):
+        """Test all video file variations for Pattern 26."""
+        pattern = self.patterns[25]  # id: 26
+        self._test_pattern_variations(pattern, 'video_variations')
+    
+    def test_subtitle_variations(self):
+        """Test all subtitle file variations for Pattern 26."""
+        pattern = self.patterns[25]
+        self._test_pattern_variations(pattern, 'subtitle_variations')
+
+
+class TestPattern27_DashEpisode(TestPatternMatching):
+    """Test Pattern 27: - ## format (assumes Season 1)"""
+    
+    def test_video_variations(self):
+        """Test all video file variations for Pattern 27."""
+        pattern = self.patterns[26]  # id: 27
+        self._test_pattern_variations(pattern, 'video_variations')
+    
+    def test_subtitle_variations(self):
+        """Test all subtitle file variations for Pattern 27."""
+        pattern = self.patterns[26]
+        self._test_pattern_variations(pattern, 'subtitle_variations')
+
+
+class TestPattern28_BracketEpisode(TestPatternMatching):
+    """Test Pattern 28: [##] format (assumes Season 1)"""
+    
+    def test_video_variations(self):
+        """Test all video file variations for Pattern 28."""
+        pattern = self.patterns[27]  # id: 28
+        self._test_pattern_variations(pattern, 'video_variations')
+    
+    def test_subtitle_variations(self):
+        """Test all subtitle file variations for Pattern 28."""
+        pattern = self.patterns[27]
+        self._test_pattern_variations(pattern, 'subtitle_variations')
+
+
+class TestPattern29_UnderscoreEpisode(TestPatternMatching):
+    """Test Pattern 29: _## format (assumes Season 1)"""
+    
+    def test_video_variations(self):
+        """Test all video file variations for Pattern 29."""
+        pattern = self.patterns[28]  # id: 29
+        self._test_pattern_variations(pattern, 'video_variations')
+    
+    def test_subtitle_variations(self):
+        """Test all subtitle file variations for Pattern 29."""
+        pattern = self.patterns[28]
+        self._test_pattern_variations(pattern, 'subtitle_variations')
+
+
+class TestPattern30_FinalSeason(TestPatternMatching):
+    """Test Pattern 30: FINAL SEASON contextual matching"""
+    
+    def test_video_variations(self):
+        """Test all video file variations for Pattern 30."""
+        pattern = self.patterns[29]  # id: 30
+        self._test_pattern_variations(pattern, 'video_variations')
+    
+    def test_subtitle_variations(self):
+        """Test all subtitle file variations for Pattern 30."""
+        pattern = self.patterns[29]
         self._test_pattern_variations(pattern, 'subtitle_variations')
 
 
