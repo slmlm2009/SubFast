@@ -10,37 +10,62 @@
 # ==========================================
 #
 # Subtitle Renaming Report
-# Generated: 2025-10-28 01:08:12
+# Generated: 2025-10-28 06:00:19
 # Directory: C:\Users\slmlm2009\Desktop\Github\SubFast\v3.2.1_preview_rename_subtitles_to_match_videos_ar\tests\fixtures\pattern_files\pattern_27_-
 # Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass
 #
 # SUMMARY:
-# Total Videos: 4
-# Total Subtitles: 4
-# Renamed: 4/4 subtitles
+# Total Videos: 10
+# Total Subtitles: 10
+# Renamed: 5/10 subtitles
 # Videos Missing Subtitles: 0
 # Subtitles Missing Videos: 0
-# Videos Without Episode Pattern: 0
-# Subtitles Without Episode Pattern: 0
+# Videos Without Episode Pattern: 5
+# Subtitles Without Episode Pattern: 5
 # Movie Mode: No
 # Execution Time: 0.00s
 #
-+--------------------------------+------------------+----------+-----------------------------------+
-| Original Filename              | Detected Episode | Action   | New Name                          |
-+--------------------------------+------------------+----------+-----------------------------------+
-| [VAR1]-Show - 05.mkv           | S01E05           | MATCHED  | No Change                         |
-| [VAR2]-Series - 10.720p.mkv    | S01E10           | MATCHED  | No Change                         |
-| [VAR3]-Example - 15.BluRay.mkv | S01E15           | MATCHED  | No Change                         |
-| [VAR4]-Example-1080p - 20.mkv  | S01E20           | MATCHED  | No Change                         |
-| [VAR1]-Show - 05.srt           | S01E05           | RENAMED  | [VAR1]-Show - 05.ar.srt           |
-| [VAR2]-Series - 10.srt         | S01E10           | RENAMED  | [VAR2]-Series - 10.720p.ar.srt    |
-| [VAR3]-Example - 15.srt        | S01E15           | RENAMED  | [VAR3]-Example - 15.BluRay.ar.srt |
-| [VAR4]-Example-2025 - 20.srt   | S01E20           | RENAMED  | [VAR4]-Example-1080p - 20.ar.srt  |
-+--------------------------------+------------------+----------+-----------------------------------+
++-----------------------------+------------------+----------+---------------------------------------------------+
+| Original Filename           | Detected Episode | Action   | New Name                                          |
++-----------------------------+------------------+----------+---------------------------------------------------+
+| [VAR10]-One Piece -2000.mkv | (UNIDENTIFIED)   | --       | No Change                                         |
+| [VAR1]-One Piece -1.mkv     | S01E01           | MATCHED  | No Change                                         |
+| [VAR2]-One Piece -1v2.mkv   | S01E01           | MATCHED  | No Change                                         |
+| [VAR3]-One Piece -1vv2.mkv  | (UNIDENTIFIED)   | --       | No Change                                         |
+| [VAR4]-One Piece -1v22.mkv  | (UNIDENTIFIED)   | --       | No Change                                         |
+| [VAR5]-One Piece -1080.mkv  | S01E1080         | MATCHED  | No Change                                         |
+| [VAR6]-One Piece -1080p.mkv | (UNIDENTIFIED)   | --       | No Change                                         |
+| [VAR7]-One Piece -1901.mkv  | (UNIDENTIFIED)   | --       | No Change                                         |
+| [VAR8]-One Piece -0001.mkv  | S01E01           | MATCHED  | No Change                                         |
+| [VAR9]-One Piece -1899.mkv  | S01E1899         | MATCHED  | No Change                                         |
+| [VAR10]-One Piece -2000.srt | (UNIDENTIFIED)   | --       | No Change                                         |
+| [VAR1]-One Piece -1.srt     | S01E01           | RENAMED  | [VAR1]-One Piece -1.ar.srt                        |
+| [VAR2]-One Piece -1v2.srt   | S01E01           | RENAMED  | [VAR1]-One Piece -1.ar_[VAR2]-One Piece -1v2.srt  |
+| [VAR3]-One Piece -1vv2.srt  | (UNIDENTIFIED)   | --       | No Change                                         |
+| [VAR4]-One Piece -1v22.srt  | (UNIDENTIFIED)   | --       | No Change                                         |
+| [VAR5]-One Piece -1080.srt  | S01E1080         | RENAMED  | [VAR5]-One Piece -1080.ar.srt                     |
+| [VAR6]-One Piece -1080p.srt | (UNIDENTIFIED)   | --       | No Change                                         |
+| [VAR7]-One Piece -1901.srt  | (UNIDENTIFIED)   | --       | No Change                                         |
+| [VAR8]-One Piece -0001.srt  | S01E01           | RENAMED  | [VAR1]-One Piece -1.ar_[VAR8]-One Piece -0001.srt |
+| [VAR9]-One Piece -1899.srt  | S01E1899         | RENAMED  | [VAR9]-One Piece -1899.ar.srt                     |
++-----------------------------+------------------+----------+---------------------------------------------------+
 #
 # MATCHED EPISODES:
-# S01E05 -> Video: [VAR1]-Show - 05.mkv | Subtitle: [VAR1]-Show - 05.srt -> [VAR1]-Show - 05.ar.srt
-# S01E10 -> Video: [VAR2]-Series - 10.720p.mkv | Subtitle: [VAR2]-Series - 10.srt -> [VAR2]-Series - 10.720p.ar.srt
-# S01E15 -> Video: [VAR3]-Example - 15.BluRay.mkv | Subtitle: [VAR3]-Example - 15.srt -> [VAR3]-Example - 15.BluRay.ar.srt
-# S01E20 -> Video: [VAR4]-Example-1080p - 20.mkv | Subtitle: [VAR4]-Example-2025 - 20.srt -> [VAR4]-Example-1080p - 20.ar.srt
+# S01E01 -> Video: [VAR1]-One Piece -1.mkv | Subtitle: [VAR1]-One Piece -1.srt -> [VAR1]-One Piece -1.ar.srt
+# S01E01 -> Video: [VAR1]-One Piece -1.mkv | Subtitle: [VAR2]-One Piece -1v2.srt -> [VAR1]-One Piece -1.ar_[VAR2]-One Piece -1v2.srt
+# S01E01 -> Video: [VAR1]-One Piece -1.mkv | Subtitle: [VAR8]-One Piece -0001.srt -> [VAR1]-One Piece -1.ar_[VAR8]-One Piece -0001.srt
+# S01E1080 -> Video: [VAR5]-One Piece -1080.mkv | Subtitle: [VAR5]-One Piece -1080.srt -> [VAR5]-One Piece -1080.ar.srt
+# S01E1899 -> Video: [VAR9]-One Piece -1899.mkv | Subtitle: [VAR9]-One Piece -1899.srt -> [VAR9]-One Piece -1899.ar.srt
+#
+# FILES WITHOUT EPISODE PATTERN:
+# [VAR10]-One Piece -2000.mkv (no episode pattern detected)
+# [VAR10]-One Piece -2000.srt (no episode pattern detected)
+# [VAR3]-One Piece -1vv2.mkv (no episode pattern detected)
+# [VAR3]-One Piece -1vv2.srt (no episode pattern detected)
+# [VAR4]-One Piece -1v22.mkv (no episode pattern detected)
+# [VAR4]-One Piece -1v22.srt (no episode pattern detected)
+# [VAR6]-One Piece -1080p.mkv (no episode pattern detected)
+# [VAR6]-One Piece -1080p.srt (no episode pattern detected)
+# [VAR7]-One Piece -1901.mkv (no episode pattern detected)
+# [VAR7]-One Piece -1901.srt (no episode pattern detected)
 #

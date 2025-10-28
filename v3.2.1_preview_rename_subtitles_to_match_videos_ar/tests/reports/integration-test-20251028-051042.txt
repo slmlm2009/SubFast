@@ -1,0 +1,112 @@
+====================================================================================================
+SUBFAST PATTERN INTEGRATION TESTS
+====================================================================================================
+Test Run: 2025-10-28 05:10:42
+
+====================================================================================================
+SUMMARY
+====================================================================================================
+Total Patterns Tested:  30
+Total Variations:       12
+Passed:                 7 (58.3%)
+Failed:                 5 (41.7%)
+
+FAILED VARIATIONS:
+  - Pattern 28 [VAR4] - Subtitle file not found
+  - Pattern 28 [VAR6] - Both video and subtitle pattern mismatch (expected None, got video=None, subtitle=None)
+  - Pattern 28 [VAR7] - Both video and subtitle pattern mismatch (expected None, got video=None, subtitle=None)
+  - Pattern 28 [VAR8] - Both video and subtitle pattern mismatch (expected None, got video=None, subtitle=None)
+  - Pattern 28 [VAR12] - Both video and subtitle pattern mismatch (expected None, got video=None, subtitle=None)
+====================================================================================================
+
+
+====================================================================================================
+DETAILED TEST RESULTS
+====================================================================================================
+
+====================================================================================================
+Pattern 28: [##]
+====================================================================================================
+
+  Found 7 renamed subtitle files (.ar.srt)
+
+[VAR1] Expected: S01E07
+  Video:    [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].mkv -> Extracted: S01E07   | [MATCH]
+  Subtitle: [VAR1]-[VCB-Studio] IS Infinite Stratos [07][Ma10p_1080p][x265_flac_aac].ar.srt -> Extracted: S01E07   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S01E12
+  Video:    [VAR2]-Show.Name.[12].720p.mkv                     -> Extracted: S01E12   | [MATCH]
+  Subtitle: [VAR2]-Show.Name.[12].720p.ar.srt                  -> Extracted: S01E12   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S01E05
+  Video:    [VAR3]-Series [5] Episode.mkv                      -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR3]-Series [5] Episode.ar.srt                   -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR4] Expected: S01E01
+  [INFO] Entry not in CSV report (testing from disk files)
+  Video:    [VAR4]-One Piece - [1].mkv                         -> Extracted: S01E01   | [MATCH]
+  Subtitle: FILE NOT FOUND on disk
+  Pairing:  Video <-> Subtitle NOT PAIRED [X]            | Status: FAIL
+  ----------------------------------------------------------------------------------------------
+
+[VAR5] Expected: S01E01
+  Video:    [VAR10]-One Piece - [0001].mkv                     -> Extracted: S01E01   | [MATCH]
+  Subtitle: [VAR10]-One Piece - [0001].ar_[VAR10]-One Piece - [0001].ar_[VAR10]-One Piece - [0001].ar_[VAR5]-One Piece -[1v2].srt -> Extracted: S01E01   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR6] Expected: None
+  [INFO] Entry not in CSV report (testing from disk files)
+  Video:    [VAR6]-One Piece -[1 v2].mkv                       -> Extracted: None     | [NO MATCH]
+  Subtitle: [VAR6]-One Piece -[1 v2].srt                       -> Extracted: None     | [NO MATCH]
+  Pairing:  Video <-> Subtitle NOT PAIRED [X]            | Status: FAIL
+  ----------------------------------------------------------------------------------------------
+
+[VAR7] Expected: None
+  [INFO] Entry not in CSV report (testing from disk files)
+  Video:    [VAR7]-One Piece -[1v22].mkv                       -> Extracted: None     | [NO MATCH]
+  Subtitle: [VAR7]-One Piece -[1v22].srt                       -> Extracted: None     | [NO MATCH]
+  Pairing:  Video <-> Subtitle NOT PAIRED [X]            | Status: FAIL
+  ----------------------------------------------------------------------------------------------
+
+[VAR8] Expected: None
+  [INFO] Entry not in CSV report (testing from disk files)
+  Video:    [VAR8]-One Piece -[1080p].mkv                      -> Extracted: None     | [NO MATCH]
+  Subtitle: [VAR8]-One Piece -[1080p].srt                      -> Extracted: None     | [NO MATCH]
+  Pairing:  Video <-> Subtitle NOT PAIRED [X]            | Status: FAIL
+  ----------------------------------------------------------------------------------------------
+
+[VAR9] Expected: S01E1080
+  Video:    [VAR9]-One Piece -[1080].mkv                       -> Extracted: S01E1080 | [MATCH]
+  Subtitle: [VAR9]-One Piece -[1080].ar.srt                    -> Extracted: S01E1080 | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR10] Expected: S01E01
+  Video:    [VAR10]-One Piece - [0001].mkv                     -> Extracted: S01E01   | [MATCH]
+  Subtitle: [VAR10]-One Piece - [0001].ar.srt                  -> Extracted: S01E01   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR11] Expected: S01E1899
+  Video:    [VAR11]-One Piece -[1899].mkv                      -> Extracted: S01E1899 | [MATCH]
+  Subtitle: [VAR11]-One Piece -[1899].ar.srt                   -> Extracted: S01E1899 | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR12] Expected: None
+  [INFO] Entry not in CSV report (testing from disk files)
+  Video:    [VAR12]-One Piece -[1900].mkv                      -> Extracted: None     | [NO MATCH]
+  Subtitle: [VAR12]-One Piece -[1900].srt                      -> Extracted: None     | [NO MATCH]
+  Pairing:  Video <-> Subtitle NOT PAIRED [X]            | Status: FAIL
+  ----------------------------------------------------------------------------------------------
+
+Pattern 28 Summary: 7/12 PASSED (58.3%)
+                  5 FAILED
+====================================================================================================

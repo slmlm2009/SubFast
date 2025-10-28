@@ -9,9 +9,9 @@ Test Categories:
 - Pattern Priority: First match wins when multiple patterns could match
 - Edge Cases: Word boundaries, case sensitivity, special characters
 - Cache Behavior: LRU cache population and performance
-- Negative Cases: Files that should NOT match any pattern
+- Negative Cases: Files that should NOT match any pattern (v3.2.1+ support)
 
-Version: 3.2.0
+Version: 3.2.1 - Added negative test case support (expected: null)
 """
 
 import sys
@@ -37,7 +37,7 @@ from subfast.scripts.common.pattern_engine import (
 
 
 class TestPatternMatching(unittest.TestCase):
-    """Test all 30 episode patterns with dummy files."""
+    """Test episode patterns using data-driven approach with dummy files."""
     
     @classmethod
     def setUpClass(cls):
@@ -56,8 +56,8 @@ class TestPatternMatching(unittest.TestCase):
         cls.patterns = data.get('patterns', [])
         cls.total_patterns = len(cls.patterns)
         
-        if cls.total_patterns != 30:
-            raise ValueError(f"Expected 30 patterns, found {cls.total_patterns}")
+        # ✅ DYNAMIC PATTERN COUNT: No hardcoded validation - accept any number of patterns
+        print(f"DYNAMIC Test Framework: Found {cls.total_patterns} patterns to test")
     
     def setUp(self):
         """Clear cache before each test for consistent results."""
@@ -66,6 +66,7 @@ class TestPatternMatching(unittest.TestCase):
     def _test_pattern_variations(self, pattern: Dict, file_type: str):
         """
         Helper to test all variations of a pattern using ACTUAL FILES on disk.
+        Supports both positive and negative test cases.
         
         Args:
             pattern: Pattern definition from JSON
@@ -73,7 +74,15 @@ class TestPatternMatching(unittest.TestCase):
         """
         pattern_id = pattern['id']
         pattern_name = pattern['name']
-        variations = pattern.get(file_type, [])
+        
+        # Check for new variation-based structure (v3.2.1+)
+        variations = pattern.get('variations', [])
+        if variations:
+            # Use new variation-based testing with negative test case support
+            self._test_pattern_variations_new(pattern, file_type)
+            return
+        
+        # Legacy structure fallback for older test files
         expected_matches = pattern.get('expected_match', {})
         
         # Determine pattern directory path
@@ -140,6 +149,61 @@ class TestPatternMatching(unittest.TestCase):
                     f"File '{actual_filename}' extracted '{result}' but expected '{expected}'. "
                     f"HINT: File may have been renamed on disk, or pattern regex is incorrect."
                 )
+    
+    def _test_pattern_variations_new(self, pattern: Dict, file_type: str):
+        """
+        Helper to test pattern variations using the new variation-based structure.
+        Supports both positive (expected: "S##E##") and negative (expected: null) test cases.
+        
+        Args:
+            pattern: Pattern definition from JSON with variations structure
+            file_type: 'video_variations' or 'subtitle_variations'
+        """
+        pattern_id = pattern['id']
+        pattern_name = pattern['name']
+        variations = pattern.get('variations', [])
+        
+        # Filter variations for current file type and test them directly
+        extension = '.mkv' if file_type == 'video_variations' else '.srt'
+        
+        for variation in variations:
+            var_id = variation['var_id']
+            expected_raw = variation.get('expected')
+            
+            # Handle None string vs Python None conversion
+            if expected_raw is None or expected_raw == 'None':
+                expected = None
+            else:
+                expected = expected_raw
+            
+            # Determine which template to use based on file type
+            template_key = 'video_template' if file_type == 'video_variations' else 'subtitle_template'
+            template = variation.get(template_key)
+            
+            if not template:
+                continue  # Skip if no template for this file type
+            
+            with self.subTest(pattern=pattern_id, variation=var_id, template=template):
+                # Extract pattern match result from template filename
+                result = get_episode_number_cached(template)
+                
+                if expected is None:
+                    # Negative test case: should return None
+                    self.assertIsNone(
+                        result,
+                        f"Pattern {pattern_id} ({pattern_name}), Variation {var_id}: "
+                        f"Template '{template}' should NOT match (expected null), but got '{result}'. "
+                        f"This indicates a false positive that needs to be fixed."
+                    )
+                else:
+                    # Positive test case: should return expected value
+                    self.assertEqual(
+                        result,
+                        expected,
+                        f"Pattern {pattern_id} ({pattern_name}), Variation {var_id}: "
+                        f"Template '{template}' extracted '{result}' but expected '{expected}'. "
+                        f"Pattern regex may be incorrect or expected value is wrong."
+                    )
 
 
 class TestPattern01_SE(TestPatternMatching):
@@ -859,6 +923,105 @@ class TestFinalSeasonMatching(unittest.TestCase):
         )
         # No inference because video season is 1 (same as subtitle default)
         self.assertEqual(result, ('S01E01', 'S01E01'))
+
+
+# ✅ DYNAMIC TEST GENERATION: Replace 30 hardcoded test classes with automatic generation
+class TestAllPatternsDynamic(TestPatternMatching):
+    """
+    Dynamic test class that automatically generates test methods for ALL patterns.
+    Replaces the 30+ hardcoded individual test classes (TestPattern01_SE, TestPattern02_x, etc.).
+    """
+    
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+    
+    def test_all_video_variations(self):
+        """Test video variations for all patterns dynamically."""
+        for pattern in self.patterns:
+            pattern_id = pattern['id']
+            pattern_name = pattern['name']
+            
+            # Skip contextual patterns in unit tests - they use integration tests only
+            if pattern.get('type') == 'contextual':
+                continue
+                
+            with self.subTest(pattern_id=pattern_id, pattern_name=pattern_name, file_type='video'):
+                # Use the existing helper method with current pattern
+                try:
+                    # Check if this is a contextual pattern (like Pattern 30)
+                    if pattern.get('type') == 'contextual':
+                        self._test_contextual_pattern(pattern)
+                    else:
+                        self._test_pattern_variations_new(pattern, 'video_variations')
+                except Exception as e:
+                    self.fail(f"Pattern {pattern_id} ({pattern_name}) video test failed: {e}")
+    
+    def test_all_subtitle_variations(self):
+        """Test subtitle variations for all patterns dynamically."""
+        for pattern in self.patterns:
+            pattern_id = pattern['id']
+            pattern_name = pattern['name']
+            
+            # Skip contextual patterns in unit tests - they use integration tests only
+            if pattern.get('type') == 'contextual':
+                continue
+                
+            with self.subTest(pattern_id=pattern_id, pattern_name=pattern_name, file_type='subtitle'):
+                # Use the existing helper method with current pattern
+                try:
+                    # Check if this is a contextual pattern (like Pattern 30)
+                    if pattern.get('type') == 'contextual':
+                        self._test_contextual_pattern(pattern)
+                    else:
+                        self._test_pattern_variations_new(pattern, 'subtitle_variations')
+                except Exception as e:
+                    self.fail(f"Pattern {pattern_id} ({pattern_name}) subtitle test failed: {e}")
+    
+    def _test_contextual_pattern(self, pattern: Dict):
+        """
+        Test contextual patterns that require subtitle-video matching logic.
+        Currently used for Pattern 30 (FINAL SEASON).
+        """
+        pattern_id = pattern['id']
+        pattern_name = pattern['name']
+        variations = pattern.get('variations', [])
+        
+        for variation in variations:
+            var_id = variation['var_id']
+            expected_raw = variation.get('expected')
+            
+            # Handle None string vs Python None conversion
+            if expected_raw is None or expected_raw == 'None':
+                expected = None
+            else:
+                expected = expected_raw
+            
+            video_template = variation.get('video_template')
+            subtitle_template = variation.get('subtitle_template')
+            
+            if not video_template or not subtitle_template:
+                continue  # Skip if missing templates
+            
+            with self.subTest(pattern=pattern_id, variation=var_id):
+                # Test contextual matching
+                result = match_subtitle_to_video(subtitle_template, video_template)
+                
+                if expected is None:
+                    # Negative test case: should return (None, None)
+                    self.assertEqual(
+                        result,
+                        (None, None),
+                        f"Pattern {pattern_id} ({pattern_name}), Variation {var_id}: "
+                        f"Expected (None, None) but got {result}"
+                    )
+                else:
+                    # Positive test case: should return expected pair
+                    self.assertEqual(
+                        result,
+                        (expected, expected),
+                        f"Pattern {pattern_id} ({pattern_name}), Variation {var_id}: "
+                        f"Expected ({expected}, {expected}) but got {result}"
+                    )
 
 
 if __name__ == '__main__':

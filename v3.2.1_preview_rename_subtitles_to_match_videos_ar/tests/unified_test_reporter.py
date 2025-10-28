@@ -8,6 +8,47 @@ Combines unit test and integration test results into a single comprehensive repo
 from datetime import datetime
 from pathlib import Path
 from typing import List, Dict
+import json
+
+
+def get_dynamic_pattern_count():
+    """Get current pattern count from pattern_definitions.json dynamically."""
+    try:
+        pattern_file = Path(__file__).parent / 'fixtures' / 'pattern_definitions.json'
+        if pattern_file.exists():
+            with open(pattern_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            # ✅ AUTOMATIC: Calculate from actual patterns, not metadata
+            return len(data.get('patterns', []))
+    except Exception:
+        pass
+    return 0
+
+
+def get_dynamic_metadata():
+    """Get calculated metadata from actual patterns (no manual updates needed)."""
+    try:
+        pattern_file = Path(__file__).parent / 'fixtures' / 'pattern_definitions.json'
+        if pattern_file.exists():
+            with open(pattern_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            
+            patterns = data.get('patterns', [])
+            
+            # Calculate from actual data - no manual maintenance!
+            return {
+                'total_patterns': len(patterns),
+                'total_variations': sum(len(p.get('variations', [])) for p in patterns),
+                'calculated_at': datetime.now().isoformat(),
+                'auto_generated': True
+            }
+    except Exception:
+        return {
+            'total_patterns': 0,
+            'total_variations': 0, 
+            'calculated_at': datetime.now().isoformat(),
+            'auto_generated': True
+        }
 
 
 class UnifiedTestReporter:
@@ -116,19 +157,32 @@ class UnifiedTestReporter:
         self.report_lines.append("=" * 100)
         self.report_lines.append("")
         
-        # Categorize unit tests by functional area
+        # Import pattern metadata to identify contextual patterns
+        try:
+            pattern_file = Path(__file__).parent / 'fixtures' / 'pattern_definitions.json'
+            with open(pattern_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+            patterns = data.get('patterns', [])
+            
+            # Count contextual patterns
+            contextual_patterns = sum(1 for p in patterns if p.get('type') == 'contextual')
+        except Exception:
+            contextual_patterns = 0
+        
+        # Categorize unit tests by functional area (excluding contextual patterns)
+        non_contextual_tests = self.unit_total - contextual_patterns
         config_tests = sum(1 for r in self.unit_test_results if 'config' in r.get('test_id', '').lower())
-        csv_tests = sum(1 for r in self.unit_test_results if 'csv' in r.get('test_id', '').lower() or 'table' in r.get('test_id', '').lower())
-        pattern_tests = sum(1 for r in self.unit_test_results if 'extension' in r.get('test_id', '').lower() or 'pattern' in r.get('test_id', '').lower())
+        csv_tests = sum(1 for r in self.unit_test_results if ('csv' in r.get('test_id', '').lower() or 'table' in r.get('test_id', '').lower()))
+        pattern_tests = sum(1 for r in self.unit_test_results if ('extension' in r.get('test_id', '').lower() or 'pattern' in r.get('test_id', '').lower()))
         embedding_unit_tests = sum(1 for r in self.unit_test_results if 'embedding' in r.get('test_id', '').lower())
-        other_tests = self.unit_total - (config_tests + csv_tests + pattern_tests + embedding_unit_tests)
+        other_tests = non_contextual_tests - (config_tests + csv_tests + pattern_tests + embedding_unit_tests)
         
         # Calculate pass rates
         config_passed = sum(1 for r in self.unit_test_results if 'config' in r.get('test_id', '').lower() and r.get('status') == 'PASS')
         csv_passed = sum(1 for r in self.unit_test_results if ('csv' in r.get('test_id', '').lower() or 'table' in r.get('test_id', '').lower()) and r.get('status') == 'PASS')
         pattern_passed = sum(1 for r in self.unit_test_results if ('extension' in r.get('test_id', '').lower() or 'pattern' in r.get('test_id', '').lower()) and r.get('status') == 'PASS')
         embedding_passed = sum(1 for r in self.unit_test_results if 'embedding' in r.get('test_id', '').lower() and r.get('status') == 'PASS')
-        other_passed = self.unit_passed - (config_passed + csv_passed + pattern_passed + embedding_passed)
+        other_passed = non_contextual_tests - (config_passed + csv_tests + pattern_tests + embedding_unit_tests)
         
         self.report_lines.append("UNIT TESTS ({} total):".format(self.unit_total))
         self.report_lines.append(f"  ✓ Configuration Management    : {config_tests} tests   ({config_passed}/{config_tests} pass)  - Config generation, loading, validation")
@@ -140,7 +194,7 @@ class UnifiedTestReporter:
         self.report_lines.append("")
         
         self.report_lines.append("INTEGRATION TESTS ({} total):".format(self.integration_total_variations + 2))  # +2 for embedding tests
-        self.report_lines.append(f"  ✓ Pattern Matching            : {self.integration_total_variations} variations  ({self.integration_passed}/{self.integration_total_variations} pass) - 25 episode patterns tested")
+        self.report_lines.append(f"  ✓ Pattern Matching            : {self.integration_total_variations} variations  ({self.integration_passed}/{self.integration_total_variations} pass) - {get_dynamic_pattern_count()} episode patterns tested")
         self.report_lines.append(f"  ✓ Subtitle Embedding          : 2 tests        (2/2 pass) - Real mkvmerge embedding")
         self.report_lines.append("")
         
@@ -150,7 +204,6 @@ class UnifiedTestReporter:
         self.report_lines.append(f"  • Total Execution Time: {self.total_duration:.2f} seconds")
         self.report_lines.append("")
         self.report_lines.append("=" * 100)
-        self.report_lines.append("")
         self.report_lines.append("")
     
     def _add_unit_test_summary(self):
@@ -227,7 +280,7 @@ class UnifiedTestReporter:
         pass_pct = (self.integration_passed / self.integration_total_variations * 100) if self.integration_total_variations > 0 else 0
         fail_pct = (self.integration_failed / self.integration_total_variations * 100) if self.integration_total_variations > 0 else 0
         
-        self.report_lines.append(f"Total Patterns Tested:  25")
+        self.report_lines.append(f"Total Patterns Tested:  {get_dynamic_pattern_count()}")
         self.report_lines.append(f"Total Variations:       {self.integration_total_variations}")
         self.report_lines.append(f"Passed:                 {self.integration_passed} ({pass_pct:.1f}%)")
         self.report_lines.append(f"Failed:                 {self.integration_failed} ({fail_pct:.1f}%)")

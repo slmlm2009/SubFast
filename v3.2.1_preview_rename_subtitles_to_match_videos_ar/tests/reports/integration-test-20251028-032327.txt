@@ -1,0 +1,69 @@
+====================================================================================================
+SUBFAST PATTERN INTEGRATION TESTS
+====================================================================================================
+Test Run: 2025-10-28 03:23:27
+
+====================================================================================================
+SUMMARY
+====================================================================================================
+Total Patterns Tested:  30
+Total Variations:       7
+Passed:                 7 (100.0%)
+Failed:                 0 (0.0%)
+====================================================================================================
+
+
+====================================================================================================
+DETAILED TEST RESULTS
+====================================================================================================
+
+====================================================================================================
+Pattern 01: S##E##
+====================================================================================================
+
+  Found 7 renamed subtitle files (6 .ar.srt, 1 .ar.ass)
+
+[VAR1] Expected: S01E05
+  Video:    [VAR1]-Show.Name.S01E05.720p.mkv                   -> Extracted: S01E05   | [MATCH]
+  Subtitle: [VAR1]-Show.Name.S01E05.720p.ar_[VAR1]-Show.Name.S01E05.720p.ar.srt -> Extracted: S01E05   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S02E10
+  Video:    [VAR2]-Series.S2E10.BluRay.mkv                     -> Extracted: S02E10   | [MATCH]
+  Subtitle: [VAR2]-Series.S2E10.BluRay.ar_[VAR2]-Series.S2E10.BluRay.ar.srt -> Extracted: S02E10   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S03E15
+  Video:    [VAR3]-Example.s03e15.WEB-DL.mkv                   -> Extracted: S03E15   | [MATCH]
+  Subtitle: [VAR3]-Example.s03e15.WEB-DL.ar_[VAR3]-Example.s03e15.WEB-DL.ar.srt -> Extracted: S03E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR4] Expected: S01E01
+  Video:    [VAR4]-Test.S01E01.mkv                             -> Extracted: S01E01   | [MATCH]
+  Subtitle: [VAR4]-Test.S01E01.ar_[VAR4]-Test.S01E01.ar.srt    -> Extracted: S01E01   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR5] Expected: S03E02
+  Video:    [VAR5]-Hajimeru Isekai Seikatsu s3 e2.mkv          -> Extracted: S03E02   | [MATCH]
+  Subtitle: [VAR5]-Hajimeru Isekai Seikatsu s3 e2.ar_[VAR5]-Hajimeru Isekai Seikatsu s3 e2.ar.ass -> Extracted: S03E02   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR6] Expected: S02E08
+  Video:    [VAR6]-Show.S02 Episode 08.mkv                     -> Extracted: S02E08   | [MATCH]
+  Subtitle: [VAR6]-Show.S02 Episode 08.ar_[VAR6]-Show.S02 Episode 08.ar.srt -> Extracted: S02E08   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR7] Expected: S04E12
+  Video:    [VAR7]-Movie.S04E12.WEB-DL.mp4                     -> Extracted: S04E12   | [MATCH]
+  Subtitle: [VAR7]-Movie.S04E12.WEB-DL.ar_[VAR7]-Movie.S04E12.WEB-DL.ar.srt -> Extracted: S04E12   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 01 Summary: 7/7 PASSED (100.0%)
+====================================================================================================

@@ -1,0 +1,24 @@
+Pattern#28:
+
+One Piece - [1] (expected: S01E01)
+One Piece -[1v2] (expected: S01E01)
+One Piece -[1 v2] (expected: null)
+One Piece -[1v22] (expected: null)
+One Piece -[1080p] (expected: null)
+One Piece -[1080] (expected: S01E1080)
+One Piece - [0001] (expected: S01E01)
+One Piece -[1899] (expected: S01E1899)
+One Piece -[1900] (expected: null)
+
+Pattern#29:
+
+One Piece _1 (expected: S01E01)
+One Piece _1v2 (expected: S01E01)
+One Piece _1vv2 (expected: null)
+One Piece _1v22 (expected: null)
+One Piece _1080p (expected: null)
+One Piece _1080 (expected: S01E1080)
+One Piece _0001 (expected: S01E01)
+One Piece _1899 (expected: S01E1899)
+One Piece _1900 (expected: null)
+

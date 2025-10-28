@@ -1,10 +1,11 @@
 {
   "metadata": {
-    "version": "3.2.0",
-    "description": "Pattern definitions for SubFast episode matching tests with VAR-based structure",
+    "version": "3.2.1",
+    "description": "Pattern definitions for SubFast episode matching tests with VAR-based structure including negative test cases (expected: None)",
+    "comment": "Each variation has [VAR#] prefix for stable reference during manual testing. Pattern 22 added for user-reported season## e## format. Pattern 30 is CONTEXTUAL matching (FINAL SEASON inference) - simplified to 2 variations to avoid episode number conflicts in automated tests. v3.2.1: Added negative test case support with 22 new variations for patterns 26-29 to validate zero padding, versioning, and prevent false positives. Negative cases use expected: None.",
     "total_patterns": 30,
-    "total_variations": 101,
-    "comment": "Each variation has [VAR#] prefix for stable reference during manual testing. Pattern 22 added for user-reported season## e## format. Pattern 30 is CONTEXTUAL matching (FINAL SEASON inference) - simplified to 2 variations to avoid episode number conflicts in automated tests."
+    "total_variations": 126,
+    "last_updated": "2025-10-28T06:00:16.651788"
   },
   "patterns": [
     {
@@ -709,21 +710,28 @@
       "variations": [
         {
           "var_id": "VAR1",
-          "expected": "S03E04",
-          "video_template": "[VAR1]-Show 3 - 04.mkv",
-          "subtitle_template": "[VAR1]-Show 3 - 04.srt"
+          "expected": "S03E01",
+          "video_template": "[Crunchyroll] Kaiju8 3 - 01v2.mkv",
+          "subtitle_template": "[Crunchyroll] Kaiju8 3 - 01v2.ass"
         },
         {
           "var_id": "VAR2",
-          "expected": "S02E10",
-          "video_template": "[VAR2]-Series 2-10.720p.mkv",
-          "subtitle_template": "[VAR2]-Series 2-10.srt"
+          "expected": "None",
+          "video_template": "[Crunchyroll] Kaiju8 3 - 01v22.mkv",
+          "subtitle_template": "[Crunchyroll] Kaiju8 3 - 01v22.ass"
         },
         {
           "var_id": "VAR3",
-          "expected": "S01E25",
-          "video_template": "[VAR3]-Example 1 - 25.BluRay.mkv",
-          "subtitle_template": "[VAR3]-Example 1 - 25.srt"
+          "expected": "S01E01",
+          "video_template": "[Crunchyroll] Kaiju83 - 01.mkv",
+          "subtitle_template": "[Crunchyroll] Kaiju83 - 01.ass"
+        },
+        {
+          "var_id": "VAR4",
+          "expected": "S03E99",
+          "video_template": "Test Series 3 - 99.mkv",
+          "subtitle_template": "Test Series 3-99.srt",
+          "description": "Year pattern - should not match"
         }
       ]
     },
@@ -734,27 +742,71 @@
       "variations": [
         {
           "var_id": "VAR1",
-          "expected": "S01E05",
-          "video_template": "Show - 05.mkv",
-          "subtitle_template": "Show - 05.srt"
+          "expected": "S01E01",
+          "video_template": "One Piece -1.mkv",
+          "subtitle_template": "One Piece -1.srt"
         },
         {
           "var_id": "VAR2",
-          "expected": "S01E10",
-          "video_template": "Series - 10.720p.mkv",
-          "subtitle_template": "Series - 10.srt"
+          "expected": "S01E01",
+          "video_template": "One Piece -1v2.mkv",
+          "subtitle_template": "One Piece -1v2.srt"
         },
         {
           "var_id": "VAR3",
-          "expected": "S01E15",
-          "video_template": "Example - 15.BluRay.mkv",
-          "subtitle_template": "Example - 15.srt"
+          "expected": "None",
+          "video_template": "One Piece -1vv2.mkv",
+          "subtitle_template": "One Piece -1vv2.srt",
+          "description": "Multiple V/number combinations - invalid"
         },
         {
           "var_id": "VAR4",
-          "expected": "S01E20",
-          "video_template": "Example-1080p - 20.mkv",
-          "subtitle_template": "Example-2025 - 20.srt"
+          "expected": "None",
+          "video_template": "One Piece -1v22.mkv",
+          "subtitle_template": "One Piece -1v22.srt",
+          "description": "Multiple V/number combinations - invalid"
+        },
+        {
+          "var_id": "VAR5",
+          "expected": "S01E1080",
+          "video_template": "One Piece -1080.mkv",
+          "subtitle_template": "One Piece -1080.srt",
+          "description": "Quality tag without `p` suffix - should match as episode 1080"
+        },
+        {
+          "var_id": "VAR6",
+          "expected": "None",
+          "video_template": "One Piece -1080p.mkv",
+          "subtitle_template": "One Piece -1080p.srt",
+          "description": "Quality tag with `p` suffix - should not match"
+        },
+        {
+          "var_id": "VAR7",
+          "expected": "None",
+          "video_template": "One Piece -1901.mkv",
+          "subtitle_template": "One Piece -1901.srt",
+          "description": "Out of range episode number (beyond 1-1899)"
+        },
+        {
+          "var_id": "VAR8",
+          "expected": "S01E01",
+          "video_template": "One Piece -0001.mkv",
+          "subtitle_template": "One Piece -0001.srt",
+          "description": "Zero padding within range - should match (normalized to episode 1)"
+        },
+        {
+          "var_id": "VAR9",
+          "expected": "S01E1899",
+          "video_template": "One Piece -1899.mkv",
+          "subtitle_template": "One Piece -1899.srt",
+          "description": "Maximum supported episode number - should match"
+        },
+        {
+          "var_id": "VAR10",
+          "expected": "None",
+          "video_template": "One Piece -2000.mkv",
+          "subtitle_template": "One Piece -2000.srt",
+          "description": "Far beyond acceptable range"
         }
       ]
     },
@@ -780,6 +832,60 @@
           "expected": "S01E05",
           "video_template": "Series [5] Episode.mkv",
           "subtitle_template": "Series [5] Episode.srt"
+        },
+        {
+          "var_id": "VAR4",
+          "expected": "S01E01",
+          "video_template": "One Piece - [1].mkv",
+          "subtitle_template": "One Piece - [1].srt"
+        },
+        {
+          "var_id": "VAR5",
+          "expected": "S01E01",
+          "video_template": "One Piece -[1v2].mkv",
+          "subtitle_template": "One Piece -[1v2].srt"
+        },
+        {
+          "var_id": "VAR6",
+          "expected": "None",
+          "video_template": "One Piece -[1 v2].mkv",
+          "subtitle_template": "One Piece -[1 v2].srt"
+        },
+        {
+          "var_id": "VAR7",
+          "expected": "None",
+          "video_template": "One Piece -[1v22].mkv",
+          "subtitle_template": "One Piece -[1v22].srt"
+        },
+        {
+          "var_id": "VAR8",
+          "expected": "None",
+          "video_template": "One Piece -[1080p].mkv",
+          "subtitle_template": "One Piece -[1080p].srt"
+        },
+        {
+          "var_id": "VAR9",
+          "expected": "S01E1080",
+          "video_template": "One Piece -[1080].mkv",
+          "subtitle_template": "One Piece -[1080].srt"
+        },
+        {
+          "var_id": "VAR10",
+          "expected": "S01E01",
+          "video_template": "One Piece - [0001].mkv",
+          "subtitle_template": "One Piece - [0001].srt"
+        },
+        {
+          "var_id": "VAR11",
+          "expected": "S01E1899",
+          "video_template": "One Piece -[1899].mkv",
+          "subtitle_template": "One Piece -[1899].srt"
+        },
+        {
+          "var_id": "VAR12",
+          "expected": "None",
+          "video_template": "One Piece -[1900].mkv",
+          "subtitle_template": "One Piece -[1900].srt"
         }
       ]
     },
@@ -805,6 +911,60 @@
           "expected": "S01E03",
           "video_template": "Example_3.720p.mkv",
           "subtitle_template": "Example_3.srt"
+        },
+        {
+          "var_id": "VAR4",
+          "expected": "S01E01",
+          "video_template": "One Piece _1.mkv",
+          "subtitle_template": "One Piece _1.srt"
+        },
+        {
+          "var_id": "VAR5",
+          "expected": "S01E01",
+          "video_template": "One Piece _1v2.mkv",
+          "subtitle_template": "One Piece _1v2.srt"
+        },
+        {
+          "var_id": "VAR6",
+          "expected": "None",
+          "video_template": "One Piece _1vv2.mkv",
+          "subtitle_template": "One Piece _1vv2.srt"
+        },
+        {
+          "var_id": "VAR7",
+          "expected": "None",
+          "video_template": "One Piece _1v22.mkv",
+          "subtitle_template": "One Piece _1v22.srt"
+        },
+        {
+          "var_id": "VAR8",
+          "expected": "None",
+          "video_template": "One Piece _1080p.mkv",
+          "subtitle_template": "One Piece _1080p.srt"
+        },
+        {
+          "var_id": "VAR9",
+          "expected": "S01E1080",
+          "video_template": "One Piece _1080.mkv",
+          "subtitle_template": "One Piece _1080.srt"
+        },
+        {
+          "var_id": "VAR10",
+          "expected": "S01E01",
+          "video_template": "One Piece _0001.mkv",
+          "subtitle_template": "One Piece _0001.srt"
+        },
+        {
+          "var_id": "VAR11",
+          "expected": "S01E1899",
+          "video_template": "One Piece _1899.mkv",
+          "subtitle_template": "One Piece _1899.srt"
+        },
+        {
+          "var_id": "VAR12",
+          "expected": "None",
+          "video_template": "One Piece _1900.mkv",
+          "subtitle_template": "One Piece _1900.srt"
         }
       ]
     },
@@ -827,7 +987,7 @@
           "expected": "S01E05",
           "video_template": "Attack.on.Titan.FINAL.SEASON - 05.mkv",
           "subtitle_template": "Attack on Titan S04E05.ass",
-          "comment": "Video has FINAL SEASON → subtitle renamed to match video. After rename, both extract to S01E05. The S04 season info from original subtitle is used for inference but lost after rename."
+          "comment": "Video has FINAL SEASON → subtitle renamed to match video with FINAL SEASON. After rename, both extract to S01E05 due to contextual pairing."
         }
       ]
     }

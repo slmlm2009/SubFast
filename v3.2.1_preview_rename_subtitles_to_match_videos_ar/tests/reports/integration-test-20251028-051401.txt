@@ -1,0 +1,108 @@
+====================================================================================================
+SUBFAST PATTERN INTEGRATION TESTS
+====================================================================================================
+Test Run: 2025-10-28 05:14:01
+
+====================================================================================================
+SUMMARY
+====================================================================================================
+Total Patterns Tested:  30
+Total Variations:       12
+Passed:                 11 (91.7%)
+Failed:                 1 (8.3%)
+
+FAILED VARIATIONS:
+  - Pattern 29 [VAR4] - Subtitle file not found
+====================================================================================================
+
+
+====================================================================================================
+DETAILED TEST RESULTS
+====================================================================================================
+
+====================================================================================================
+Pattern 29: _##
+====================================================================================================
+
+  Found 7 renamed subtitle files (.ar.srt)
+
+[VAR1] Expected: S01E09
+  Video:    [VAR1]-[DB]Maoyuu Maou Yuusha_-_09_(10bit_BD1080p_x265).mkv -> Extracted: S01E09   | [MATCH]
+  Subtitle: [VAR1]-[DB]Maoyuu Maou Yuusha_-_09_(10bit_BD1080p_x265).ar.srt -> Extracted: S01E09   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR2] Expected: S01E15
+  Video:    [VAR2]-Show_15.mkv                                 -> Extracted: S01E15   | [MATCH]
+  Subtitle: [VAR2]-Show_15.ar.srt                              -> Extracted: S01E15   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR3] Expected: S01E03
+  Video:    [VAR3]-Example_3.720p.mkv                          -> Extracted: S01E03   | [MATCH]
+  Subtitle: [VAR3]-Example_3.720p.ar.srt                       -> Extracted: S01E03   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR4] Expected: S01E01
+  [INFO] Entry not in CSV report (testing from disk files)
+  Video:    [VAR4]-One Piece _1.mkv                            -> Extracted: S01E01   | [MATCH]
+  Subtitle: FILE NOT FOUND on disk
+  Pairing:  Video <-> Subtitle NOT PAIRED [X]            | Status: FAIL
+  ----------------------------------------------------------------------------------------------
+
+[VAR5] Expected: S01E01
+  Video:    [VAR10]-One Piece _0001.mkv                        -> Extracted: S01E01   | [MATCH]
+  Subtitle: [VAR10]-One Piece _0001.ar_[VAR10]-One Piece _0001.ar_[VAR10]-One Piece _0001.ar_[VAR5]-One Piece _1v2.srt -> Extracted: S01E01   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR6] Expected: None
+  [INFO] Entry not in CSV report (testing from disk files)
+  Video:    [VAR6]-One Piece _1vv2.mkv                         -> Extracted: None     | [PASS NEG]
+  Subtitle: [VAR6]-One Piece _1vv2.srt                         -> Extracted: None     | [PASS NEG]
+  Pairing:  Video <-> Subtitle NEG TEST PASS             | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR7] Expected: None
+  [INFO] Entry not in CSV report (testing from disk files)
+  Video:    [VAR7]-One Piece _1v22.mkv                         -> Extracted: None     | [PASS NEG]
+  Subtitle: [VAR7]-One Piece _1v22.srt                         -> Extracted: None     | [PASS NEG]
+  Pairing:  Video <-> Subtitle NEG TEST PASS             | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR8] Expected: None
+  [INFO] Entry not in CSV report (testing from disk files)
+  Video:    [VAR8]-One Piece _1080p.mkv                        -> Extracted: None     | [PASS NEG]
+  Subtitle: [VAR8]-One Piece _1080p.srt                        -> Extracted: None     | [PASS NEG]
+  Pairing:  Video <-> Subtitle NEG TEST PASS             | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR9] Expected: S01E1080
+  Video:    [VAR9]-One Piece _1080.mkv                         -> Extracted: S01E1080 | [MATCH]
+  Subtitle: [VAR9]-One Piece _1080.ar.srt                      -> Extracted: S01E1080 | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR10] Expected: S01E01
+  Video:    [VAR10]-One Piece _0001.mkv                        -> Extracted: S01E01   | [MATCH]
+  Subtitle: [VAR10]-One Piece _0001.ar.srt                     -> Extracted: S01E01   | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR11] Expected: S01E1899
+  Video:    [VAR11]-One Piece _1899.mkv                        -> Extracted: S01E1899 | [MATCH]
+  Subtitle: [VAR11]-One Piece _1899.ar.srt                     -> Extracted: S01E1899 | [MATCH]
+  Pairing:  Video <-> Subtitle PAIRED               | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+[VAR12] Expected: None
+  [INFO] Entry not in CSV report (testing from disk files)
+  Video:    [VAR12]-One Piece _1900.mkv                        -> Extracted: None     | [PASS NEG]
+  Subtitle: [VAR12]-One Piece _1900.srt                        -> Extracted: None     | [PASS NEG]
+  Pairing:  Video <-> Subtitle NEG TEST PASS             | Status: PASS
+  ----------------------------------------------------------------------------------------------
+
+Pattern 29 Summary: 11/12 PASSED (91.7%)
+                  1 FAILED
+====================================================================================================

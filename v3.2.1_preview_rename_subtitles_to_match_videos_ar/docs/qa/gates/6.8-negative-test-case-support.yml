@@ -1,0 +1,58 @@
+schema: 1
+story: '6.8'
+story_title: 'Negative Test Case Support for Pattern Testing Framework'
+gate: 'CONCERNS'
+status_reason: 'Implementation complete with 3 identified issues requiring fixes: 1) Hardcoded pattern count in test reporter, 2) File pairing issue for Pattern 27 VAR1/VAR2, 3) Test reporting interpretation of negative test results'
+reviewer: 'Quinn (Test Architect)'
+updated: '2025-10-28T02:45:00Z'
+
+top_issues:
+  - id: 'QA-001'
+    severity: 'medium'
+    finding: 'Test report shows hardcoded "25 episode patterns tested" instead of dynamic count from pattern_definitions.json (30 patterns exist)'
+    suggested_action: 'Update unified_test_reporter.py line 125 to dynamically read pattern count from JSON metadata'
+  - id: 'QA-002' 
+    severity: 'medium'
+    finding: 'Pattern 27 VAR1 and VAR2 using VAR11 video files instead of proper VAR1/VAR2 files in test execution'
+    suggested_action: 'Investigate file pairing logic in integration test runner to ensure correct video-subtitle file matching'
+  - id: 'QA-003'
+    severity: 'low'
+    finding: 'Test reporting displays negative test results as "pattern mismatch" when they should be "working correctly"'
+    suggested_action: 'Update test result messaging to distinguish between legitimate failures and successful negative test validation'
+
+waiver: { active: false }
+
+evidence:
+  tests_reviewed: 170
+  risks_identified: 0
+  trace:
+    ac_covered: [1, 2, 3, 4, 5, 6, 7]
+    ac_gaps: []
+
+nfr_validation:
+  _assessed: [security, performance, reliability, maintainability]
+  security:
+    status: 'PASS'
+    notes: 'No security risks introduced with negative test case functionality'
+  performance:
+    status: 'PASS' 
+    notes: 'Test execution time remains acceptable at 2.63 seconds for 170 tests'
+  reliability:
+    status: 'PASS'
+    notes: 'Negative test framework operates reliably, correctly identifying false positives'
+  maintainability:
+    status: 'PASS'
+    notes: 'Code structure well-maintained, clear separation between positive and negative test logic'
+
+recommendations:
+  immediate:
+    - action: 'Fix unified_test_reporter.py hardcoded pattern count'
+      refs: ['tests/unified_test_reporter.py:125']
+    - action: 'Investigate Pattern 27 file pairing logic'
+      refs: ['tests/fixtures/pattern_files/pattern_27_-/']
+    - action: 'Improve test result messaging for negative tests'
+      refs: ['tests/unified_test_reporter.py']
+  future:
+    - action: 'Add documentation for negative test case troubleshooting'
+      refs: ['docs/stories/6.8.negative-test-case-support.md']
+    - action: 'Consider adding visual indicators in reports for negative vs positive test failures'

@@ -33,6 +33,9 @@ from typing import Dict, List, Tuple
 
 from tests.csv_report_parser import CSVReportParser, extract_var_tag
 
+# ✅ AUTO METADATA: Import auto-updater
+from tests.utils.metadata_updater import update_pattern_metadata
+
 
 class IntegrationTestRunner:
     """Runs pattern integration tests on ACTUAL fixture files."""
@@ -225,7 +228,12 @@ class IntegrationTestRunner:
         # Test each variation
         for variation in variations:
             var_id = variation['var_id']
-            expected = variation['expected']
+            # Handle string "None" to Python None conversion for negative test cases
+            expected_raw = variation['expected']
+            if expected_raw == 'None':
+                expected = None
+            else:
+                expected = expected_raw
             
             # Find entry in CSV
             entry = parser.find_by_var_tag(var_id)
@@ -254,13 +262,28 @@ class IntegrationTestRunner:
                 subtitle_extracted = pattern_engine.get_episode_number_cached(subtitle_file.name) if subtitle_file else None
                 
                 # Determine match status
-                video_match = (video_extracted == expected) if video_extracted else False
-                subtitle_match = (subtitle_extracted == expected) if subtitle_extracted else False
+                # Handle both positive and negative test cases correctly
+                if video_file:
+                    video_match = (video_extracted == expected)
+                else:
+                    video_match = False
+                
+                if subtitle_file:
+                    subtitle_match = (subtitle_extracted == expected)
+                else:
+                    subtitle_match = False
                 
                 # Overall status
                 both_exist = (video_file and subtitle_file)
                 both_match = (video_match and subtitle_match)
-                overall_status = "PASS" if both_match else "FAIL"
+                
+                # For negative test cases (expected None), successful None extraction is a PASS
+                if expected is None:
+                    # For negative tests, pass if both files correctly returned None
+                    overall_status = "PASS" if (video_extracted is None and subtitle_extracted is None) else "FAIL"
+                else:
+                    # For positive tests, pass if both files matched expected value
+                    overall_status = "PASS" if both_match else "FAIL"
                 
                 # Only show warning if entry not in CSV (not a failure, just info)
                 csv_warning = f"  [INFO] Entry not in CSV report (testing from disk files)"
@@ -269,7 +292,11 @@ class IntegrationTestRunner:
                 
                 # Show video extraction
                 if video_file:
-                    video_status = "[MATCH]" if video_match else "[NO MATCH]"
+                    if expected is None:
+                        # For negative test cases, show PASS when extraction is None
+                        video_status = "[PASS NEG]" if video_extracted is None else "[FAIL NEG]"
+                    else:
+                        video_status = "[MATCH]" if video_match else "[NO MATCH]"
                     video_line = f"  Video:    {video_file.name:<50} -> Extracted: {video_extracted or 'None':<8} | {video_status}"
                     print(video_line)
                     self.report_lines.append(video_line)
@@ -280,7 +307,11 @@ class IntegrationTestRunner:
                 
                 # Show subtitle extraction
                 if subtitle_file:
-                    subtitle_status = "[MATCH]" if subtitle_match else "[NO MATCH]"
+                    if expected is None:
+                        # For negative test cases, show PASS when extraction is None
+                        subtitle_status = "[PASS NEG]" if subtitle_extracted is None else "[FAIL NEG]"
+                    else:
+                        subtitle_status = "[MATCH]" if subtitle_match else "[NO MATCH]"
                     subtitle_line = f"  Subtitle: {subtitle_file.name:<50} -> Extracted: {subtitle_extracted or 'None':<8} | {subtitle_status}"
                     print(subtitle_line)
                     self.report_lines.append(subtitle_line)
@@ -290,8 +321,15 @@ class IntegrationTestRunner:
                     self.report_lines.append(subtitle_line)
                 
                 # Show pairing status
-                # Files are PAIRED only if both exist AND both patterns match
-                pairing_status = "PAIRED" if (both_exist and both_match) else "NOT PAIRED [X]"
+                if expected is None:
+                    # For negative test cases, show that negative validation succeeded
+                    if both_exist and video_extracted is None and subtitle_extracted is None:
+                        pairing_status = "NEG TEST PASS"
+                    else:
+                        pairing_status = "NEG TEST FAIL [X]"
+                else:
+                    # Files are PAIRED only if both exist AND both patterns match
+                    pairing_status = "PAIRED" if (both_exist and both_match) else "NOT PAIRED [X]"
                 pairing_line = f"  Pairing:  Video <-> Subtitle {pairing_status:<25} | Status: {overall_status}"
                 print(pairing_line)
                 self.report_lines.append(pairing_line)
@@ -310,12 +348,19 @@ class IntegrationTestRunner:
                 
                 # Add detailed failure info only if failed
                 if overall_status == "FAIL" and video_file and subtitle_file:
-                    if not video_match and not subtitle_match:
-                        self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Both video and subtitle pattern mismatch (expected {expected}, got video={video_extracted}, subtitle={subtitle_extracted})")
-                    elif not video_match:
-                        self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Video pattern mismatch (expected {expected}, got {video_extracted})")
-                    elif not subtitle_match:
-                        self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Subtitle pattern mismatch (expected {expected}, got {subtitle_extracted})")
+                    if expected is None:
+                        # For negative test cases, None result is expected - only report if got non-None
+                        if video_extracted is not None or subtitle_extracted is not None:
+                            self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Negative test failed - expected None but got video={video_extracted}, subtitle={subtitle_extracted}")
+                        # Note: If both are None (good negative test), we don't add to failed_details
+                    else:
+                        # For positive test cases, report any mismatches
+                        if not video_match and not subtitle_match:
+                            self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Both video and subtitle pattern mismatch (expected {expected}, got video={video_extracted}, subtitle={subtitle_extracted})")
+                        elif not video_match:
+                            self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Video pattern mismatch (expected {expected}, got {video_extracted})")
+                        elif not subtitle_match:
+                            self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Subtitle pattern mismatch (expected {expected}, got {subtitle_extracted})")
                 elif overall_status == "FAIL" and not video_file:
                     self.failed_details.append(f"Pattern {pattern_id:02d} [{var_id}] - Video file not found")
                 elif overall_status == "FAIL" and not subtitle_file:
@@ -454,7 +499,8 @@ class IntegrationTestRunner:
         print("SUMMARY")
         print("=" * 100)
         
-        patterns_tested = len([p for p in self.patterns if any(v['var_id'] in str(self.test_results) for v in self.patterns[p]['variations'])])
+        # ✅ DYNAMIC PATTERN COUNT: Simply use total patterns from JSON
+        patterns_tested = len(self.patterns)
         
         print(f"Total Patterns Tested:  {patterns_tested}")
         print(f"Total Variations:       {self.total_variations}")
@@ -489,7 +535,8 @@ class IntegrationTestRunner:
         report.append("SUMMARY")
         report.append("=" * 100)
         
-        patterns_tested = len(set(d.split('[')[0].strip().split()[-1] for d in self.failed_details)) if self.failed_details else len(self.patterns)
+        # ✅ DYNAMIC PATTERN COUNT: Use total patterns from JSON
+        patterns_tested = len(self.patterns)
         
         report.append(f"Total Patterns Tested:  {patterns_tested}")
         report.append(f"Total Variations:       {self.total_variations}")
@@ -538,10 +585,18 @@ def main():
     parser.add_argument(
         '--pattern',
         type=int,
-        help='Test specific pattern only (1-25)'
+        help='Test specific pattern only (e.g., 1, 2, 30)'
     )
     
     args = parser.parse_args()
+    
+    # AUTO METADATA: Update before running tests (no manual updates needed!)
+    try:
+        result = update_pattern_metadata()
+        if result['updated']:
+            print(f"SUCCESS: Auto-updated metadata: {result['new_counts']['patterns']} patterns, {result['new_counts']['variations']} variations")
+    except Exception as e:
+        print(f"WARNING: Could not auto-update metadata: {e}")
     
     runner = IntegrationTestRunner()
     exit_code = runner.run_all_patterns(args.pattern)

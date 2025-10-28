@@ -19,6 +19,9 @@ project_root = Path(__file__).parent.parent.absolute()
 if str(project_root) not in sys.path:
     sys.path.insert(0, str(project_root))
 
+# ✅ AUTO METADATA: Ensure metadata is always current before running tests
+from tests.update_pattern_metadata import update_metadata
+
 
 class ReportingTestResult(unittest.TextTestResult):
     """Enhanced test result that captures detailed information for reporting."""
@@ -154,25 +157,53 @@ Reports are ALWAYS generated automatically in tests/reports/
     
     args = parser.parse_args()
     
+    # ✅ AUTO METADATA: Update pattern definitions metadata before running tests
+    print("Updating pattern metadata...")
+    try:
+        update_metadata()
+    except Exception as e:
+        print(f"[WARNING] Could not update metadata: {e}")
+    
     unittest_exit_code = 0
     
-    # Set up test discovery (excluding test_pattern_matching - replaced by integration tests)
+    # ✅ DYNAMIC TEST DISCOVERY: Exclude legacy test_pattern_matching.py (replaced by integration tests)
     tests_dir = Path(__file__).parent
     
     if args.module:
         # Run specific module
         loader = unittest.TestLoader()
-        suite = loader.loadTestsFromName(f'tests.{args.module}')
+        if args.module == 'tests':
+            # Special case: "tests" means run all tests, discover from tests directory
+            suite = loader.discover(str(tests_dir), pattern='test_*.py')
+            # Apply dynamic filtering logic
+            filtered_suite = unittest.TestSuite()
+            for test_group in suite:
+                for test_case in test_group:
+                    test_str = str(test_case)
+                    # Only include TestAllPatternsDynamic from test_pattern_matching.py, exclude all old hardcoded test classes
+                    if 'TestAllPatternsDynamic' in test_str:
+                        filtered_suite.addTest(test_case)
+                    # For other test files, include them
+                    elif 'test_pattern_matching' not in test_str:
+                        filtered_suite.addTest(test_case)
+            suite = filtered_suite
+        else:
+            suite = loader.loadTestsFromName(f'tests.{args.module}')
     else:
         # Discover all tests EXCEPT test_pattern_matching (replaced by integration tests)
         loader = unittest.TestLoader()
         all_tests = loader.discover(str(tests_dir), pattern='test_*.py')
         
-        # Filter out test_pattern_matching
+        # ✅ DYNAMIC TEST DISCOVERY: Only run the new TestAllPatternsDynamic class
         suite = unittest.TestSuite()
         for test_group in all_tests:
             for test_case in test_group:
-                if 'test_pattern_matching' not in str(test_case):
+                test_str = str(test_case)
+                # Only include TestAllPatternsDynamic from test_pattern_matching.py, exclude all old hardcoded test classes
+                if 'TestAllPatternsDynamic' in test_str:
+                    suite.addTest(test_case)
+                # For other test files, include them
+                elif 'test_pattern_matching' not in test_str:
                     suite.addTest(test_case)
     
     # Run unit tests (without report generation - will be unified)
@@ -194,7 +225,7 @@ Reports are ALWAYS generated automatically in tests/reports/
     integration_exit_code = integration_runner.run_all_patterns(save_report=False)  # Don't save separate report
     
     # Generate unified comprehensive report
-    from unified_test_reporter import UnifiedTestReporter
+    from tests.unified_test_reporter import UnifiedTestReporter
     unified_reporter = UnifiedTestReporter()
     
     # Set unit test data

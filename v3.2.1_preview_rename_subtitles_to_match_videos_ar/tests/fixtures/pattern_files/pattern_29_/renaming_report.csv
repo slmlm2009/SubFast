@@ -10,34 +10,67 @@
 # ==========================================
 #
 # Subtitle Renaming Report
-# Generated: 2025-10-28 01:08:12
+# Generated: 2025-10-28 06:00:19
 # Directory: C:\Users\slmlm2009\Desktop\Github\SubFast\v3.2.1_preview_rename_subtitles_to_match_videos_ar\tests\fixtures\pattern_files\pattern_29_
 # Configuration: language=ar, videos=mkv|mp4, subtitles=srt|ass
 #
 # SUMMARY:
-# Total Videos: 3
-# Total Subtitles: 3
-# Renamed: 3/3 subtitles
+# Total Videos: 12
+# Total Subtitles: 12
+# Renamed: 8/12 subtitles
 # Videos Missing Subtitles: 0
 # Subtitles Missing Videos: 0
-# Videos Without Episode Pattern: 0
-# Subtitles Without Episode Pattern: 0
+# Videos Without Episode Pattern: 4
+# Subtitles Without Episode Pattern: 4
 # Movie Mode: No
 # Execution Time: 0.00s
 #
 +-------------------------------------------------------------+------------------+----------+----------------------------------------------------------------+
 | Original Filename                                           | Detected Episode | Action   | New Name                                                       |
 +-------------------------------------------------------------+------------------+----------+----------------------------------------------------------------+
+| [VAR10]-One Piece _0001.mkv                                 | S01E01           | MATCHED  | No Change                                                      |
+| [VAR11]-One Piece _1899.mkv                                 | S01E1899         | MATCHED  | No Change                                                      |
+| [VAR12]-One Piece _1900.mkv                                 | (UNIDENTIFIED)   | --       | No Change                                                      |
 | [VAR1]-[DB]Maoyuu Maou Yuusha_-_09_(10bit_BD1080p_x265).mkv | S01E09           | MATCHED  | No Change                                                      |
 | [VAR2]-Show_15.mkv                                          | S01E15           | MATCHED  | No Change                                                      |
 | [VAR3]-Example_3.720p.mkv                                   | S01E03           | MATCHED  | No Change                                                      |
+| [VAR4]-One Piece _1.mkv                                     | S01E01           | MATCHED  | No Change                                                      |
+| [VAR5]-One Piece _1v2.mkv                                   | S01E01           | MATCHED  | No Change                                                      |
+| [VAR6]-One Piece _1vv2.mkv                                  | (UNIDENTIFIED)   | --       | No Change                                                      |
+| [VAR7]-One Piece _1v22.mkv                                  | (UNIDENTIFIED)   | --       | No Change                                                      |
+| [VAR8]-One Piece _1080p.mkv                                 | (UNIDENTIFIED)   | --       | No Change                                                      |
+| [VAR9]-One Piece _1080.mkv                                  | S01E1080         | MATCHED  | No Change                                                      |
+| [VAR10]-One Piece _0001.srt                                 | S01E01           | RENAMED  | [VAR10]-One Piece _0001.ar.srt                                 |
+| [VAR11]-One Piece _1899.srt                                 | S01E1899         | RENAMED  | [VAR11]-One Piece _1899.ar.srt                                 |
+| [VAR12]-One Piece _1900.srt                                 | (UNIDENTIFIED)   | --       | No Change                                                      |
 | [VAR1]-[DB]Maoyuu Maou Yuusha_09.srt                        | S01E09           | RENAMED  | [VAR1]-[DB]Maoyuu Maou Yuusha_-_09_(10bit_BD1080p_x265).ar.srt |
 | [VAR2]-Show_15.srt                                          | S01E15           | RENAMED  | [VAR2]-Show_15.ar.srt                                          |
 | [VAR3]-Example_3.srt                                        | S01E03           | RENAMED  | [VAR3]-Example_3.720p.ar.srt                                   |
+| [VAR4]-One Piece _1.srt                                     | S01E01           | RENAMED  | [VAR10]-One Piece _0001.ar_[VAR4]-One Piece _1.srt             |
+| [VAR5]-One Piece _1v2.srt                                   | S01E01           | RENAMED  | [VAR10]-One Piece _0001.ar_[VAR5]-One Piece _1v2.srt           |
+| [VAR6]-One Piece _1vv2.srt                                  | (UNIDENTIFIED)   | --       | No Change                                                      |
+| [VAR7]-One Piece _1v22.srt                                  | (UNIDENTIFIED)   | --       | No Change                                                      |
+| [VAR8]-One Piece _1080p.srt                                 | (UNIDENTIFIED)   | --       | No Change                                                      |
+| [VAR9]-One Piece _1080.srt                                  | S01E1080         | RENAMED  | [VAR9]-One Piece _1080.ar.srt                                  |
 +-------------------------------------------------------------+------------------+----------+----------------------------------------------------------------+
 #
 # MATCHED EPISODES:
+# S01E01 -> Video: [VAR10]-One Piece _0001.mkv | Subtitle: [VAR10]-One Piece _0001.srt -> [VAR10]-One Piece _0001.ar.srt
+# S01E01 -> Video: [VAR10]-One Piece _0001.mkv | Subtitle: [VAR4]-One Piece _1.srt -> [VAR10]-One Piece _0001.ar_[VAR4]-One Piece _1.srt
+# S01E01 -> Video: [VAR10]-One Piece _0001.mkv | Subtitle: [VAR5]-One Piece _1v2.srt -> [VAR10]-One Piece _0001.ar_[VAR5]-One Piece _1v2.srt
 # S01E03 -> Video: [VAR3]-Example_3.720p.mkv | Subtitle: [VAR3]-Example_3.srt -> [VAR3]-Example_3.720p.ar.srt
 # S01E09 -> Video: [VAR1]-[DB]Maoyuu Maou Yuusha_-_09_(10bit_BD1080p_x265).mkv | Subtitle: [VAR1]-[DB]Maoyuu Maou Yuusha_09.srt -> [VAR1]-[DB]Maoyuu Maou Yuusha_-_09_(10bit_BD1080p_x265).ar.srt
+# S01E1080 -> Video: [VAR9]-One Piece _1080.mkv | Subtitle: [VAR9]-One Piece _1080.srt -> [VAR9]-One Piece _1080.ar.srt
 # S01E15 -> Video: [VAR2]-Show_15.mkv | Subtitle: [VAR2]-Show_15.srt -> [VAR2]-Show_15.ar.srt
+# S01E1899 -> Video: [VAR11]-One Piece _1899.mkv | Subtitle: [VAR11]-One Piece _1899.srt -> [VAR11]-One Piece _1899.ar.srt
+#
+# FILES WITHOUT EPISODE PATTERN:
+# [VAR12]-One Piece _1900.mkv (no episode pattern detected)
+# [VAR12]-One Piece _1900.srt (no episode pattern detected)
+# [VAR6]-One Piece _1vv2.mkv (no episode pattern detected)
+# [VAR6]-One Piece _1vv2.srt (no episode pattern detected)
+# [VAR7]-One Piece _1v22.mkv (no episode pattern detected)
+# [VAR7]-One Piece _1v22.srt (no episode pattern detected)
+# [VAR8]-One Piece _1080p.mkv (no episode pattern detected)
+# [VAR8]-One Piece _1080p.srt (no episode pattern detected)
 #
