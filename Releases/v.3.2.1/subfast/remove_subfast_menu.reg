@@ -1,0 +1,8 @@
+Windows Registry Editor Version 5.00
+
+; ============================================================
+; SubFast - Remove Context Menu
+; Removes SubFast parent menu and all children
+; ============================================================
+
+[-HKEY_CLASSES_ROOT\Directory\Background\shell\SubFast]
