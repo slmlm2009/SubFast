@@ -240,36 +240,42 @@ EPISODE_PATTERNS = [
     # Pattern 26: ## - ## format (Season-Episode with dash, e.g., "Show 3 - 04.mkv")
     # Season and episode numbers separated by dash, no S/E prefix
     # Optional spaces around dash, supports 1-99 for both season and episode
+    # Not catching any characters before it and allowing for versioning e.g. '## - ##v2'
     (
         '## - ##',
-        re.compile(r'(?<![0-9])(\d{1,2})\s*-\s*(\d{1,2})(?![a-zA-Z0-9])'),
+        re.compile(r'(?:^|[._\s-])(\d{1,2})\s*-\s*(\d{1,2})(?:[Vv]\d)?(?![A-Za-z0-9])'),
         lambda m: (int(m.group(1)), int(m.group(2)))
     ),
     
     # Pattern 27: - # format (assumes Season 1, e.g., "Show - 15.mkv")
     # Hardened: Episodes 1-1899 only, excludes years 1900+, blocks letter suffixes (1080p, x264)
+    # Allowing for versioning e.g. '- ##v2' and zero padding e.g. '- 0001'
     (
         '- ##',
-        re.compile(r'-\s*(?:1[0-8]\d{2}|\d{1,3})(?![a-zA-Z0-9])'),
-        lambda m: (1, int(m.group(0).split('-')[1].strip()))
+        re.compile(r'-\s*(0*\d{1,3}|1[0-8]\d{2})(?:[Vv]\d)?(?![A-Za-z0-9])'),
+        lambda m: (1, int(m.group(1)))
     ),
     
     # Pattern 28: [##] format (assumes Season 1, e.g., "[07].mkv")
-    # Hardened: Same as Pattern 27, blocks [10bit], [1080p], [x265] etc.
+    # Hardened: Same as Pattern 27, Episodes 1-1899 only, excludes years 1900+, blocks letter suffixes [10bit], [1080p], [x265] etc.
     # Examples: [07] → S01E07, but [10bit] → no match
+    # Allowing for versioning e.g. '[##v2]' and zero padding e.g. '[0001]'
+    
     (
         '[##]',
-        re.compile(r'\[(\d{1,2})\](?![a-zA-Z0-9])'),
+        re.compile(r'\[(0*\d{1,3}|0*1[0-8]\d{2})(?:[Vv]\d)?(?![A-Za-z0-9])]'),
         lambda m: (1, int(m.group(1)))
     ),
     
     # Pattern 29: _## format (assumes Season 1, e.g., "Show_09.mkv")
-    # Hardened: Same as Pattern 27, blocks _1080p etc.
+    # Hardened: Same as Pattern 27, Episodes 1-1899 only, excludes years 1900+, blocks letter suffixes _10bit, _1080p, _x265 etc.
+    # Examples: _07 → S01E07, but _10bit → no match
+    # Allowing for versioning e.g. '_##v2' and zero padding e.g. '_0001'
     # LAST PATTERN - most permissive
     (
         '_##',
-        re.compile(r'_(?:1[0-8]\d{2}|\d{1,3})(?![a-zA-Z0-9])'),
-        lambda m: (1, int(m.group(0).split('_')[1].strip()))
+        re.compile(r'_(1[0-8]\d{2}|0*\d{1,3})(?:[Vv]\d)?(?![A-Za-z0-9])'),
+        lambda m: (1, int(m.group(1)))
     ),
 ]
 
